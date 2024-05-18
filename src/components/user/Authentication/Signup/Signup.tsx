@@ -26,7 +26,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import { signupValidation } from "../../../../utils/validation";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { auth } from "../../../../service/axios/firebase";
+import { auth } from "../../../../service/firebase";
 
 function Signup() {
   const [counter, setCounter] = useState(30);
@@ -47,9 +47,9 @@ function Signup() {
   const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult | null>(null);
 
-  // useEffect(() => {
-  //     setOtpPage(false);
-  // }, []);
+  useEffect(() => {
+      setOtpPage(false);
+  }, []);
   const initialValues = {
     name: "",
     email: "",
@@ -208,7 +208,7 @@ function Signup() {
                     </h1>
                   </div>
 
-                  <HStack >
+                  <HStack className="ml-8" >
                     <PinInput size='sm'  otp placeholder="">
                       {[...Array(6)].map((_, index) => (
                         <PinInputField
@@ -378,7 +378,7 @@ function Signup() {
                     Register Now
                   </button>
                   <div className="text-center">
-                    <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer">
+                    <span onClick={() => navigate('/login')} className="text-sm ml-2 hover:text-blue-500 cursor-pointer">
                       Already a member? Login here
                     </span>
                   </div>
