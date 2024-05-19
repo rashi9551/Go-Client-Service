@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const createAxios=(userToken:string)=>{
+const createAxios=(driverToken:string)=>{
     const axiosUser=axios.create({
         baseURL:"http://localhost:3002/driver",
         headers:{
             "Content-Type":"application/json"
         }
     });
-    console.log(userToken)
+    console.log(driverToken)
     return axiosUser
 }
 

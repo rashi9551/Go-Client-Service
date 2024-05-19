@@ -33,7 +33,8 @@ const SignupMap = ({ handleGeolocation, isGeolocationActive }: any) => {
             }
         }
     }, [isGeolocationActive]);
-
+ 
+    // getting current locatoion 
     useEffect(() => {
         map.current = new mapboxgl.Map({
             container: mapContainer.current || "",
