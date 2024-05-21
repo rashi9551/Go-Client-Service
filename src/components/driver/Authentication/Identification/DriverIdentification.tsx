@@ -4,10 +4,11 @@ import { useFormik } from "formik";
 import axiosDriver from "../../../../service/axios/axiosDriver";
 import { toast } from "react-toastify";
 import DriverPhotoPage from "../photo/DriverPhoto";
+import Loader from "../../../shimmer/Loader";
 
 function DriverIdentification() {
     const [photoPage,setphotoPage]=useState(false);
-
+    const [load,setLoad]=useState(false)
     const validationSchema=DriverIdentificationValidation
     const initialValues={
         aadharImage:null,
@@ -25,7 +26,7 @@ function DriverIdentification() {
     })
     const handleUpload=async(formData:unknown)=>{
         const driverId=localStorage.getItem('driverId')
-        
+        setLoad(true)
          axiosDriver("").post(`/identification?driverId=${driverId}`,formData,{
             headers:{
                 "Content-Type":'multipart/form-data',
@@ -33,8 +34,8 @@ function DriverIdentification() {
          })
          .then((response)=>{
             console.log(response.data.mesaage);
-            
             if(response.data.message==="Success"){
+                setLoad(false)
                 setphotoPage(true);
                 toast.success("Identification details submitted succesfully")
             }else{
@@ -42,6 +43,7 @@ function DriverIdentification() {
             }
          })
          .catch((error)=>{
+            setLoad(false)
             toast.error("Error updating :" ,error)
          });
     }
@@ -60,11 +62,12 @@ function DriverIdentification() {
                                 </h1>
                             </div>
                             <div className="hidden  md:flex md:items-center justify-center" style={{ marginTop: "-30px" }}>
-                                <img
+                                {load ? <Loader/>: (<img
                                     style={{ height: "380px", width: "auto" }}
                                     src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_22bf0d53-d053-4b6d-9cd1-92bd49f0a131-5214651.png"
                                     alt=""
-                                />
+                                />)}
+                                
                             </div>
                         </div>
                         <div className="flex md:w-1/2 justify-center pb-10 md:py-10 px-2 md:px-0 items-center">

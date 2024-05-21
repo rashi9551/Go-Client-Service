@@ -2,12 +2,12 @@ import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { adminValidation } from "../../utils/validation";
-import axiosAdmin from "../../service/axios/axiosAdmin";
+import {axiosAdminUser} from "../../service/axios/axiosAdmin";
 import { toast } from "react-toastify";
 import { adminLogin } from "../../service/redux/slices/adminAuthSlice";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
-
+import "./AdminDashboard.scss"
 
 
 function AdminLogin() {
@@ -24,13 +24,13 @@ function AdminLogin() {
     validationSchema: adminValidation,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axiosAdmin("").post("/login", values);
+        const { data } = await axiosAdminUser("").post("/login", values);
         if (data.message === "Success") {
           toast.success("Login Successfully");
-          dispatch(adminLogin({ name: data.name, adminToken: data.token }));
+          dispatch(adminLogin({ name: data.email, adminToken: data.token }));
           navigate("/admin/dashboard");
         } else {
-          toast.error(data.mesaage);
+          toast.error(data.message);
         }
       } catch (error) {
         toast.error((error as Error).message);
@@ -122,14 +122,6 @@ function AdminLogin() {
                 >
                   Log in
                 </button>
-                {/* <span
-                                    onClick={() => {
-                                        navigate("/login", { state: { status: "" } });
-                                    }}
-                                    className="text-sm ml-2 hover:text-blue-500 cursor-pointer"
-                                >
-                                    Already a member? Login here
-                                </span> */}
               </form>
             </div>
           </div>

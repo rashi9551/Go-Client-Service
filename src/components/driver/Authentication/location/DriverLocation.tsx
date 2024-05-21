@@ -14,6 +14,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { useDispatch } from "react-redux";
 import { openPendingModal } from "../../../../service/redux/slices/pendingModalSlice";
+import Loader from "../../../shimmer/Loader";
 
 function DriverLocation() {
 
@@ -27,7 +28,7 @@ function DriverLocation() {
     const [, setlocation] = useState(false);
     const [longitude, setlongitude] = useState(68.7);
     const [latitude, setlatitude] = useState(8.4);
-
+    const [load,setLoad]=useState(false)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleGeolocation = (lat: any, lng: any, status: any) => {
         setlocation(status);
@@ -51,7 +52,8 @@ function DriverLocation() {
                 .max(97.25, "Choose a valid location in India"),
         }),
         onSubmit: async (values, { setSubmitting }) => {
-            try {                
+            try {        
+                setLoad(true)        
                 const driverId = localStorage.getItem("driverId");
                 const { data } = await axiosDriver("").post(`location?driverId=${driverId}`, values, {
                     headers: {
@@ -59,6 +61,7 @@ function DriverLocation() {
                     },
                 });                
                 if (data.message === "Success") {
+                    setLoad(false)
                     navigate("/driver/login");
                     dispatch(openPendingModal())
                 } else {
@@ -92,10 +95,13 @@ function DriverLocation() {
                             passengers.{" "}
                         </h1>
                         <div className="hidden  md:flex md:items-center justify-center">
-                            <img
-                                style={{ height: "300px", width: "auto" }}
-                                src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_e8b3373d-808f-43b2-85d2-374ab65847e9-11641795_4752200.png"
-                            />
+                            {load ? <Loader/> : (
+                                <img
+                                    style={{ height: "300px", width: "auto" }}
+                                    src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_e8b3373d-808f-43b2-85d2-374ab65847e9-11641795_4752200.png"
+                                />
+
+                            )}
                         </div>
                     </div>
                     <div className="flex md:w-1/2 justify-center pb-10 md:py-10 px-2 md:px-0 items-center">

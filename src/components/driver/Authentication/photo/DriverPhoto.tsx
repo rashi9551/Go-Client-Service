@@ -5,6 +5,7 @@ import {toast} from 'react-toastify'
 import axiosDriver from "../../../../service/axios/axiosDriver"
 import DriverVehiclePage from "../../../../pages/driver/Authentication/DriverVehiclePage"
 import * as yup from 'yup'
+import Loader from "../../../shimmer/Loader"
 const videoConstraints={
     width:400,
     height:400,
@@ -12,6 +13,7 @@ const videoConstraints={
 }
 
 function DriverPhoto() {
+    const [load,setLoad]=useState(false)
     const [initial,setInitial]=useState(true)
     const [vehiclePage,setVehiclePage]=useState(false)
     const initialValues={
@@ -28,6 +30,7 @@ function DriverPhoto() {
         validationSchema,
         onSubmit:async (values)=>{
             try {
+                setLoad(true)
                 if(values.driverImage){
                     const blob=await fetch(values.driverImage).then((res)=>res.blob())
                     const file=await new File([blob],"driverImage.jpeg",{type:"image/jpeg"});
@@ -45,6 +48,7 @@ function DriverPhoto() {
 
                     if(response.data.message==="Success"){
                         toast.success("Successfully uploaded Image");
+                        setLoad(false)
                         setVehiclePage(true)
                     }else{
                         toast.error(response.data.mesaage)
@@ -82,10 +86,13 @@ function DriverPhoto() {
                                         </h1>
                                     </div>
                                     <div className="hidden  md:flex md:items-center justify-center">
-                                        <img
+                                        {load ? <Loader/>:(
+                                            <img
                                             style={{ height: "300px", width: "auto" }}
                                             src="https://d2y3cuhvusjnoc.cloudfront.net/20135087_6213634-removebg-preview.png"
                                         />
+                                        )}
+                                        
                                     </div>
                                 </div>
                                 <div className="flex md:w-1/2 justify-center pb-10 md:py-10 px-2 md:px-0 items-center">

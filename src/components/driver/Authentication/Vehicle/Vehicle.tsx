@@ -4,11 +4,13 @@ import {VehcleValidation} from '../../../../utils/validation'
 import axiosDriver from "../../../../service/axios/axiosDriver"
 import { toast } from "react-toastify"
 import DriverLocationPage from "../../../../pages/driver/Authentication/DriverLocationPage"
+import Loader from "../../../shimmer/Loader"
 
 function Vehicle() {
     const [locationPage,setlocationPage] = useState(false)
     const [carImageUrl,setcarImageUrl] = useState(null)
     const [rcImageUrl,setrcImageUrl] = useState(null)
+    const [load,setLoad]=useState(false)
 
     const initialValues={
         registerationID:"",
@@ -22,6 +24,7 @@ function Vehicle() {
         validationSchema:VehcleValidation,
         onSubmit:async(values)=>{
             try {
+                setLoad(true)
                 const driverId=localStorage.getItem('driverId');
                 const {data}= await axiosDriver("").post(`vehicleDetails?driverId=${driverId}`,values,{
                     headers:{
@@ -32,6 +35,7 @@ function Vehicle() {
                 
                 if(data.message==="Success"){
                     toast.success("Vehicle details submitted succesfully")
+                    setLoad(false)
                     setlocationPage(true)
                 }else{
                     toast.error(data.mesaage)
@@ -73,11 +77,14 @@ function Vehicle() {
                                 </h1>
                             </div>
                             <div className="hidden  md:flex md:items-center justify-center">
-                                <img
-                                    style={{ height: "320px", width: "auto" }}
-                                    src="https://img.freepik.com/free-vector/files-sent-concept-illustration_114360-3020.jpg?w=740&t=st=1693677666~exp=1693678266~hmac=d2b8470cda1668f0b6b107b888297653d914b10c633cef1bec894126613dacd1"
-                                    alt=""
-                                />
+                                {load ? <Loader/>:(
+                                    <img
+                                        style={{ height: "320px", width: "auto" }}
+                                        src="https://img.freepik.com/free-vector/files-sent-concept-illustration_114360-3020.jpg?w=740&t=st=1693677666~exp=1693678266~hmac=d2b8470cda1668f0b6b107b888297653d914b10c633cef1bec894126613dacd1"
+                                        alt=""
+                                    />
+
+                                )}
                             </div>
                         </div>
                         <div className="flex md:w-1/2 justify-center pb-10 md:py-10 px-2 mx-8 md:px-0 items-center">

@@ -235,7 +235,8 @@ function Signup() {
                       <p
                         className="text-sm text-blue-800 cursor-pointer"
                         onClick={() => {
-                          setCounter(30);
+                          setCounter(40);
+                          setOtp(0)
                           sendOtp();
                         }}
                       >

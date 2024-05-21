@@ -116,7 +116,7 @@ function DriverLogin() {
                 .then(async () => {
                     toast.success("Login success");
                     dispatch(driverLogin(driverData));
-                    // navigate("/driver/dashboard");
+                    navigate("/driver/dashboard");
                     localStorage.removeItem("driverId");
                 })
                 .catch(() => {
@@ -147,13 +147,14 @@ function DriverLogin() {
             />
           </Link>
         </div>
+        
       </nav>
             <div className="driver-registration-container h-screen flex justify-center items-center">
                 <div className="w-5/6 md:w-4/6 md:h-4/5  md:flex justify-center bg-white rounded-3xl my-5 drop-shadow-2xl">
                     <div className="relative overflow-hidden h-full sm:pl-14 md:pl-16 md:w-1/2 i justify-around items-center mb-3 md:m-0">
                         <div className=" w-full pt-10 ">
                             <h1 className="text-blue-800 font-bold md:mt-4 text-4xl mx-7 md:mx-0  md:text-5xl user-signup-title md:max-w-sm">
-                                Please sign in with your mobile number!
+                                Please sign in with your mobile number! 
                             </h1>
                             <h1 className="text-blue-800 md:max-w-xs text-sm my-3 mx-7 md:mx-0  md:text-sm md:mt-3 user-signup-title">
                                 We'll send you a One-Time-Password to your registered mobile number.
@@ -223,7 +224,8 @@ function DriverLogin() {
                                                 <p
                                                     className="text-sm text-blue-800 cursor-pointer"
                                                     onClick={() => {
-                                                        setCounter(30);
+                                                        setCounter(40);
+                                                        setOtp(0)
                                                         sendOtp;
                                                     }}
                                                 >

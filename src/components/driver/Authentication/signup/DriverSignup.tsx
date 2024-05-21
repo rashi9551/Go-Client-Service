@@ -14,13 +14,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import axiosDriver from "../../../../service/axios/axiosDriver";
+import Loader from "../../../shimmer/Loader";
 
 function DriverSignup() {
 
     const [counter, setCounter] = useState(30);
 
     const navigate = useNavigate();
-
+    const [load,setLoad]=useState(false)
     const [otpPage, setOtpPage] = useState(false);
     const [identificationPage, setIdentificationPage] = useState(false);
 
@@ -73,8 +74,11 @@ function DriverSignup() {
                 .matches(/^(?=.*\d)/, "Enter a valid code"),
         }),
         onSubmit: async (values, { setSubmitting }) => {
+            setLoad(true)
+            await new Promise((resolve)=>setTimeout(resolve,1000))
             try {
                 await signupHandle(values);
+                
             } catch (error) {
                 console.log("coming");
                 
@@ -133,6 +137,7 @@ function DriverSignup() {
                 setConfirmationResult(result);
 
             }
+            setLoad(false)
             setOtpPage(true);
         } catch (error) {
             toast.error((error as Error).message);
@@ -140,6 +145,7 @@ function DriverSignup() {
     };
 
     const otpVerify = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setLoad(true)
         event.preventDefault();
         if (otp && confirmationResult) {
             const otpValue: string = otp.toString();
@@ -164,6 +170,7 @@ function DriverSignup() {
             if (response.data.message === "Success") {
                 toast.success("OTP verified successfully");
                 localStorage.setItem("driverId", response.data.driverId);
+                setLoad(false)
                 setIdentificationPage(true);
             }
         } catch (error) {
@@ -219,11 +226,12 @@ function DriverSignup() {
                                         </h1>
                                     </div>
                                     <div className="hidden  md:flex md:items-center" style={{ marginTop: "-40px" }}>
-                                        <img
+                                        {load ? <Loader/> :<img
                                             style={{ height: "330px", width: "auto" }}
                                             src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_7d8b958b-03bb-4249-8817-6e555f711362-12892968_5095140.png"
                                             alt=""
-                                        />
+                                        />}
+                                        
                                     </div>
                                 </div>
                             )}
