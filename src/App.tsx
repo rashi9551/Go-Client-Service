@@ -15,12 +15,12 @@ import AdminDriverPage from './pages/admin/adminDriver/AdminDriverPage.tsx';
 import AdminDriverPendingDetails from './pages/admin/adminDriver/AdminDriverPendingDetails.tsx';
 import AdminDriverDetailsVerified from './pages/admin/adminDriver/AdminVerifiedDriverPage.tsx';
 import DriverDashboardPage from './pages/driver/Dashboard/DriverDashboardPage.tsx';
+import AdminUserDetailsPage from './pages/admin/adminUser/AdminUserDetailsPage.tsx';
 
 function App() {
   const  user  = useSelector((store:{ user: { loggedIn: boolean } })=>store.user.loggedIn);
   const  driver  = useSelector((store:{ driver: { loggedIn: boolean } })=>store.driver.loggedIn);
   const  admin  = useSelector((store:{ admin: { loggedIn: boolean } })=>store.admin.loggedIn);
-  console.log(driver,"------");
   
   return (
     <>
@@ -47,6 +47,7 @@ function App() {
           <Route path='/admin/drivers' element={!admin ? <Navigate to={'/admin/login'}/>:<AdminDriverPage/>}/>
           <Route path="/admin/pendingDriver/:id" element={!admin ? <Navigate to={'/admin/login'} /> : <AdminDriverPendingDetails />} />
           <Route path="/admin/verifiedDriver/:id" element={!admin ? <Navigate to={'/admin/login'}/>:<AdminDriverDetailsVerified/>}/>
+          <Route path="/admin/users" element={!admin ? <Navigate to={'/admin/login'}/>:<AdminUserDetailsPage/>}/>
 
 
         </Routes>

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState={
-    driver:"",
+    name:"",
     driverId:"",
     driverToken:null,
     loggedIn:false
@@ -12,13 +12,13 @@ const driverAuthSlice=createSlice({
     initialState,
     reducers:{
         driverLogin:((state,action)=>{
-            state.driver=action.payload.name,
+            state.name=action.payload.name,
             state.driverId=action.payload.driver_id,
             state.driverToken=action.payload.driverToken,
             state.loggedIn=true
         }),
         driverLogout:((state)=>{
-            state.driver="",
+            state.name="",
             state.driverId="",
             state.driverToken=null,
             state.loggedIn=false

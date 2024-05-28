@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HStack, PinInput, PinInputField } from "@chakra-ui/react";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import { auth } from "../../../../service/firebase";
@@ -8,6 +9,9 @@ import * as yup from "yup"
 import { useNavigate } from "react-router-dom";
 import axiosDriver from "../../../../service/axios/axiosDriver";
 import { driverLogin } from "../../../../service/redux/slices/driverAuthSlice";
+
+import { jwtDecode } from "jwt-decode";
+
 import {
     ApplicationVerifier,
     Auth,
@@ -18,6 +22,8 @@ import {
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {  openPendingModal } from "../../../../service/redux/slices/pendingModalSlice";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { openRejectedModal } from "../../../../service/redux/slices/rejectModalSlice";
   
 function DriverLogin() {
     const dispatch=useDispatch()
@@ -31,7 +37,7 @@ function DriverLogin() {
     })
     const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
-    const [counter,setCounter]=useState<number>(30)
+    const [counter,setCounter]=useState<number>(40)
     useEffect(() => {
         if (otpInput) {
             counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
@@ -63,7 +69,7 @@ function DriverLogin() {
                     dispatch(openPendingModal());
                 } else if (data.message === "Rejected") {
                     localStorage.setItem("driverId", data.driverId);
-                    // dispatch(openRejectedModal());
+                    dispatch(openRejectedModal());
                 } else {
                     toast.error("Not registered! Please register to  continue.");
                 }
@@ -132,6 +138,44 @@ function DriverLogin() {
         newOtp[index]=newValue.toString();
         setOtp(parseInt(newOtp.join("")))
     }
+
+    const googleLogin = async (datas: CredentialResponse) => {
+        try {
+                const token:string |undefined=datas.credential
+            if (token) {
+                const decode = jwtDecode(token) as any
+                const response = await axiosDriver("").post("checkGoogleLoginDriver", {email:decode.email});
+                if (response.data.message === "Success") {
+                    toast.success("Login success!");
+                    dispatch(
+                        driverLogin({
+                            name: response.data.name,
+                            driverToken: response.data.token,
+                            driver_id: response.data._id,
+                        })
+                    );
+                    localStorage.removeItem("driverId");
+                    navigate("/driver/dashboard");
+                } else if (response.data.message === "Incomplete registration") {
+                    toast.info("Please complete the registration!");
+                    localStorage.setItem("driverId", response.data.driverId);
+                    navigate("/driver/identification");
+                } else if (response.data.message === "Blocked") {
+                    toast.info("Your account is blocked!");
+                } else if (response.data.message === "Not verified") {
+                    dispatch(openPendingModal());
+                } else if (response.data.message === "Rejected") {
+                    dispatch(openRejectedModal());
+                    localStorage.setItem("driverId", response.data.driverId);
+                } else {
+                    toast.error("Not registered! Please register to  continue.");
+                }
+            }
+        } catch (error: any) {
+            toast.error(error);
+        }
+    };
+
     const iconsColor = "text-gray-400";
 
 
@@ -243,13 +287,17 @@ function DriverLogin() {
                                     </button>
                                 )}
 
-                                <div className="flex flex-col w-full border-opacity-50">
-                                    <div className="divider text-xs font-medium">or sign-in using Google</div>
+                    <div className="flex flex-col w-full mt-8 border-opacity-50">
+                    <div className="flex items-center text-xs font-medium">
+                        <div className="flex-grow border-t border-gray-300"></div>
+                        <span className="mx-2">or sign-in using Google</span>
+                        <div className="flex-grow border-t border-gray-300"></div>
+                    </div>
 
-                                    <div className="flex justify-center items-center mb-2">
-                                        {/* <GoogleLogin shape="circle" ux_mode="popup" onSuccess={googleLogin} /> */}
-                                    </div>
-                                </div>
+                    <div className="flex justify-center items-center mt-5">
+                        <GoogleLogin shape="circle" ux_mode="popup" onSuccess={googleLogin} />
+                    </div>
+                </div>
 
                                 <div className="text-center">
                                     <span

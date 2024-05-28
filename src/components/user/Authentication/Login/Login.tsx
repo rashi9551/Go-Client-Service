@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -12,13 +13,18 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
+
+import { jwtDecode } from "jwt-decode";
+
+
 import { auth } from "../../../../service/firebase";
 
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../../../service/redux/slices/userAuthSlice";
 
-// import {  GoogleLogin } from "@react-oauth/google";
+import {  CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { openPendingModal } from "../../../../service/redux/slices/pendingModalSlice";
 
 interface UserData {
   user: string;
@@ -83,7 +89,7 @@ function Login() {
     setOtp(parseInt(newOtp.join("")));
   };
 
-  const [counter, setCounter] = useState(30);
+  const [counter, setCounter] = useState(40);
   useEffect(() => {
     if (otpInput) {
       counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
@@ -147,6 +153,35 @@ function Login() {
       toast.error("Enter a valid otp");
     }
   };
+  const googleLogin = async (datas: CredentialResponse) => {
+    try {
+      const token:string |undefined=datas.credential
+      if (token) {
+        const decode = jwtDecode(token) as any
+        const { data } = await axiosUser("").post("checkGoogleLoginUser", { email: decode.email });
+            if (data.message === "Success") {
+                toast.success("Login success!");
+                dispatch(userLogin({user: data.name, userToken: data.token, user_id: data._id,loggedIn:true}));
+                localStorage.removeItem("userId")
+                navigate("/");
+            } else if (data.message === "Incomplete registration") {
+                toast.info("Please complete the verification!");
+                localStorage.setItem("userId", data.userId);
+                navigate("/identification");
+            } else if (data.message === "Not verified") {
+                dispatch(openPendingModal());
+            } else if (data.message === "Rejected") {
+                toast.error("rejected");
+                // dispatch(openRejectedModal());
+                localStorage.setItem("userId",data.userId);
+            } else {
+                toast.error("Not registered! Please register to  continue.");
+            }
+        }
+    } catch (error: any) {
+        toast.error(error);
+    }
+};
 
   const iconsColor = "text-gray-400";
   return (
@@ -236,7 +271,7 @@ function Login() {
                   <>
                     <button
                       onClick={otpVerify}
-                      className="block w-full text-white bg-blue-800 py-1.5 rounded-2xl text-golden font-semibold mb-2"
+                      className="block w-full text-white bg-blue-800 py-1.5 rounded-2xl font-semibold mb-2"
                     >
                       Verify OTP
                     </button>
@@ -259,23 +294,30 @@ function Login() {
                     </div>
                   </>
                 ) : (
-                  <button type="submit" className="block w-full text-white bg-blue-800 py-1.5 rounded-2xl text-golden font-semibold mb-2">
+                  <button type="submit" className="block w-full text-white bg-blue-800 py-1.5 rounded-2xl font-semibold mb-2">
                     Send OTP
                   </button>
                 )}
-                <div className="flex flex-col w-full border-opacity-50">
-                  <div className="divider text-xs font-medium">
-                    or sign-in using Google
-                  </div>
 
-                  <div className="flex justify-center items-center mb-2">
-                    {/* <GoogleLogin shape="circle" ux_mode="popup" onSuccess={googleLogin} /> */}
-                  </div>
+                <div className="flex flex-col w-full mt-8 border-opacity-50">
+                    <div className="flex items-center text-xs font-medium">
+                        <div className="flex-grow border-t border-gray-300"></div>
+                        <span className="mx-2">or sign-in using Google</span>
+                        <div className="flex-grow border-t border-gray-300"></div>
+                    </div>
+
+                    <div className="flex justify-center items-center mt-5">
+                        <GoogleLogin shape="circle" ux_mode="popup" onSuccess={googleLogin} />
+                    </div>
                 </div>
 
-                <div className="text-center">
-                    <span onClick={() => navigate('/signup')} className="text-xs ml-2 hover:text-blue-500 cursor-pointer">
-                      Not registered yet? Sign-up here!
+
+                <div className="text-center mt-3">
+                    <span
+                        onClick={() => navigate("/signup")}
+                        className="text-xs ml-2 hover:text-blue-500 cursor-pointer"
+                    >
+                        Not registered yet? Sign-up here!
                     </span>
                 </div>
               </form>
@@ -289,3 +331,5 @@ function Login() {
 }
 
 export default Login;
+
+

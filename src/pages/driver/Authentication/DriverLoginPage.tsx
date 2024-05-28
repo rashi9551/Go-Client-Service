@@ -1,13 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DriverLogin from "../../../components/driver/Authentication/Login/DriverLogin";
 import { useSelector } from "react-redux";
 import PendingModal from "../../../components/driver/Authentication/PendingModal";
+import  RejectedModal  from "../../../components/driver/Authentication/RejectModal";
 function DriverLoginPage() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { isOpenPending } = useSelector((store: any) => store.pendingModal);
-
+    const isOpenPending  = useSelector((store: {pendingModal:{isOpenPending:boolean}}) => store.pendingModal.isOpenPending);
+    const isOpenRejected  = useSelector((store: {rejectModal:{isOpenRejected:boolean}}) => store.rejectModal.isOpenRejected);
+    console.log(isOpenRejected,"chgvhgh");
+    
     return (
         <div>
             {isOpenPending && <PendingModal />}
+            {isOpenRejected && <RejectedModal/>}
             <DriverLogin />
         </div>
     );

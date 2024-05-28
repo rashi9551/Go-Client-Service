@@ -106,7 +106,7 @@ function DriverLocation() {
                     </div>
                     <div className="flex md:w-1/2 justify-center pb-10 md:py-10 px-2 md:px-0 items-center">
                         <form onSubmit={formik.handleSubmit}>
-                            <div className="user-signup-form driver-signup-map-form w-full h-full md:w-96 md:h-96   bg-black drop-shadow-xl">
+                            <div className="user-signup-form driver-signup-map-form w-full h-full md:w-96 md:h-96  rounded-md drop-shadow-xl">
                                 <div className="mb-4 mt-4">
                                     <SignupMap
                                         handleGeolocation={handleGeolocation}

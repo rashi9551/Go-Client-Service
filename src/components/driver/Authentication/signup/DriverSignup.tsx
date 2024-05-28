@@ -18,7 +18,7 @@ import Loader from "../../../shimmer/Loader";
 
 function DriverSignup() {
 
-    const [counter, setCounter] = useState(30);
+    const [counter, setCounter] = useState(40);
 
     const navigate = useNavigate();
     const [load,setLoad]=useState(false)
@@ -272,7 +272,7 @@ function DriverSignup() {
                                                     <p
                                                         className="text-sm text-blue-800 cursor-pointer"
                                                         onClick={() => {
-                                                            setCounter(30);
+                                                            setCounter(40);
                                                             sendOtp();
                                                         }}
                                                     >

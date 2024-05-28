@@ -27,9 +27,9 @@ function PendingDetails() {
     await new Promise((resolve)=>setTimeout(resolve,1000))
     try {
         
-      const { data } = await axiosAdminDriver(adminToken).get(
-        `driverData?id=${id}`
-      );
+        const { data } = await axiosAdminDriver(adminToken).get(
+            `driverData?id=${id}`
+        );
       setdriverData(data);
       setLoad(false)
     } catch (error) {

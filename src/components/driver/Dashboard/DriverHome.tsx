@@ -1,19 +1,117 @@
 import Footer from "../../../components/user/Home/Footer";
-import NavBar from "../../../components/user/Home/NavBar";
-import GpsFixedIcon from "@mui/icons-material/GpsFixed";
-import WhySafely from "../../../components/user/Home/WhySafety";
-import { useDispatch } from "react-redux";
+// import GpsFixedIcon from "@mui/icons-material/GpsFixed";
+import { useDispatch, useSelector } from "react-redux";
 import { driverLogout } from "../../../service/redux/slices/driverAuthSlice";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import DriverDashboard from "./DriverDashboard";
 
 function DriverHome() {
-  const dispatch=useDispatch()
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const driver = useSelector(
+    (store: { driver: { name: string } }) => store.driver.name
+  );
+  console.log(driver,"dffdf");
+  
+  const dispatch = useDispatch();
+
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
+  useEffect(() => {
+    if (windowSize > 400) {
+      setIsOpen(false);
+    }
+  }, [windowSize]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
+
   return (
     <div className="">
       {/* naavbar */}
-      <NavBar />
+      <nav className="bg-black text-white flex justify-between items-center p-6 ">
+        <div className="flex items-center space-x-4">
+          <Link to="/driver/dashboard" className="hover:text-gray-300">
+            <img
+              src="/images/images__1_-removebg-preview.png"
+              alt="Logo"
+              className=" w-[40%]"
+            />
+          </Link>
+        </div>
+        <div className="flex items-center mr-16 space-x-8">
+          <a href="#" className="hover:text-gray-300">
+            Dashboard
+          </a>
+          <a href="#" className="hover:text-gray-300">
+            Ride
+          </a>
+          <a
+            href="#"
+            onClick={() => navigate("/driver/login")}
+            className="hover:text-gray-300"
+          >
+            Profile
+          </a>
+          <a href="#" className="hover:text-gray-300">
+            About
+          </a>
+
+          {driver ? (
+            <>
+              <button
+                onClick={() =>{ setIsOpen(!isOpen)}}
+                className="profile-avatar"
+              >
+                {driver[0]}
+              </button>
+              {isOpen && (
+                <div className="options-box">
+                  <ul>
+                    <li
+                      onClick={() => {
+                        dispatch(driverLogout());
+                        navigate("/login");
+                      }}
+                    >
+                      Logout
+                    </li>
+                    <li onClick={() => navigate("/driver/signup")}>Signup</li>
+                  </ul>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="text-white w-20  h-8"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/signup")}
+                className="Signup bg-white rounded text-black w-20  h-8"
+              >
+                Signup
+              </button>
+            </>
+          )}
+        </div>
+      </nav>
 
       {/* banner side  */}
-      <div className="flex h-screen">
+      {/* <div className="flex h-screen">
         <div className="w-1/2 bg-black  text-white p-6">
           <div className="mt-40 ml-56">
             <h4 className="text-2xl font-bold mb-4">
@@ -51,50 +149,22 @@ function DriverHome() {
               border-style: dotted;
             }
           `}</style>
-          <button onClick={()=>dispatch(driverLogout())} className="bg-yellow-400 h-9 w-[19%] ml-[54%] mt-9 rounded text-black ">
+          <button
+            onClick={() => dispatch(driverLogout())}
+            className="bg-yellow-400 h-9 w-[19%] ml-[54%] mt-9 rounded text-black "
+          >
             See Prices
           </button>
         </div>
         <div className="w-1/2 bg-black text-white p-6">
           <img
-            src="/images/IMG_2663.JPG"
+            src="/images/IMG_2666.jpg"
             alt="Right Side Image"
             className="w-[53%] h-auto ml-40 mt-20"
           />
         </div>
-      </div>
-      {/* next banner  */}
-      <div className="flex  h-screen">
-        <div className="w-1/2 bg-white flex  justify-center items-center  text-white p-6">
-          <img
-            src="/images/IMG_2666.jpg"
-            alt="Right Side Image"
-            className="w-[53%] h-auto"
-          />
-        </div>
-        <div className="w-1/2 bg-yellow-400 text-white p-6 mb-9 flex  justify-center items-center">
-          <div className="mb-[19%]">
-            <h4 className="text-2xl font-bold mb-4">
-              Flexibility at your fingertips,freedom awaits.
-            </h4>
-            <h1>
-              Make money on your schedule with deliveries
-              <br /> or rides—or both. You can use your own car or
-              <br /> choose a rental through Go.
-            </h1>
-            <div className="flex items-center mt-9 ">
-              <button className="bg-black h-9  mt- rounded text-white w-28">
-                Get Started
-              </button>
-              <a className="ml-9 border-b-2 text-black border-black" href="">
-                Already have an account? sign in --
-                <span className="ml-1">&gt;</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <WhySafely/>
+      </div> */}
+      <DriverDashboard/>
       <Footer />
     </div>
   );
