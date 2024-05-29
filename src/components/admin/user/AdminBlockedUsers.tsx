@@ -4,14 +4,14 @@ import { axiosAdminUser } from "../../../service/axios/axiosAdmin";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
-const AdminUsers = () => {
+const AdminBlockedUsers = () => {
     const [usersData, setusersData] = useState([]);
 
     const { adminToken } = useSelector((store: any) => store.admin)
 
     const getData = async () => {
         try {
-            const { data } = await axiosAdminUser(adminToken).get("getUserData");
+            const { data } = await axiosAdminUser(adminToken).get("blockedUserData");
             setusersData(data);
         } catch (error) {
             toast.error((error as Error).message)
@@ -23,18 +23,18 @@ const AdminUsers = () => {
         getData();
     }, []);
 
-    const blockUser=async (id:string)=>{
+    const unblockUser=async (id:string)=>{
         try {
             
-             await axiosAdminUser(adminToken).post(`blockUser?id=${id}`);
+             await axiosAdminUser(adminToken).post(`unblockUser?id=${id}`);
         } catch (error:any) {
             toast.error(error.message)
         }
     }
-
+    
     useEffect(() => {
         getData();
-    }, [blockUser]);
+    }, [unblockUser]);
     
 
     return (
@@ -76,10 +76,10 @@ const AdminUsers = () => {
                             <td className="px-4 py-2">{users.email}</td>
                             <th className="px-4 py-2">
                                 <button
-                                    onClick={() => blockUser(users._id)}
-                                    className="btn btn-xs bg-red-400 text-white hover:bg-red-600 relative right-2 rounded-full px-4 py-2 transition-colors duration-300"
+                                    onClick={() => unblockUser(users._id)}
+                                    className="btn btn-xs bg-blue-300  text-black hover:bg-blue-600 relative right-2 rounded-full px-4 py-2 transition-colors duration-300"
                                 >
-                                    Block
+                                    unblock
                                 </button>
                             </th>
                         </tr>
@@ -92,4 +92,4 @@ const AdminUsers = () => {
     );
 };
 
-export default AdminUsers;
+export default AdminBlockedUsers;

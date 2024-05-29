@@ -1,24 +1,13 @@
-import { useState, useEffect } from "react";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import WhySafely from "./WhySafety";
 import Ride from "./Ride";
 
+
+
+
 function Home() {
-  const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 800);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsWideScreen(window.innerWidth > 950);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <div className="">
@@ -26,8 +15,8 @@ function Home() {
       <NavBar />
 
       {/* Banner */}
-      {isWideScreen && (
-        <div className="flex flex-col md:flex-row h-screen">
+
+        <div className="flex flex-col md:flex-row min-h-screen">
           <div className="w-full md:w-1/2 bg-black text-white p-6">
             <div className="mt-20 md:mt-40 md:ml-56 text-center md:text-left">
               <h4 className="text-2xl font-bold mb-4">
@@ -65,7 +54,6 @@ function Home() {
             />
           </div>
         </div>
-      )}
 
       {/* Ride Component */}
       <div className="py-12 px-6">
@@ -73,8 +61,8 @@ function Home() {
       </div>
 
       {/* Next Banner */}
-      {isWideScreen && (
-        <div className="flex flex-col md:flex-row h-screen">
+
+        <div className="flex flex-col md:flex-row min-h-screen">
           <div className="w-full md:w-1/2 bg-white flex justify-center items-center p-6">
             <img
               src="/images/IMG_2666.jpg"
@@ -107,7 +95,6 @@ function Home() {
             </div>
           </div>
         </div>
-      )}
 
       {/* WhySafely */}
       <WhySafely />

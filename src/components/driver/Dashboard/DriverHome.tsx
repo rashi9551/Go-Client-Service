@@ -81,7 +81,6 @@ function DriverHome() {
                     <li
                       onClick={() => {
                         dispatch(driverLogout());
-                        navigate("/login");
                       }}
                     >
                       Logout
@@ -94,13 +93,13 @@ function DriverHome() {
           ) : (
             <>
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("driver/login")}
                 className="text-white w-20  h-8"
               >
                 Login
               </button>
               <button
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("driver/signup")}
                 className="Signup bg-white rounded text-black w-20  h-8"
               >
                 Signup
@@ -109,61 +108,6 @@ function DriverHome() {
           )}
         </div>
       </nav>
-
-      {/* banner side  */}
-      {/* <div className="flex h-screen">
-        <div className="w-1/2 bg-black  text-white p-6">
-          <div className="mt-40 ml-56">
-            <h4 className="text-2xl font-bold mb-4">
-              Ready To Assist Anywhere With Go & Go
-            </h4>
-            <p>Tap, Book, Ride, Go, Enjoy!</p>
-          </div>
-          <div className="relative  items-center  w-1/2 ml-52 mt-10  ">
-            <input
-              type="text"
-              placeholder="Pickup Location"
-              className="border-2 border-gray-300 rounded-full px-4 py-2 w-full"
-            />
-            <div className="icon-line">
-              <GpsFixedIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black " />
-            </div>
-          </div>
-          <div className="relative  items-center  w-1/2 ml-52 mt-10">
-            <input
-              type="text"
-              placeholder="Dropoff Location"
-              className="border-2 border-gray-300 rounded-full px-4 py-2 w-full"
-            />
-            <GpsFixedIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black" />
-          </div>
-          <style>{`
-           .icon-line::before {
-              content: '';
-              position: absolute;
-              top: 50%;
-              left: 91.5%;
-              width: 2px;
-              height: 200%;
-              background-color: white;
-              border-style: dotted;
-            }
-          `}</style>
-          <button
-            onClick={() => dispatch(driverLogout())}
-            className="bg-yellow-400 h-9 w-[19%] ml-[54%] mt-9 rounded text-black "
-          >
-            See Prices
-          </button>
-        </div>
-        <div className="w-1/2 bg-black text-white p-6">
-          <img
-            src="/images/IMG_2666.jpg"
-            alt="Right Side Image"
-            className="w-[53%] h-auto ml-40 mt-20"
-          />
-        </div>
-      </div> */}
       <DriverDashboard/>
       <Footer />
     </div>

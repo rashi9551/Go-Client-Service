@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
+import socketIOClient, { Socket } from 'socket.io-client'
+
 
 function Ride() {
   const [pickupLocation, setPickupLocation] = useState<string>("");
@@ -39,6 +41,23 @@ function Ride() {
     useState<google.maps.DirectionsResult | null>(null);
   const [distance, setdistance] = useState<string | undefined>(undefined);
   const [duration, setduration] = useState<string | undefined>(undefined);
+
+  const [socket,setSocket]=useState<Socket|null>(null)
+
+  useEffect(()=>{
+    const socketInstance=socketIOClient("http://localhost:3002")
+
+    setSocket(socketInstance);
+    console.log("Socket connected to client");
+
+    return () => {
+      if (socketInstance) {
+          socketInstance.disconnect();
+      }
+  };
+    
+    
+  },[])
 
   const reverseGeocode = async (latitude: number, longitude: number) => {
     try {
@@ -304,8 +323,11 @@ function Ride() {
         .required("Please choose an option!"),
     }),
     onSubmit: async (values) => {
-        console.log(values);
-        
+      console.log(values);
+      if (!user_id) {
+        return toast.error("Please login to book the cab!")
+    }
+    socket?.emit('getNearByDrivers',values)
     },
   });
 
@@ -316,22 +338,22 @@ function Ride() {
   };
 
   useEffect(() => {
-    formik.setFieldValue("pickupLocation", pickupLocation)
-    formik.setFieldValue("dropoffLocation", dropoffLocation)
-}, [pickupLocation, dropoffLocation])
+    formik.setFieldValue("pickupLocation", pickupLocation);
+    formik.setFieldValue("dropoffLocation", dropoffLocation);
+  }, [pickupLocation, dropoffLocation]);
 
-useEffect(() => {
-    formik.setFieldValue("pickupCoordinates", pickupCoordinates)
-    formik.setFieldValue("dropoffCoordinates", dropoffCoordinates)
-}, [pickupCoordinates, dropoffCoordinates])
+  useEffect(() => {
+    formik.setFieldValue("pickupCoordinates", pickupCoordinates);
+    formik.setFieldValue("dropoffCoordinates", dropoffCoordinates);
+  }, [pickupCoordinates, dropoffCoordinates]);
 
-useEffect(() => {
-    formik.setFieldValue("distance", distance)
-}, [distance])
+  useEffect(() => {
+    formik.setFieldValue("distance", distance);
+  }, [distance]);
 
-useEffect(() => {
+  useEffect(() => {
     formik.setFieldValue("duration", duration);
-}, [duration])
+  }, [duration]);
 
   if (!isLoaded) {
     return <div>its coming</div>;
@@ -427,10 +449,34 @@ useEffect(() => {
                   <div className="flex overflow-x-auto pb-4 car-selection">
                     <div className="flex gap-4">
                       {[
-                        { value: "Sedan", label: "Sedan", recommended: true, image: "images/sedan.png", price: charges.sedan },
-                        { value: "Standard", label: "Standard", recommended: false, image: "images/standard.png", price: charges.standard },
-                        { value: "SUV", label: "SUV", recommended: false, image: "images/suv.png", price: charges.suv },
-                        { value: "Premium", label: "Premium", recommended: false, image: "images/premium.png", price: charges.premium },
+                        {
+                          value: "Sedan",
+                          label: "Sedan",
+                          recommended: true,
+                          image: "images/sedan.png",
+                          price: charges.sedan,
+                        },
+                        {
+                          value: "Standard",
+                          label: "Standard",
+                          recommended: false,
+                          image: "images/standard.png",
+                          price: charges.standard,
+                        },
+                        {
+                          value: "SUV",
+                          label: "SUV",
+                          recommended: false,
+                          image: "images/suv.png",
+                          price: charges.suv,
+                        },
+                        {
+                          value: "Premium",
+                          label: "Premium",
+                          recommended: false,
+                          image: "images/premium.png",
+                          price: charges.premium,
+                        },
                       ].map((car, index) => (
                         <div
                           key={index}
@@ -447,12 +493,16 @@ useEffect(() => {
                             <h1 className="text-xs">{car.label}</h1>
                             {car.recommended && (
                               <span>
-                                <h1 className="text-[9px] mt-[3px] text-teal-500">Recommended</h1>
+                                <h1 className="text-[9px] mt-[3px] text-teal-500">
+                                  Recommended
+                                </h1>
                               </span>
                             )}
                           </div>
                           <div className="pl-5 mb-2">
-                            <h1 className="text-sm font-semibold">₹{car.price}/-</h1>
+                            <h1 className="text-sm font-semibold">
+                              ₹{car.price}/-
+                            </h1>
                           </div>
                           <div
                             className="h-20 bg-cover bg-center rounded-2xl"
@@ -468,7 +518,9 @@ useEffect(() => {
                     <button
                       type="submit"
                       className="w-full h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300"
-                      onClick={formik.errors.model ? () => showError() : () => null}
+                      onClick={
+                        formik.errors.model ? () => showError() : () => null
+                      }
                     >
                       Confirm the Ride
                     </button>

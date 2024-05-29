@@ -1,9 +1,10 @@
 import { useState } from "react";
-import AdminUsers from "../../../components/admin/user/AdminUsers";
+import AdminUsers from '../../../components/admin/user/AdminUsers'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { AdminNavbar } from "../../../components/admin/AdminNavbar";
+import AdminBlockedUsers from "../../../components/admin/user/AdminBlockedUsers";
 
-const AdminUserDetailsPage = () => {
+const AdminUserPage = () => {
     const [tab, settab] = useState(1);
 
     return (
@@ -14,13 +15,10 @@ const AdminUserDetailsPage = () => {
                     <div className="ml-5">
                         <TabList>
                             <Tab sx={{ fontSize: "24px" }} onClick={() => settab(1)}>
-                                <h1 className={tab === 1 ? "font-bold" : "font-normal"}>Verified Users</h1>
+                                <h1 className={tab === 1 ? "font-bold" : "font-normal"}>Unblocked Users</h1>
                             </Tab>
                             <Tab sx={{ fontSize: "24px" }} onClick={() => settab(2)}>
-                                <h1 className={tab === 2 ? "font-bold " : "font-normal"}>Pending Users</h1>
-                            </Tab>
-                            <Tab sx={{ fontSize: "24px" }} onClick={() => settab(3)}>
-                                <h1 className={tab === 3 ? "font-bold " : "font-normal"}>Blocked Users</h1>
+                                <h1 className={tab === 2 ? "font-bold " : "font-normal"}>Blocked Users</h1>
                             </Tab>
                         </TabList>
                         <TabIndicator mt="-1.5px" height="3px" bg="blue.500" borderRadius="1px" />
@@ -30,10 +28,7 @@ const AdminUserDetailsPage = () => {
                             <AdminUsers />
                         </TabPanel>
                         <TabPanel>
-                            <AdminUsers/>
-                        </TabPanel>
-                        <TabPanel>
-                            <AdminUsers/>
+                            <AdminBlockedUsers/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
@@ -42,4 +37,4 @@ const AdminUserDetailsPage = () => {
     );
 };
 
-export default AdminUserDetailsPage;
+export default AdminUserPage;
