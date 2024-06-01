@@ -1,20 +1,21 @@
-declare global {
-  interface Window {
-    recaptchaVerifier?: RecaptchaVerifier;
-  }
-}
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// declare global {
+//   interface Window {
+//     recaptchaVerifier?: RecaptchaVerifier;
+//   }
+// }
 import "./Sigunp.scss";
 import { useFormik } from "formik";
 import axiosUser from "../../../../service/axios/axiosUser";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  signInWithPhoneNumber,
-  RecaptchaVerifier,
-  Auth,
-  ConfirmationResult,
-} from "firebase/auth";
+// import {
+//   signInWithPhoneNumber,
+//   RecaptchaVerifier,
+//   Auth,
+//   ConfirmationResult,
+// } from "firebase/auth";
 
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
@@ -26,11 +27,14 @@ import GroupIcon from "@mui/icons-material/Group";
 import { signupValidation } from "../../../../utils/validation";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { auth } from "../../../../service/firebase";
+// import { auth } from "../../../../service/firebase";
 
 function Signup() {
   const [counter, setCounter] = useState(30);
   const [otpPage, setOtpPage] = useState(false);
+  const [userImageUrl,setuserImageUrl] = useState(null)
+  console.log(userImageUrl);
+  
 
   const navigate = useNavigate();
 
@@ -44,8 +48,8 @@ function Signup() {
   }, [counter, otpPage]);
 
   const [otp, setOtp] = useState<number>(0);
-  const [confirmationResult, setConfirmationResult] =
-    useState<ConfirmationResult | null>(null);
+  // const [confirmationResult, setConfirmationResult] =
+  //   useState<ConfirmationResult | null>(null);
 
   useEffect(() => {
       setOtpPage(false);
@@ -57,6 +61,8 @@ function Signup() {
     password: "",
     re_password: "",
     reffered_code: "",
+    userImage:null,
+    otp:"",
   };
   const formik = useFormik({
     initialValues,
@@ -70,14 +76,51 @@ function Signup() {
       }
     },
   });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string, setImageUrl: any)=>{
+  
+    const file = e.currentTarget.files?.[0];
+    if(file){
+        formik.setFieldValue(fieldName,file)
 
-  const signupSubmit = async () => {
+        const imageUrl=URL.createObjectURL(file);
+        setImageUrl(imageUrl)
+
+    }else{
+        setImageUrl(null)
+        formik.setFieldValue(fieldName,null)
+    }
+}
+
+  const signupSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     try {
-      const response = await axiosUser("").post("/register", formik.values);
-      console.log(response)
-      if (response.data.message === "Success") {
+      event.preventDefault()
+      const formData = new FormData();
+      formData.append('name', formik.values.name);
+      formData.append('email', formik.values.email);
+      formData.append('mobile', formik.values.mobile);
+      formData.append('password', formik.values.password);
+      formData.append('re_password', formik.values.re_password);
+      formData.append('reffered_code', formik.values.reffered_code);
+      formData.append('otp', otp.toString());
+      if (formik.values.userImage) {
+        formData.append('userImage', formik.values.userImage);
+      } 
+      if(counter<=0){
+        return toast.error("Time expired tap to resend")
+      }
+
+      const {data} = await axiosUser("").post(`/register`,formData,{
+        headers:{
+          "Content-Type":"multipart/form-data"
+      }
+      });
+      if (data.message === "Success") {
         toast.success("OTP verified succesfully");
         navigate("/login");
+      }else if(data.message === "Invalid OTP"){
+        console.log("ewndfvsh");
+        
+        toast.error("Invalid OTP");
       }
     } catch (error) {
       toast.error((error as Error).message);
@@ -86,76 +129,101 @@ function Signup() {
 
   const signipHandle = async (formData: unknown) => {
     try {
+      console.log("sdfvsjhbckjczb");
       const { data } = await axiosUser("").post("/checkUser", formData);
+            
       if (data.message === "user already have an account !") {
-        console.log(data);
         toast.info("user Already registered Please Login to continue");
         navigate("/login");
-      } else {
-        sendOtp();
       }
-    } catch (error) {
-      toast.error((error as Error).message);
-    }
-  };
-
-  const onCaptchaVerify = (auth: Auth) => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => {
-            toast.success("Otp sent successfully");
-          },
-          "expired-callback": () => {
-            toast.error("TimeOut");
-          },
-        }
-      );
-    }
-  };
-
-  const sendOtp = async () => {
-    try {
-      onCaptchaVerify(auth);
-      const number = "+91" + formik.values.mobile;
-      const appVerifier = window.recaptchaVerifier;
-      if (appVerifier) {
-        const result = await signInWithPhoneNumber(auth, number, appVerifier);
-        console.log(result, "-----");
-        setConfirmationResult(result);
+      else {
+        // sendOtp();
         setOtpPage(true);
-      } else {
-        throw new Error("Recaptcha verifier is not available.");
       }
     } catch (error) {
       toast.error((error as Error).message);
     }
   };
 
-  const otpVerify = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-    console.log("jdghshdg")
-    if (otp && confirmationResult) {
-        console.log("==========")
-      const otpValue: string = otp.toString();
-      console.log(otpValue,"otp")
-      confirmationResult
-        .confirm(otpValue)
-        .then(async () => {
-          signupSubmit();
-        })
-        .catch(() => {
-            console.log("catch")
-            toast.error("Enter a valid otp");
-        });
-    } else {
-        console.log("if")
-      toast.error("Enter a valid otp");
+  const resendOtp=async()=>{
+    try {
+      const {data}=await axiosUser("").post("/resendOtp",formik.values);
+
+      if(data.message==="OTP resent successfully"){
+        toast.success(data.mesaage)
+      }
+    } catch (error) {
+      toast.error((error as Error).message);
+
     }
-  };
+  }
+
+  // const onCaptchaVerify = (auth: Auth) => {
+  //   if (!window.recaptchaVerifier) {
+  //     window.recaptchaVerifier = new RecaptchaVerifier(
+  //       auth,
+  //       "recaptcha-container",
+  //       {
+  //         size: "invisible",
+  //         callback: () => {
+  //           toast.success("Otp sent successfully");
+  //         },
+  //         "expired-callback": () => {
+  //           toast.error("TimeOut");
+  //         },
+  //       }
+  //     );
+  //   }
+  // };
+
+  // const sendOtp = async () => {
+    // try {
+    //   onCaptchaVerify(auth);
+    //   const number = "+91" + formik.values.mobile;
+    //   const appVerifier = window.recaptchaVerifier;
+    //   if (appVerifier) {
+    //     const result = await signInWithPhoneNumber(auth, number, appVerifier);
+    //     console.log(result, "-----");
+    //     setConfirmationResult(result);
+        // setOtpPage(true);
+    //   } else {
+    //     throw new Error("Recaptcha verifier is not available.");
+    //   }
+    // } catch (error) {
+    //   toast.error((error as Error).message);
+    // }
+
+
+
+  // };
+
+  // const otpVerify = async(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  //   event.preventDefault();
+    // console.log("jdghshdg")
+    // if (otp && confirmationResult) {
+    //     console.log("==========")
+    //   const otpValue: string = otp.toString();
+    //   console.log(otpValue,"otp")
+    //   confirmationResult
+    //     .confirm(otpValue)
+    //     .then(async () => {
+    //       signupSubmit();
+    //     })
+    //     .catch((error) => {
+    //         console.log(error)
+    //         toast.error("Enter a valid otp");
+    //     });
+    // } else {
+    //     console.log("if")
+    //   toast.error("Enter a valid otp");
+    // }
+
+
+  // };
+
+  useEffect(() => {
+    formik.setFieldValue("otp", otp);
+  }, [otp]);
 
   const handleOtpChange = (index: number, newValue: number) => {
     const newOtp = [...otp.toString()];
@@ -222,9 +290,9 @@ function Signup() {
                   </HStack>
 
                   <button
-                    onClick={otpVerify}
+                    onClick={signupSubmit}
                     type="submit"
-                    className="block w-full text-white bg-blue-800 py-2 my-4 rounded-2xl text-golden font-semibold mb-2"
+                    className="block w-full text-white bg-blue-800 py-2 my-4 rounded-2xl font-semibold mb-2"
                   >
                     Verify
                   </button>
@@ -237,7 +305,7 @@ function Signup() {
                         onClick={() => {
                           setCounter(40);
                           setOtp(0)
-                          sendOtp();
+                          resendOtp();
                         }}
                       >
                         Resend OTP
@@ -372,9 +440,30 @@ function Signup() {
                         {formik.errors.reffered_code}
                       </p>
                     )}
+                    <div className="text-left md:pr-3">
+                        <h1 className="text-blue-800 font-bold text-xs mb-1">Upload Your Profile Image</h1>
+                        <div className="mb-5 mt-3">
+                            <input
+                                id="rcImage"
+                                type="file"
+                                name="rcImage"
+                                accept="image/*"
+                                onChange={(e) => handleFileChange(e, 'userImage', setuserImageUrl)}
+
+                                className="block w-full px-3 py-1.5 mt-2 text-sm text-gray-600 bg-white border
+                      border-gray-200 rounded-2xl file:bg-gray-200 file:text-gray-700 file:text-sm 
+                      file:px-4 file:py-0.5 file:border-none file:rounded-full dark:file:bg-gray-200 dark:file:text-gray-500
+                      dark:text-gray-800 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none 
+                      focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-gray-300 dark:focus:border-blue-300"
+                            />
+                            <p className="text-xs my-2 text-red-500">
+                                {formik.touched.userImage && formik.errors.userImage}
+                            </p>
+                        </div>
+                    </div>
                   <button
                     type="submit"
-                    className="block w-full text-white bg-blue-800 py-2 rounded-2xl text-golden font-semibold mt-3 mb-2"
+                    className="block w-full text-white bg-blue-800 py-2 rounded-2xl font-semibold mt-3 mb-2"
                   >
                     Register Now
                   </button>

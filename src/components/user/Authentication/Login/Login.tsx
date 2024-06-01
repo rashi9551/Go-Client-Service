@@ -1,4 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+declare global {
+  interface Window {
+    recaptchaVerifier?: RecaptchaVerifier;
+  }
+}
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -24,7 +30,6 @@ import { useDispatch } from "react-redux";
 import { userLogin } from "../../../../service/redux/slices/userAuthSlice";
 
 import {  CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { openPendingModal } from "../../../../service/redux/slices/pendingModalSlice";
 
 interface UserData {
   user: string;
@@ -69,6 +74,8 @@ function Login() {
             user_id: data._id,
             loggedIn:true
           });
+          console.log(data.message);
+          
         } else if (data.message === "Blocked") {
           toast.info("your account is blocked");
         } else {
@@ -162,18 +169,9 @@ function Login() {
             if (data.message === "Success") {
                 toast.success("Login success!");
                 dispatch(userLogin({user: data.name, userToken: data.token, user_id: data._id,loggedIn:true}));
-                localStorage.removeItem("userId")
                 navigate("/");
-            } else if (data.message === "Incomplete registration") {
-                toast.info("Please complete the verification!");
-                localStorage.setItem("userId", data.userId);
-                navigate("/identification");
-            } else if (data.message === "Not verified") {
-                dispatch(openPendingModal());
-            } else if (data.message === "Rejected") {
-                toast.error("rejected");
-                // dispatch(openRejectedModal());
-                localStorage.setItem("userId",data.userId);
+            } else if (data.message === "Blocked") {
+                toast.error("Your Blocked By Admin");
             } else {
                 toast.error("Not registered! Please register to  continue.");
             }

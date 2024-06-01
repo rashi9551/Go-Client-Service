@@ -26,6 +26,8 @@ function Vehicle() {
             try {
                 setLoad(true)
                 const driverId=localStorage.getItem('driverId');
+                console.log(values.carImage,"======");
+                
                 const {data}= await axiosDriver("").post(`vehicleDetails?driverId=${driverId}`,values,{
                     headers:{
                         "Content-Type":"multipart/form-data"

@@ -16,6 +16,7 @@ import AdminDriverPendingDetails from './pages/admin/adminDriver/AdminDriverPend
 import AdminDriverDetailsVerified from './pages/admin/adminDriver/AdminVerifiedDriverPage.tsx';
 import DriverDashboardPage from './pages/driver/Dashboard/DriverDashboardPage.tsx';
 import AdminUserPage from './pages/admin/adminUser/AdminUserPage.tsx';
+import Profilepage from './pages/user/Home/profilePage.tsx';
 
 function App() {
   const  user  = useSelector((store:{ user: { loggedIn: boolean } })=>store.user.loggedIn);
@@ -34,6 +35,7 @@ function App() {
               <Route path='/' element={<HomePage/>}/>
               <Route path='/login' element={user ? <Navigate to={'/'}/>:<LoginPage/>}/>
               <Route path='/signup' element={user ? <Navigate to={'/'}/>:<SigunpPage/>}/>
+              <Route path='/account' element={!user ? <Navigate to={'/login'}/>:<Profilepage/>}/>
 
           {/* driver route  */}
           <Route path='/driver/login' element={driver ? <Navigate to={'/driver/dashboard'}/>:  <DriverLoginPage/>}/>

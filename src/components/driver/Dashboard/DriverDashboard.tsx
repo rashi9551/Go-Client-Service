@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import EmergencyShareIcon from "@mui/icons-material/EmergencyShare";
 import { RideDetails } from "../../../utils/interfaces";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import socketIOClient, { Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
 
@@ -73,31 +73,33 @@ export const DriverDashboard = () => {
     );
   };
 
-  const { driver_id, driverToken } = useSelector((store: any) => store.driver);
+  const { driverId } = useSelector((store: any) => store.driver);
 
   const [rides, setRides] = useState<RideDetails | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const audioRef = useRef<HTMLAudioElement|null>(null);
+  audioRef.current = new Audio('/uber_tune.mp3');
 
+  
   useEffect(() => {
     const socketInstance = socketIOClient("http://localhost:3002");
-    console.log("socket connected to driver side ");
+    console.log("socket connected to driver side ",socket);
     setSocket(socketInstance);
     socketInstance.on("connect", () => {
       console.log("Connected to server with ID:", socketInstance.id);
     });
     socketInstance.on("getNearByDrivers", () => {
+      console.log("location edukkunnu");
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            if (socketInstance) {
-              console.log("Socket is still on after getting coords");
-            }
+            console.log(latitude,longitude);
             socketInstance?.emit(
               "driverLocation",
               latitude,
               longitude,
-              driver_id
+              driverId
             );
           },
           (error) => {
@@ -107,15 +109,44 @@ export const DriverDashboard = () => {
       }
     });
 
+    socketInstance.on('newRideRequest',(rideDetails,driverIdArray)=>{
+      console.log(rideDetails,"ride rquest mannu");
+      
+      if(driverIdArray.includes(driverId)){
+        if (audioRef.current) {
+          audioRef.current.play();
+        }
+        setRides(rideDetails)
+        setTimeout(()=>{
+          setRides(null)
+        },5000)
+
+      }
+      console.log(driverIdArray,driverId,"------");
+      
+    })
+
     return () => {
       if (socketInstance) {
         socketInstance.disconnect();
       }
     };
   }, []);
+
+  const handleAcceptRide=()=>{
+    if(socket)
+      {
+        const updateRideDetais={...rides,driverId}
+        socket.emit("acceptRide",updateRideDetais)
+        console.log("accept ride aaayi");
+        
+      }
+  }
+
+
   return (
     <div className="w-[81.5%] h-fit mx-auto my-[2.5rem] bg-gray-100 py-6 rounded-3xl drop-shadow-lg">
-      <div className="w-full max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-6">
+      {rides  &&  (<div className="w-[90%] mx-auto bg-white shadow-lg rounded-xl p-6">
         <div className="flex items-center space-x-4 mb-4">
           <EmergencyShareIcon className="text-blue-500 w-6 h-6" />
           <div>
@@ -130,40 +161,41 @@ export const DriverDashboard = () => {
         <div className="flex justify-between items-center space-x-4">
           <div className="flex flex-col items-start">
             <span className="font-bold">Pickup:</span>
-            <span>Koramangala</span>
+            <span>{rides.pickupLocation}</span>
           </div>
           <div className="flex flex-col items-start">
             <span className="font-bold">Dropoff:</span>
-            <span>Madiwala</span>
+            <span>{rides.dropoffLocation}</span>
           </div>
           <div className="flex flex-col items-start">
             <span className="font-bold">Distance:</span>
-            <span>4 km</span>
+            <span>{rides.distance}</span>
           </div>
           <div className="flex flex-col items-start">
             <span className="font-bold">Duration:</span>
-            <span>15 mins</span>
+            <span>{rides.duration}</span>
           </div>
           <div className="flex flex-col items-start">
             <span className="font-bold">Charge:</span>
-            <span>₹200</span>
+            <span>{rides.price}</span>
           </div>
           <div className="flex space-x-4">
             <button
-              // onClick={() => setRides(null)}
+              onClick={() => setRides(null)}
               className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
             >
               Deny
             </button>
             <button
-              // onClick={() => handleAcceptRide()}
+              onClick={() => handleAcceptRide()}
               className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
             >
               Accept
             </button>
           </div>
         </div>
-      </div>
+      </div>)}
+      
 
       <div className="w-[95%] mx-auto md:h-fit h-fit md:grid-cols-3 md:gap-8 grid gap-5 mt-6">
         <div className="bg-blue-400 rounded-3xl md:grid-cols-1 grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">

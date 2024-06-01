@@ -266,19 +266,19 @@ function Ride() {
   const handleModelSelection = (e: ChangeEvent<HTMLInputElement>) => {
     switch (e.target.value) {
       case "Standard":
-        formik.setFieldValue("model", "Standard");
+        formik.setFieldValue("vehicleModel", "Standard");
         formik.setFieldValue("price", charges.standard);
         break;
       case "SUV":
-        formik.setFieldValue("model", "SUV");
+        formik.setFieldValue("vehicleModel", "SUV");
         formik.setFieldValue("price", charges.suv);
         break;
       case "Premium":
-        formik.setFieldValue("model", "Premium");
+        formik.setFieldValue("vehicleModel", "Premium");
         formik.setFieldValue("price", charges.premium);
         break;
       case "Sedan":
-        formik.setFieldValue("model", "Sedan");
+        formik.setFieldValue("vehicleModel", "Sedan");
         formik.setFieldValue("price", charges.sedan);
         break;
     }
@@ -311,29 +311,29 @@ function Ride() {
     dropoffCoordinates: {},
     distance: "",
     duration: "",
-    model: "",
+    vehicleModel: "",
     price: 0,
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema: Yup.object({
-      model: Yup.string()
+      vehicleModel: Yup.string()
         .min(3, "Please choose an option!")
         .required("Please choose an option!"),
     }),
     onSubmit: async (values) => {
-      console.log(values);
       if (!user_id) {
         return toast.error("Please login to book the cab!")
     }
+    console.log("request confirm aayi")
     socket?.emit('getNearByDrivers',values)
     },
   });
 
   const showError = () => {
-    if (formik.errors.model) {
-      toast.error(formik.errors.model);
+    if (formik.errors.vehicleModel) {
+      toast.error(formik.errors.vehicleModel);
     }
   };
 
@@ -487,7 +487,7 @@ function Ride() {
                               type="radio"
                               value={car.value}
                               onChange={handleModelSelection}
-                              name="model"
+                              name="vehicleModel"
                               className="radio-xs checked:bg-blue-500"
                             />
                             <h1 className="text-xs">{car.label}</h1>
@@ -519,7 +519,7 @@ function Ride() {
                       type="submit"
                       className="w-full h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300"
                       onClick={
-                        formik.errors.model ? () => showError() : () => null
+                        formik.values.vehicleModel==="" ? () => showError() : () => null
                       }
                     >
                       Confirm the Ride

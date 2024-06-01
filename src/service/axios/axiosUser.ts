@@ -4,6 +4,7 @@ import axios from "axios";
 const createAxios=(userToken:string)=>{
     const axiosUser=axios.create({
         baseURL:"http://localhost:3001/users",
+        withCredentials:true,
         headers:{
             "Content-Type":"application/json"
         }

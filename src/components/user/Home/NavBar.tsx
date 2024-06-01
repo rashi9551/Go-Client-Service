@@ -48,7 +48,7 @@ function NavBar() {
           <a href="#" onClick={() => navigate("/driver/login")} className="hover:text-gray-300">
             Drive
           </a>
-          <a href="#" className="hover:text-gray-300">
+          <a href="#" onClick={() => navigate("/account")} className="hover:text-gray-300">
             Account
           </a>
           <a href="#" className="hover:text-gray-300">
