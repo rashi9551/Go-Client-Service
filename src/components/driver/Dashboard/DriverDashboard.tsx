@@ -111,8 +111,9 @@ export const DriverDashboard = () => {
 
     socketInstance.on('newRideRequest',(rideDetails,driverIdArray)=>{
       console.log(rideDetails,"ride rquest mannu");
-      
       if(driverIdArray.includes(driverId)){
+        console.log("driver ullatha");
+        
         if (audioRef.current) {
           audioRef.current.play();
         }
@@ -125,6 +126,9 @@ export const DriverDashboard = () => {
       console.log(driverIdArray,driverId,"------");
       
     })
+    // socketInstance.on("driverConfirmation",(rideId)=>{
+
+    // })
 
     return () => {
       if (socketInstance) {
@@ -136,8 +140,10 @@ export const DriverDashboard = () => {
   const handleAcceptRide=()=>{
     if(socket)
       {
-        const updateRideDetais={...rides,driverId}
+        const driver_id=driverId
+        const updateRideDetais={...rides,driver_id}
         socket.emit("acceptRide",updateRideDetais)
+        setRides(null)
         console.log("accept ride aaayi");
         
       }

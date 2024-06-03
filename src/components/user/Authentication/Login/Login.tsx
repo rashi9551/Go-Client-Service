@@ -48,7 +48,6 @@ function Login() {
     loggedIn:false
   });
   const dispatch=useDispatch()
-
   console.log(userData);
   const formik = useFormik({
     initialValues: {
@@ -166,6 +165,8 @@ function Login() {
       if (token) {
         const decode = jwtDecode(token) as any
         const { data } = await axiosUser("").post("checkGoogleLoginUser", { email: decode.email });
+        console.log(data);
+        
             if (data.message === "Success") {
                 toast.success("Login success!");
                 dispatch(userLogin({user: data.name, userToken: data.token, user_id: data._id,loggedIn:true}));

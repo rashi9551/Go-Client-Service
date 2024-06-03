@@ -70,7 +70,7 @@ function Signup() {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         console.log("sub");
-        await signipHandle(values);
+        await signipHandle(values.email,values.mobile);
       } catch (error) {
         setSubmitting(false);
       }
@@ -127,10 +127,9 @@ function Signup() {
     }
   };
 
-  const signipHandle = async (formData: unknown) => {
+  const signipHandle = async (email:string,mobile:string) => {
     try {
-      console.log("sdfvsjhbckjczb");
-      const { data } = await axiosUser("").post("/checkUser", formData);
+      const { data } = await axiosUser("").post("/checkUser", {email,mobile});
             
       if (data.message === "user already have an account !") {
         toast.info("user Already registered Please Login to continue");

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { axiosAdminUser } from "../../../service/axios/axiosAdmin";
+import { axiosAdmin } from "../../../service/axios/axiosAdmin";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
@@ -11,32 +11,36 @@ const AdminBlockedUsers = () => {
 
     const getData = async () => {
         try {
-            const { data } = await axiosAdminUser(adminToken).get("blockedUserData");
+            const { data } = await axiosAdmin(adminToken).get("blockedUserData");
             setusersData(data);
+            console.log(data);
+            
         } catch (error) {
             toast.error((error as Error).message)
             console.log(error);
         }
     };
 
-    useEffect(() => {
-        getData();
-    }, []);
-
+    
     const unblockUser=async (id:string)=>{
         try {
             
-             await axiosAdminUser(adminToken).post(`unblockUser?id=${id}`);
-        } catch (error:any) {
-            toast.error(error.message)
+            const {data}=await axiosAdmin(adminToken).post(`unblockUser?id=${id}`);
+            if(data.message)
+                {
+                    toast.success(data.message)
+                }
+                await getData();
+            } catch (error:any) {
+                toast.error(error.message)
+            }
         }
-    }
-    
-    useEffect(() => {
-        getData();
-    }, [unblockUser]);
-    
-
+        
+        useEffect(() => {
+            getData();
+        },[]);
+        
+        
     return (
         <>
     <div className="overflow-x-auto">
@@ -53,7 +57,7 @@ const AdminBlockedUsers = () => {
             </thead>
             <tbody>
                 {/* row 1 */}
-                {usersData.map((users: any, index) => {
+                {usersData && usersData.map((users: any, index) => {
                     return (
                         <tr key={index + 1} className="bg-white border-b">
                             <th className="px-4 py-2">{index + 1}</th>
@@ -62,7 +66,7 @@ const AdminBlockedUsers = () => {
                                     <div className="avatar">
                                         <div className="mask mask-squircle w-12 h-12">
                                             <img
-                                                src={users.driverImage}
+                                                src={users.userImage}
                                                 alt="Driver Avatar"
                                             />
                                         </div>

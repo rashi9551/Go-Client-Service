@@ -14,9 +14,11 @@ const ProfileInfo = () => {
 
     const [userData, setuserData] = useState<any | {}>({})
 
+    console.log(userData);
     const getData = async () => {
         try {
             const { data } = await axiosUser(userToken).get(`userData?id=${user_id}`)
+            
             setuserData(data)
         } catch (error) {
             toast.error((error as Error).message)
@@ -93,14 +95,14 @@ const ProfileInfo = () => {
                             <div className='md:flex gap-6'>
                                 <Input label={userData?.email} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                                 <p className='w-1/2 md:hidden'>Refferl Code</p>
-                                <Input label={userData?.referral_code} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                                <Input label={userData?.referralCode} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                             </div>
                             <div className='w-full flex gap-6 -mb-3'>
                                 <p className='w-1/2'>Account Status</p>
                                 <p className='w-1/2 hidden md:block'>Joining Date</p>
                             </div>
                             <div className='md:flex gap-6 overflow-hidden'>
-                                <Input label={userData?.account_status} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                                <Input label={userData?.accountStatus} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                                 <p className='w-1/2 md:hidden'>Joining Date</p>
                                 <Input className='' label={userData?.formattedDate} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                             </div>

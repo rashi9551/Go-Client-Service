@@ -32,10 +32,10 @@ function App() {
         <Routes>
 
           {/* user roter  */}
-              <Route path='/' element={<HomePage/>}/>
-              <Route path='/login' element={user ? <Navigate to={'/'}/>:<LoginPage/>}/>
-              <Route path='/signup' element={user ? <Navigate to={'/'}/>:<SigunpPage/>}/>
-              <Route path='/account' element={!user ? <Navigate to={'/login'}/>:<Profilepage/>}/>
+          <Route path='/' element={<HomePage/>}/>
+          <Route path='/login' element={user ? <Navigate to={'/'}/>:<LoginPage/>}/>
+          <Route path='/signup' element={user ? <Navigate to={'/'}/>:<SigunpPage/>}/>
+          <Route path='/account' element={!user ? <Navigate to={'/login'}/>:<Profilepage/>}/>
 
           {/* driver route  */}
           <Route path='/driver/login' element={driver ? <Navigate to={'/driver/dashboard'}/>:  <DriverLoginPage/>}/>

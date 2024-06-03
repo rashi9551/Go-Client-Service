@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const axiosAdminUser=(adminToken:string)=>{
+export const axiosAdmin=(adminToken:string)=>{
     const axiosAdmin=axios.create({
-        baseURL:"http://localhost:3001/admin",
+        baseURL:"http://localhost:3000/api/admin",
         headers:{
             "Content-Type":"application/json"
         }

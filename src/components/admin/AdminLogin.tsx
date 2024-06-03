@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { adminValidation } from "../../utils/validation";
-import {axiosAdminUser} from "../../service/axios/axiosAdmin";
+import {axiosAdmin} from "../../service/axios/axiosAdmin";
 import { toast } from "react-toastify";
 import { adminLogin } from "../../service/redux/slices/adminAuthSlice";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
@@ -24,7 +24,7 @@ function AdminLogin() {
     validationSchema: adminValidation,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axiosAdminUser("").post("/login", values);
+        const { data } = await axiosAdmin("").post("/login", values);
         if (data.message === "Success") {
           toast.success("Login Successfully");
           dispatch(adminLogin({ name: data.email, adminToken: data.token }));

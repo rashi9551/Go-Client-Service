@@ -3,7 +3,7 @@ import axios from "axios";
 
 const createAxios=(userToken:string)=>{
     const axiosUser=axios.create({
-        baseURL:"http://localhost:3001/users",
+        baseURL:"http://localhost:3000/api/user",
         withCredentials:true,
         headers:{
             "Content-Type":"application/json"
