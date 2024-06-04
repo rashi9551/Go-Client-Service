@@ -3,7 +3,7 @@ import axios from "axios";
 
 const createAxios=(driverToken:string)=>{
     const axiosDriver=axios.create({
-        baseURL:"http://localhost:3002/driver",
+        baseURL:"http://localhost:3000/api/driver",
         headers:{
             "Content-Type":"application/json"
         }

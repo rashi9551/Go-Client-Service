@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosAdminDriver } from "../../../service/axios/axiosAdmin";
+import { axiosAdmin } from "../../../service/axios/axiosAdmin";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -13,7 +13,7 @@ function PendingDriver() {
   
   const pendingDriverGet = async () => {
     try {
-      const { data } = await axiosAdminDriver(adminToken).get("pendingDrivers");
+      const { data } = await axiosAdmin(adminToken).get("pendingDrivers");
       setdriverData(data);
     } catch (error: any) {
       toast.error(error.message);

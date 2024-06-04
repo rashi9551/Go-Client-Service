@@ -113,7 +113,6 @@ export const DriverDashboard = () => {
       console.log(rideDetails,"ride rquest mannu");
       if(driverIdArray.includes(driverId)){
         console.log("driver ullatha");
-        
         if (audioRef.current) {
           audioRef.current.play();
         }

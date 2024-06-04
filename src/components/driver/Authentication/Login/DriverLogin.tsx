@@ -145,6 +145,7 @@ function DriverLogin() {
             if (token) {
                 const decode = jwtDecode(token) as any
                 const response = await axiosDriver("").post("checkGoogleLoginDriver", {email:decode.email});
+                console.log(decode.email,"ithu email");
                 if (response.data.message === "Success") {
                     toast.success("Login success!");
                     dispatch(

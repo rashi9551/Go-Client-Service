@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { axiosAdminDriver } from "../../../service/axios/axiosAdmin";
+import { axiosAdmin } from "../../../service/axios/axiosAdmin";
 import { toast } from "react-toastify";
 import { DriverInterface } from "../../../utils/interfaces";
 import { useFormik } from "formik";
@@ -22,7 +22,7 @@ function VerifiedDriverDetails() {
         try {
             setLoad(true)
             await new Promise((resolve)=>setTimeout(resolve,1000))
-            const {data}= await axiosAdminDriver(adminToken).get(`driverData?id=${id}`)
+            const {data}= await axiosAdmin(adminToken).get(`driverData?id=${id}`)
             setLoad(false)
             setdriverData(data)
         } catch (error) {
@@ -46,7 +46,7 @@ function VerifiedDriverDetails() {
         }),
         onSubmit:async(values,{setSubmitting})=>{
             try {
-                const {data}=await axiosAdminDriver(adminToken).post(`updateDriverStatus?id=${id}`,values)
+                const {data}=await axiosAdmin(adminToken).post(`updateDriverStatus?id=${id}`,values)
                 if(data.message==="Success"){
                     setStatusModalOpen(false);
                     toast.success("Status update successfully")

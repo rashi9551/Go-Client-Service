@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { axiosAdminDriver } from "../../../service/axios/axiosAdmin";
+import { axiosAdmin } from "../../../service/axios/axiosAdmin";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Dialog } from "@material-tailwind/react";
@@ -27,7 +27,7 @@ function PendingDetails() {
     await new Promise((resolve)=>setTimeout(resolve,1000))
     try {
         
-        const { data } = await axiosAdminDriver(adminToken).get(
+        const { data } = await axiosAdmin(adminToken).get(
             `driverData?id=${id}`
         );
       setdriverData(data);
@@ -45,7 +45,7 @@ function PendingDetails() {
 
   const verifyDriver = async () => {
     try {
-      const { data } = await axiosAdminDriver(adminToken).post(`verifiedUser?id=${id}`);
+      const { data } = await axiosAdmin(adminToken).post(`verifyDriver?id=${id}`);
       if (data.message === "Success") {
         toast.success("Driver verified successfully");
         navigate("/admin/drivers");
@@ -70,7 +70,7 @@ function PendingDetails() {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axiosAdminDriver(adminToken).post(`rejectDriver?id=${id}`);
+        const { data } = await axiosAdmin(adminToken).post(`rejectDriver?id=${id}`);
         if (data.message === "Success") {
           setrejectModal(false);
           toast.success("Driver rejected successfully");
