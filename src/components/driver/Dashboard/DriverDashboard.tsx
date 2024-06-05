@@ -110,12 +110,11 @@ export const DriverDashboard = () => {
     });
 
     socketInstance.on('newRideRequest',(rideDetails,driverIdArray)=>{
-      console.log(rideDetails,"ride rquest mannu");
       if(driverIdArray.includes(driverId)){
-        console.log("driver ullatha");
         if (audioRef.current) {
           audioRef.current.play();
         }
+        console.log(rideDetails,"ride rquest mannu");
         setRides(rideDetails)
         setTimeout(()=>{
           setRides(null)
