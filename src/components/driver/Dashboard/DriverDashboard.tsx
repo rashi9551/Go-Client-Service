@@ -79,10 +79,10 @@ export const DriverDashboard = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const audioRef = useRef<HTMLAudioElement|null>(null);
   audioRef.current = new Audio('/uber_tune.mp3');
-
+  const driverServerUrl=import.meta.env.DRIVER_SERVER_URL
   
   useEffect(() => {
-    const socketInstance = socketIOClient("http://localhost:3002");
+    const socketInstance = socketIOClient(driverServerUrl);
     console.log("socket connected to driver side ",socket);
     setSocket(socketInstance);
     socketInstance.on("connect", () => {

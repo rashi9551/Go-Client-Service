@@ -33,8 +33,8 @@ import {  CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 interface UserData {
   user: string;
-  userToken: string;
   user_id: string;
+  userToken:string;
   loggedIn: boolean;
 }
 
@@ -43,8 +43,8 @@ function Login() {
   const navigate = useNavigate();
   const [userData, setuserData] = useState<UserData>({
     user: "",
-    userToken:"",
     user_id: "",
+    userToken:"",
     loggedIn:false
   });
   const dispatch=useDispatch()
@@ -61,7 +61,7 @@ function Login() {
     }),
     onSubmit: async (values) => {
       try {
-        const { data } = await axiosUser("").post("/checkLoginUser", values);
+        const { data } = await axiosUser().post("/checkLoginUser", values);
         console.log(data);
         
         if (data.message === "Success") {
@@ -69,8 +69,8 @@ function Login() {
           console.log(data,"-========")
           setuserData({
             user: data.name,
-            userToken: data.token,
             user_id: data._id,
+            userToken:data.token,
             loggedIn:true
           });
           console.log(data.message);
@@ -148,6 +148,7 @@ function Login() {
         .confirm(otpValue)
         .then(async () => {
           console.log(userData,"-------")
+          localStorage.setItem("userToken",userData.userToken)
           dispatch(userLogin(userData))
           toast.success("login success");
           navigate("/");
@@ -164,12 +165,13 @@ function Login() {
       const token:string |undefined=datas.credential
       if (token) {
         const decode = jwtDecode(token) as any
-        const { data } = await axiosUser("").post("checkGoogleLoginUser", { email: decode.email });
+        const { data } = await axiosUser().post("checkGoogleLoginUser", { email: decode.email });
         console.log(data);
         
             if (data.message === "Success") {
                 toast.success("Login success!");
-                dispatch(userLogin({user: data.name, userToken: data.token, user_id: data._id,loggedIn:true}));
+                localStorage.setItem("userToken",data.token)
+                dispatch(userLogin({user: data.name,user_id: data._id,loggedIn:true}));
                 navigate("/");
             } else if (data.message === "Blocked") {
                 toast.error("Your Blocked By Admin");

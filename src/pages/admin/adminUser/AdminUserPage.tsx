@@ -1,8 +1,8 @@
 import { useState } from "react";
-import AdminUsers from '../../../components/admin/user/AdminUsers'
+import AdminUsers from '../../../components/admin/User/AdminUsers'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { AdminNavbar } from "../../../components/admin/AdminNavbar";
-import AdminBlockedUsers from "../../../components/admin/user/AdminBlockedUsers";
+import AdminBlockedUsers from "../../../components/admin/User/AdminBlockedUsers";
 
 const AdminUserPage = () => {
     const [tab, settab] = useState(1);

@@ -78,6 +78,7 @@ function DirverNavbar() {
                     <li
                       onClick={() => {
                         dispatch(driverLogout());
+                        localStorage.removeItem("driverToken")
                       }}
                     >
                       Logout

@@ -9,7 +9,7 @@ function VerifiedDriver() {
   const [driversData, setdriverData] = useState([]);
   const navigate = useNavigate();
 
-  const { adminToken } = useSelector((store: any) => store.admin);  
+  const { adminToken } = useSelector((store: {admin:{adminToken:string}}) => store.admin);  
   const verifiedDriverGet = async () => {
     try {
       const { data } = await axiosAdmin(adminToken).get("verifiedDrivers");

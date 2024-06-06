@@ -31,7 +31,7 @@ const AdminUsers = () => {
              const {data}=await axiosAdmin(adminToken).post(`blockUser?id=${id}`);
              if(data.message)
                 {
-                    toast.success(data.message)
+                    toast.success("block user success fully")
                 }
              getData()
         } catch (error:any) {

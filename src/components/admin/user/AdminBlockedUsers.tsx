@@ -28,7 +28,7 @@ const AdminBlockedUsers = () => {
             const {data}=await axiosAdmin(adminToken).post(`unblockUser?id=${id}`);
             if(data.message)
                 {
-                    toast.success(data.message)
+                    toast.success("user unblocked successfully")
                 }
                 await getData();
             } catch (error:any) {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
-const createAxios=(driverToken:string)=>{
+const createAxios=()=>{
     const axiosDriver=axios.create({
         baseURL:"http://localhost:3000/api/driver",
         headers:{
@@ -10,7 +10,7 @@ const createAxios=(driverToken:string)=>{
     });
     axiosDriver.interceptors.request.use(
         (config: any) => {
-            const token = driverToken
+            const token = localStorage.getItem("driverToken")
             return {
                 ...config,
                 headers: {

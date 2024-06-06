@@ -10,14 +10,13 @@ import axiosUser from '../../../service/axios/axiosUser';
 
 const ProfileInfo = () => {
 
-    const {user_id,userToken} = useSelector((store: any) => store.user)
-
+    const {user_id} = useSelector((store: any) => store.user)
     const [userData, setuserData] = useState<any | {}>({})
 
     console.log(userData);
     const getData = async () => {
         try {
-            const { data } = await axiosUser(userToken).get(`userData?id=${user_id}`)
+            const { data } = await axiosUser().get(`userData?id=${user_id}`)
             
             setuserData(data)
         } catch (error) {
@@ -44,9 +43,10 @@ const ProfileInfo = () => {
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
-                const { data } = await axiosUser(userToken).post(`profileUpdate?user_id=${user_id}`, values)
+                const { data } = await axiosUser().post(`profileUpdate?user_id=${user_id}`, values)
                 if (data.message === "Success") {
-                    setuserData(data.userData)
+                    console.log(data);
+                    setuserData(data.newData)
                     seteditProfile(false)
                     toast.success("Profile updated successfully!")
                 }

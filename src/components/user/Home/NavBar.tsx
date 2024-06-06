@@ -73,6 +73,7 @@ function NavBar() {
                     <li
                       onClick={() => {
                         dispatch(userLogout());
+                        localStorage.removeItem("userToken")
                         navigate("/login");
                       }}
                     >
@@ -121,6 +122,7 @@ function NavBar() {
                   <button
                     onClick={() => {
                       dispatch(userLogout());
+                      localStorage.removeItem('userToken')
                       navigate("/login");
                     }}
                   >

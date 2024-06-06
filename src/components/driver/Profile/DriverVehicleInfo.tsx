@@ -5,13 +5,13 @@ import toast from 'react-hot-toast'
 import { useSelector } from 'react-redux';
 
 const DriverVehicleInfo = () => {
-    const {driverId,driverToken} =useSelector((store: any) => store.driver)
+    const {driverId} =useSelector((store: any) => store.driver)
     const [driverData, setdriverData] = useState<any | object>({})
 
     
     const getData = async () => {
         try {
-            const { data } = await axiosDriver(driverToken).get(`driverData?driver_id=${driverId}`)
+            const { data } = await axiosDriver().get(`driverData?driver_id=${driverId}`)
             setdriverData(data)
         } catch (error) {
             toast.error((error as Error).message)

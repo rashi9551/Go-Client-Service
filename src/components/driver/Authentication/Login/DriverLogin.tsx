@@ -32,7 +32,7 @@ function DriverLogin() {
     const [otp,setOtp]=useState<number>(0);
     const [driverData,setdriverData]=useState({
         name:"",
-        driverToken:null,
+        driverToken:"",
         driver_id:""
     })
     const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
@@ -53,7 +53,7 @@ function DriverLogin() {
         }),
         onSubmit:async (values)=>{
             try {
-                const {data}=await axiosDriver("").post("/checkLoginDriver",values)
+                const {data}=await axiosDriver().post("/checkLoginDriver",values)
                 console.log(data);
                 
                 if(data.message==="Success"){
@@ -121,6 +121,7 @@ function DriverLogin() {
             .confirm(otpValue)
                 .then(async () => {
                     toast.success("Login success");
+                    localStorage.setItem("driverToken",driverData.driverToken)
                     dispatch(driverLogin(driverData));
                     navigate("/driver/dashboard");
                     localStorage.removeItem("driverId");
@@ -144,10 +145,11 @@ function DriverLogin() {
                 const token:string |undefined=datas.credential
             if (token) {
                 const decode = jwtDecode(token) as any
-                const response = await axiosDriver("").post("checkGoogleLoginDriver", {email:decode.email});
+                const response = await axiosDriver().post("checkGoogleLoginDriver", {email:decode.email});
                 console.log(decode.email,"ithu email");
                 if (response.data.message === "Success") {
                     toast.success("Login success!");
+                    localStorage.setItem("driverToken",response.data.token)
                     dispatch(
                         driverLogin({
                             name: response.data.name,

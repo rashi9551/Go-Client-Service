@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
-const createAxios=(userToken:string)=>{
+const createAxios=()=>{
     const axiosUser=axios.create({
         baseURL:"http://localhost:3000/api/user",
         withCredentials:true,
@@ -12,7 +12,7 @@ const createAxios=(userToken:string)=>{
     axiosUser.interceptors.request.use(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (config: any) => {
-            const token = userToken;
+            const token = localStorage.getItem('userToken');
             return {
                 ...config,
                 headers: {

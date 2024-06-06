@@ -9,12 +9,12 @@ import { Input, Switch } from "@material-tailwind/react";
 import { Spinner } from "@chakra-ui/react";
 
 const DriverInfo = () => {
-  const { driverId, driverToken } = useSelector((store: any) => store.driver);
+  const { driverId } = useSelector((store: any) => store.driver);
   const [driverData, setdriverData] = useState<any | object>({});
 
   const getData = async () => {
     try {
-      const { data } = await axiosDriver(driverToken).get(
+      const { data } = await axiosDriver().get(
         `driverData?driver_id=${driverId}`
       );
       setdriverData(data);
@@ -43,7 +43,7 @@ const DriverInfo = () => {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axiosDriver(driverToken).post(
+        const { data } = await axiosDriver().post(
           `profileUpdate?driver_id=${driverId}`,
           values
         );
@@ -62,7 +62,7 @@ const DriverInfo = () => {
 
   const updateStatus = async () => {
     try {
-      const { data } = await axiosDriver(driverToken).get(
+      const { data } = await axiosDriver().get(
         `updateStatus?driver_id=${driverId}`
       );
       console.log(data);
