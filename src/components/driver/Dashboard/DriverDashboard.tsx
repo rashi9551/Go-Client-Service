@@ -16,6 +16,7 @@ import { RideDetails } from "../../../utils/interfaces";
 import { useEffect, useRef, useState } from "react";
 import socketIOClient, { Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const DriverDashboard = () => {
   // Static data for the dashboard
@@ -78,8 +79,9 @@ export const DriverDashboard = () => {
   const [rides, setRides] = useState<RideDetails | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const audioRef = useRef<HTMLAudioElement|null>(null);
+  const navigate=useNavigate()
   audioRef.current = new Audio('/uber_tune.mp3');
-  const driverServerUrl=import.meta.env.DRIVER_SERVER_URL
+  const driverServerUrl=import.meta.env.DRIVER_SERVER_URL || "http://localhost:3003"
   
   useEffect(() => {
     const socketInstance = socketIOClient(driverServerUrl);
@@ -124,9 +126,11 @@ export const DriverDashboard = () => {
       console.log(driverIdArray,driverId,"------");
       
     })
-    // socketInstance.on("driverConfirmation",(rideId)=>{
-
-    // })
+    socketInstance.on("driverConfirmation",(rideId)=>{
+      localStorage.setItem("currentRide-driver",rideId)
+      navigate("/driver/rides");
+      socketInstance.emit("forUser",rideId)
+    })
 
     return () => {
       if (socketInstance) {

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,9 +10,7 @@ import { DriverInterface } from "../../../utils/interfaces";
 import SpinnerLoader from "../../shimmer/SpinnerLoader";
 
 function PendingDetails() {
-  const { adminToken } = useSelector(
-    (store: { admin: { adminToken: any } }) => store.admin
-  );
+
   const [load,setLoad]=useState(false)
   const [acceptModal, setacceptModal] = useState(false);
   const [rejectModal, setrejectModal] = useState(false);
@@ -27,7 +24,7 @@ function PendingDetails() {
     await new Promise((resolve)=>setTimeout(resolve,1000))
     try {
         
-        const { data } = await axiosAdmin(adminToken).get(
+        const { data } = await axiosAdmin().get(
             `driverData?id=${id}`
         );
       setdriverData(data);
@@ -45,7 +42,7 @@ function PendingDetails() {
 
   const verifyDriver = async () => {
     try {
-      const { data } = await axiosAdmin(adminToken).post(`verifyDriver?id=${id}`);
+      const { data } = await axiosAdmin().post(`verifyDriver?id=${id}`);
       if (data.message === "Success") {
         toast.success("Driver verified successfully");
         navigate("/admin/drivers");
@@ -70,7 +67,7 @@ function PendingDetails() {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axiosAdmin(adminToken).post(`rejectDriver?id=${id}`);
+        const { data } = await axiosAdmin().post(`rejectDriver?id=${id}`);
         if (data.message === "Success") {
           setrejectModal(false);
           toast.success("Driver rejected successfully");

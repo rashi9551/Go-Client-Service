@@ -1,31 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { axiosAdmin } from "../../../service/axios/axiosAdmin";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-function PendingDriver() {
-  const [driversData, setdriverData] = useState([]);
-  const navigate = useNavigate();
+const AdminBlockedUsers = ({params}:any) => {
+    const [usersData, setusersData] = useState([]);
 
-  const { adminToken } = useSelector((store: any) => store.admin);
-  
-  const pendingDriverGet = async () => {
-    try {
-      const { data } = await axiosAdmin(adminToken).get("pendingDrivers");
-      setdriverData(data);
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    pendingDriverGet();
-  },[]);
+    const navigate=useNavigate()
 
-  return (
-    <>
+    const getData = async () => {
+        try {
+            const { data } = await axiosAdmin().get(`${params}`);
+            setusersData(data);
+            console.log(data);
+            
+        } catch (error) {
+            toast.error((error as Error).message)
+            console.log(error);
+        }
+    };
+
+ 
+        
+        useEffect(() => {
+            getData();
+        },[]);
+        
+        
+    return (
+        <>
     <div className="overflow-x-auto">
         <table className="table-auto w-full text-left whitespace-no-wrap">
             {/* head */}
@@ -35,12 +39,12 @@ function PendingDriver() {
                     <th className="px-4 py-2">NAME</th>
                     <th className="px-4 py-2">MOBILE</th>
                     <th className="px-4 py-2">EMAIL</th>
-                    <th className="px-4 py-2">MORE</th>
+                    <th className="px-4 py-2">STATUS</th>
                 </tr>
             </thead>
             <tbody>
                 {/* row 1 */}
-                {driversData.map((drivers: any, index) => {
+                {usersData && usersData.map((users: any, index) => {
                     return (
                         <tr key={index + 1} className="bg-white border-b">
                             <th className="px-4 py-2">{index + 1}</th>
@@ -49,22 +53,22 @@ function PendingDriver() {
                                     <div className="avatar">
                                         <div className="mask mask-squircle w-12 h-12">
                                             <img
-                                                src={drivers.driverImage}
+                                                src={users.userImage}
                                                 alt="Driver Avatar"
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="font-bold">{drivers.name}</div>
+                                        <div className="font-bold">{users.name}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td className="px-4 py-2">{drivers.mobile}</td>
-                            <td className="px-4 py-2">{drivers.email}</td>
+                            <td className="px-4 py-2">{users.mobile}</td>
+                            <td className="px-4 py-2">{users.email}</td>
                             <th className="px-4 py-2">
                                 <button
-                                    onClick={() => navigate('/admin/pendingDriver/' + drivers._id)}
-                                    className="btn btn-xs bg-white text-black hover:bg-blue-600 relative right-2 rounded-full px-4 py-2 transition-colors duration-300"
+                                    onClick={() => navigate("/admin/userDetails/" + users._id) }
+                                    className="btn btn-xs bg-blue-300  text-black hover:bg-blue-600 relative right-2 rounded-full px-4 py-2 transition-colors duration-300"
                                 >
                                     MORE DETAILS
                                 </button>
@@ -76,8 +80,7 @@ function PendingDriver() {
         </table>
     </div>
 </>
+    );
+};
 
-  );
-}
-
-export default PendingDriver;
+export default AdminBlockedUsers;

@@ -117,7 +117,7 @@ export function AdminNavbar() {
           {navList}
           <Button
               onClick={() => {
-                dispatch(adminLgout());
+                localStorage.removeItem("adminToken")
                 navigate('/admin/login');
               } }
               variant="gradient" size="sm" fullWidth className="mb-2"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>

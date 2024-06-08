@@ -1,8 +1,7 @@
 import { useState } from "react";
-import AdminUsers from '../../../components/admin/User/AdminUsers'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { AdminNavbar } from "../../../components/admin/AdminNavbar";
-import AdminBlockedUsers from "../../../components/admin/User/AdminBlockedUsers";
+import UsersData from "../../../components/admin/User/UserData";
 
 const AdminUserPage = () => {
     const [tab, settab] = useState(1);
@@ -25,10 +24,10 @@ const AdminUserPage = () => {
                     </div>
                     <TabPanels>
                         <TabPanel>
-                            <AdminUsers />
+                            <UsersData params={"getUserData"} />
                         </TabPanel>
                         <TabPanel>
-                            <AdminBlockedUsers/>
+                            <UsersData params={"blockedUserData"} />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

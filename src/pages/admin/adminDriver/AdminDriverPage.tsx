@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import { AdminNavbar } from '../../../components/admin/AdminNavbar'
 import { Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
-import PendingDriver from '../../../components/admin/Driver/PendingDriver'
-import VerifiedDriver from '../../../components/admin/Driver/VerifiedDriver'
-import BlockedDriver from '../../../components/admin/Driver/BlockedDriver'
+import DriverData from '../../../components/admin/Driver/DriverData'
 
 function AdminDriverPage() {
     const [tab,settab]=useState(1)
@@ -30,13 +28,13 @@ function AdminDriverPage() {
                     </div>
                     <TabPanels>
                         <TabPanel>
-                        <VerifiedDriver />
+                        <DriverData params={"verifiedDrivers"} />
                         </TabPanel>
                         <TabPanel>
-                            <PendingDriver />
+                        <DriverData params={"pendingDrivers"} />
                         </TabPanel>
                         <TabPanel>
-                        <BlockedDriver />
+                        <DriverData params={"blockedDrivers"} />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

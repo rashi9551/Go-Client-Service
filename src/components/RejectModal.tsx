@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { closeRejectedModal } from '../../../service/redux/slices/rejectModalSlice';
+import { closeRejectedModal } from '../service/redux/slices/rejectModalSlice';
 import { useNavigate } from "react-router-dom";
 
  const RejectedModal = () => {

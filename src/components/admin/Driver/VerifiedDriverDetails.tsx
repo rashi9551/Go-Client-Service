@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosAdmin } from "../../../service/axios/axiosAdmin";
 import { toast } from "react-toastify";
@@ -17,12 +16,11 @@ function VerifiedDriverDetails() {
     const [driverData, setdriverData] = useState<DriverInterface>();
     const {id} = useParams()
     const navigate=useNavigate()
-    const { adminToken } = useSelector((store: any) => store.admin);
     const getData=async()=>{
         try {
             setLoad(true)
             await new Promise((resolve)=>setTimeout(resolve,1000))
-            const {data}= await axiosAdmin(adminToken).get(`driverData?id=${id}`)
+            const {data}= await axiosAdmin().get(`driverData?id=${id}`)
             setLoad(false)
             setdriverData(data)
         } catch (error) {
@@ -46,7 +44,7 @@ function VerifiedDriverDetails() {
         }),
         onSubmit:async(values,{setSubmitting})=>{
             try {
-                const {data}=await axiosAdmin(adminToken).post(`updateDriverStatus?id=${id}`,values)
+                const {data}=await axiosAdmin().post(`updateDriverStatus?id=${id}`,values)
                 if(data.message==="Success"){
                     setStatusModalOpen(false);
                     toast.success("Status update successfully")

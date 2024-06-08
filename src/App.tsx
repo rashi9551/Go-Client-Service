@@ -18,6 +18,8 @@ import DriverDashboardPage from './pages/driver/Dashboard/DriverDashboardPage.ts
 import AdminUserPage from './pages/admin/adminUser/AdminUserPage.tsx';
 import Profilepage from './pages/user/Home/profilePage.tsx';
 import DriverProfilePage from './pages/driver/Dashboard/DriverProfilePage.tsx';
+import AdminUserDetails from './pages/admin/adminUser/AdminUserDetailsPage.tsx';
+import DriverRidesPage from './pages/driver/Dashboard/DriverRidesPage.tsx';
 
 function App() {
   const  user  = useSelector((store:{ user: { loggedIn: boolean } })=>store.user.loggedIn);
@@ -37,12 +39,14 @@ function App() {
           <Route path='/login' element={user ? <Navigate to={'/'}/>:<LoginPage/>}/>
           <Route path='/signup' element={user ? <Navigate to={'/'}/>:<SigunpPage/>}/>
           <Route path='/account' element={!user ? <Navigate to={'/login'}/>:<Profilepage/>}/>
+          <Route path='/rides' element={!user ? <Navigate to={'/login'}/>:""}/>
 
           {/* driver route  */}
           <Route path='/driver/login' element={driver ? <Navigate to={'/driver/dashboard'}/>:  <DriverLoginPage/>}/>
           <Route path='/driver/signup' element={driver ? <Navigate to={'/driver/dashboard'}/>:<DriverSignupPage/>}/>
           <Route path='/driver/dashboard' element={!driver ? <Navigate to={'/driver/login'}/>:<DriverDashboardPage/>}/>
           <Route path='/driver/profile' element={!driver ? <Navigate to={'/driver/login'}/>:<DriverProfilePage/>}/>
+          <Route path='/driver/rides' element={!driver ? <Navigate to={'/driver/login'}/>:<DriverRidesPage/>}/>
 
 
           {/* admin route  */}
@@ -52,6 +56,7 @@ function App() {
           <Route path="/admin/pendingDriver/:id" element={!admin ? <Navigate to={'/admin/login'} /> : <AdminDriverPendingDetails />} />
           <Route path="/admin/verifiedDriver/:id" element={!admin ? <Navigate to={'/admin/login'}/>:<AdminDriverDetailsVerified/>}/>
           <Route path="/admin/users" element={!admin ? <Navigate to={'/admin/login'}/>:<AdminUserPage/>}/>
+          <Route path="/admin/userDetails/:id" element={!admin ? <Navigate to={'/admin/login'} /> : <AdminUserDetails/>} />
 
 
         </Routes>

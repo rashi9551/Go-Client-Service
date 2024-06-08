@@ -24,10 +24,11 @@ function AdminLogin() {
     validationSchema: adminValidation,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axiosAdmin("").post("/login", values);
+        const { data } = await axiosAdmin().post("/login", values);
         if (data.message === "Success") {
           toast.success("Login Successfully");
-          dispatch(adminLogin({ name: data.email, adminToken: data.token }));
+          localStorage.setItem("adminToken",data.token)
+          dispatch(adminLogin({ name: data.email}));
           navigate("/admin/dashboard");
         } else {
           toast.error(data.message);

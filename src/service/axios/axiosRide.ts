@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
-export const axiosAdmin=()=>{
-    const axiosAdmin=axios.create({
-        baseURL:"http://localhost:3000/api/admin",
+const createAxios=(token:string | null)=>{
+    const axiosRide=axios.create({
+        baseURL:"http://localhost:3000/api/ride",
+        withCredentials:true,
         headers:{
             "Content-Type":"application/json"
         }
     });
-    axiosAdmin.interceptors.request.use(
+    axiosRide.interceptors.request.use(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (config: any) => {
-            const token = localStorage.getItem('adminToken')
             return {
                 ...config,
                 headers: {
@@ -19,13 +20,12 @@ export const axiosAdmin=()=>{
                 },
             };
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (error: any) => {
             return Promise.reject(error);
         }
     );
 
-    axiosAdmin.interceptors.response.use(
+    axiosRide.interceptors.response.use(
         (response) => {
             return response;
         },
@@ -33,6 +33,7 @@ export const axiosAdmin=()=>{
             return Promise.reject(error);
         }
     );
-    return axiosAdmin
+    return axiosRide;
 }
 
+export default createAxios
