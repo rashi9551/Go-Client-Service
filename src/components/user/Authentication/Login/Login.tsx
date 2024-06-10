@@ -13,11 +13,8 @@ import axiosUser from "../../../../service/axios/axiosUser";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
-  ApplicationVerifier,
-  Auth,
   ConfirmationResult,
   RecaptchaVerifier,
-  signInWithPhoneNumber,
 } from "firebase/auth";
 
 import { jwtDecode } from "jwt-decode";
@@ -30,6 +27,7 @@ import { useDispatch } from "react-redux";
 import { userLogin } from "../../../../service/redux/slices/userAuthSlice";
 
 import {  CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import {  sendOtp } from "../../../../Hooks/auth";
 
 interface UserData {
   user: string;
@@ -65,16 +63,14 @@ function Login() {
         console.log(data);
         
         if (data.message === "Success") {
-          sendOtp();
+          sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
           console.log(data,"-========")
           setuserData({
             user: data.name,
             user_id: data._id,
             userToken:data.token,
             loggedIn:true
-          });
-          console.log(data.message);
-          
+          });          
         } else if (data.message === "Blocked") {
           toast.info("your account is blocked");
         } else {
@@ -102,42 +98,7 @@ function Login() {
     }
   }, [counter, otpInput]);
 
-  const onCaptchaVerify = (auth: Auth) => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => {
-            toast.success("Otp sent successfully");
-            setotpInput(true);
-          },
-          "expired-callback": () => {
-            toast.error("TimeOut");
-          },
-        }
-      );
-    }
-  };
-  const sendOtp = async () => {
-    try {
-      onCaptchaVerify(auth);
-      const number = "+91" + formik.values.mobile;
-      const appVerifier: ApplicationVerifier | undefined =
-        window?.recaptchaVerifier;
-      if (appVerifier !== undefined) {
-        console.log("no")
-        const result = await signInWithPhoneNumber(auth, number, appVerifier);
-        setConfirmationResult(result);
-      } else {
-        throw new Error("RecaptchaVerifier is not defined.");
-      }
-    } catch (error) {
-      console.log("error")
-      toast.error((error as Error).message);
-    }
-  };
+  
   const otpVerify = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -286,7 +247,7 @@ function Login() {
                           onClick={() => {
                             setCounter(40);
                             setOtp(0)
-                            sendOtp();
+                            sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
                           }}
                         >
                           Resend OTP

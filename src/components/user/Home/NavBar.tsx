@@ -39,10 +39,10 @@ function NavBar() {
       </div>
       {windowSize > 768 ? (
         <div className="flex items-center mr-16 space-x-8">
-          <a href="#" className="hover:text-gray-300">
+          <a href="#" onClick={()=>navigate("/")} className="hover:text-gray-300">
             Home
           </a>
-          <a href="#" className="hover:text-gray-300">
+          <a href="#" onClick={()=>navigate("/rides")} className="hover:text-gray-300">
             Ride
           </a>
           <a href="#" onClick={() => navigate("/driver/login")} className="hover:text-gray-300">
@@ -79,6 +79,7 @@ function NavBar() {
                     >
                       Logout
                     </li>
+                    <li onClick={() =>{ navigate("/signup") ;dispatch(userLogout())}}>Signup</li>
                     <li onClick={() => navigate("/driver/login")}>Login as Driver</li>
                   </ul>
                 </div>

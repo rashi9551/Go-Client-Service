@@ -6,7 +6,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import "./DriverSignup.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { signInWithPhoneNumber, RecaptchaVerifier, Auth, ConfirmationResult, ApplicationVerifier } from "firebase/auth";
+import { ConfirmationResult } from "firebase/auth";
 import DriverIdentificationPage from "../../../../pages/driver/Authentication/DriverIdentificationPage";
 import { auth } from "../../../../service/firebase";
 import { toast } from "react-toastify";
@@ -15,6 +15,7 @@ import * as Yup from "yup";
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import axiosDriver from "../../../../service/axios/axiosDriver";
 import Loader from "../../../shimmer/Loader";
+import { sendOtp } from "../../../../Hooks/auth";
 
 function DriverSignup() {
 
@@ -31,7 +32,7 @@ function DriverSignup() {
         }
     }, [counter, otpPage]);
 
-    const [otp, setOtp] = useState<number>(0);
+    const [otp, setotpInput] = useState<number>(0);
     const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
     useEffect(() => {
@@ -44,7 +45,7 @@ function DriverSignup() {
     const handleOtpChange = (index: number, newValue: number) => {
         const newOtp = [...otp.toString()];
         newOtp[index] = newValue.toString();
-        setOtp(parseInt(newOtp.join("")));
+        setotpInput(parseInt(newOtp.join("")));
     };
 
     //Formik-Yup setup
@@ -94,7 +95,7 @@ function DriverSignup() {
     const signupHandle = async (formData: unknown) => {
         try {
             
-            const { data } = await axiosDriver("").post(`/checkDriver`, formData);
+            const { data } = await axiosDriver().post(`/checkDriver`, formData);
             if (data.message === "Driver login") {
                 toast.error("Driver Already registered! Please Login to continue");
                 navigate("/driver/login");
@@ -104,7 +105,9 @@ function DriverSignup() {
                 localStorage.setItem("driverId", data.driverId);
                 setIdentificationPage(true);
             } else {
-                sendOtp();
+                sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+                setLoad(false)
+                setOtpPage(true);
             }
         } catch (error) {
             toast.error((error as Error).message);
@@ -112,38 +115,6 @@ function DriverSignup() {
     };
 
     // OTP and Captcha-verification
-
-    const onCaptchaVerify = (auth: Auth) => {
-        if (!window.recaptchaVerifier) {
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-                size: "invisible",
-                callback: () => {
-                    toast.success("Otp sent successfully");
-                },
-                "expired-callback": () => {
-                    toast.error("TimeOut");
-                },
-            });
-        }
-    };
-
-    const sendOtp = async () => {
-        try {
-            onCaptchaVerify(auth);
-            const number = "+91" + formik.values.mobile;
-            const appVerifier :ApplicationVerifier|undefined = window.recaptchaVerifier;
-            if(appVerifier){
-                const result = await signInWithPhoneNumber(auth, number, appVerifier);
-                setConfirmationResult(result);
-
-            }
-            setLoad(false)
-            setOtpPage(true);
-        } catch (error) {
-            toast.error((error as Error).message);
-        }
-    };
-
     const otpVerify = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setLoad(true)
         event.preventDefault();
@@ -166,7 +137,7 @@ function DriverSignup() {
 
     const registerSubmit = async () => {
         try {
-            const response = await axiosDriver("").post(`/registerDriver`, formik.values);
+            const response = await axiosDriver().post(`/registerDriver`, formik.values);
             if (response.data.message === "Success") {
                 toast.success("OTP verified successfully");
                 localStorage.setItem("driverId", response.data.driverId);
@@ -271,9 +242,12 @@ function DriverSignup() {
                                                 ) : (
                                                     <p
                                                         className="text-sm text-blue-800 cursor-pointer"
-                                                        onClick={() => {
+                                                        onClick={(e) => {
+                                                            e.preventDefault()
                                                             setCounter(40);
-                                                            sendOtp();
+                                                            sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+                                                            setLoad(false)
+                                                            setOtpPage(true);
                                                         }}
                                                     >
                                                         Resend OTP

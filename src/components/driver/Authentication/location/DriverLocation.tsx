@@ -55,7 +55,7 @@ function DriverLocation() {
             try {        
                 setLoad(true)        
                 const driverId = localStorage.getItem("driverId");
-                const { data } = await axiosDriver("").post(`location?driverId=${driverId}`, values, {
+                const { data } = await axiosDriver().post(`location?driverId=${driverId}`, values, {
                     headers: {
                         "Content-Type": "application/json",
                     },

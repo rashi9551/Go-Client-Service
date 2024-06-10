@@ -27,7 +27,7 @@ function DriverIdentification() {
     const handleUpload=async(formData:unknown)=>{
         const driverId=localStorage.getItem('driverId')
         setLoad(true)
-         axiosDriver("").post(`/identification?driverId=${driverId}`,formData,{
+         axiosDriver().post(`/identification?driverId=${driverId}`,formData,{
             headers:{
                 "Content-Type":'multipart/form-data',
             }

@@ -50,7 +50,7 @@ function DirverNavbar() {
           <a onClick={()=>navigate('/driver/dashboard')} href="#" className="hover:text-gray-300">
             Dashboard
           </a>
-          <a href="#" className="hover:text-gray-300">
+          <a href="#" onClick={()=>navigate('/driver/rides')} className="hover:text-gray-300">
             Ride
           </a>
           <a

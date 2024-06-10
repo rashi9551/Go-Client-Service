@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-// import { useNavigate } from "react-router-dom"
 import socketIOClient, { Socket } from "socket.io-client";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
@@ -9,24 +8,21 @@ import axiosRide from "../../../service/axios/axiosRide";
 import { toast } from "react-toastify";
 import axiosDriver from "../../../service/axios/axiosDriver";
 import { useJsApiLoader, GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
+import { reverseGeocodeForLocality } from "../../../Hooks/Map";
+import { Dialog } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
-const ENDPOINT = import.meta.env.DRIVER_SERVER_UR
+const ENDPOINT =  "http://localhost:3003"
 
 function DriverCurrentRide() {
-
+    const navigate=useNavigate()
     const {driverId} =useSelector((store:any)=>store.driver)
     const token:string |null =localStorage.getItem('driverToken')
-    // const navigate=useNavigate()
+    const [cancelledModal, setcancelledModal] = useState(false)
 
-    // const [cancelledModal,setcancelledModal]=useState(false)
-    // const [paymentMode,setpaymentMode]=useState("")
-
-    // const [charge,setcharge]=useState(0)
 
     // socket setup
-
     const [socket,setSocket]=useState<Socket | null>(null)
-    // const [chats,setChats]=useState<any[]>([])
 
     useEffect(()=>{
         const socketInstance = socketIOClient(ENDPOINT)
@@ -34,6 +30,11 @@ function DriverCurrentRide() {
         socketInstance.on("rideConfirmed",()=>{
             console.log("ride confirmed");
             setrideConfirmed(true)
+        })
+
+        socketInstance.on("rideCancelled", () => {
+            console.log("ride cancelled -----------------------------");
+            setcancelledModal(true)
         })
 
 
@@ -50,14 +51,14 @@ function DriverCurrentRide() {
 
     const [driverData,setdriverData]=useState({})
     const [rideConfirmed, setrideConfirmed] = useState(false)
-    const [rideData, setrideData] = useState<any | null>(null)
-
-    
+    const [rideData, setrideData] = useState<any | null>(null)    
     const getData = async () => {
         try {
             const rideId = localStorage.getItem("currentRide-driver")
             const response = await axiosRide(token).get(`getCurrentRide?rideId=${rideId}`)
-            setrideData(response.data)
+            if(response.data.ride_id){
+                setrideData(response.data)
+            }
             const { data } = await axiosDriver().get(`driverData?driver_id=${driverId}`)
             setdriverData(data)
             
@@ -106,7 +107,7 @@ function DriverCurrentRide() {
                     getDirections(origin, destination)
                 } else {
                     const { latitude, longitude } = rideData.driverCoordinates
-                    const origin = await reverseGeocode(latitude, longitude)
+                    const origin = await reverseGeocodeForLocality(latitude, longitude)
                     getDirections(origin, rideData.pickupLocation)
                 }
             }
@@ -133,48 +134,42 @@ function DriverCurrentRide() {
         }
     }
 
-    const reverseGeocode = async (latitude: any, longitude: any) => {
-        try {            
-            const geocoder = new google.maps.Geocoder();
-            const latlng = new google.maps.LatLng(latitude, longitude);
-
-            return new Promise((resolve, reject) => {
-                geocoder.geocode({ location: latlng }, (results, status) => {
-                    if (status === "OK" && results?.[0]) {
-                        const addressComponents = results[0].address_components;
-                        let locality = "";
-
-                        for (const component of addressComponents) {
-                            if (component.types.includes("route")) {
-                                locality += component.long_name + ", ";
-                            }
-                            if (component.types.includes("neighborhood")) {
-                                locality += component.long_name + ", ";
-                            }
-                            if (component.types.includes("sublocality_level_3")) {
-                                locality += component.long_name + ", ";
-                            }
-                            if (component.types.includes("sublocality_level_2")) {
-                                locality += component.long_name + ", ";
-                            }
-                            if (component.types.includes("sublocality_level_1")) {
-                                locality += component.long_name;
-                            }
-                        }
-                        resolve(locality);
-                    } else {
-                        reject("Getting location failed");
-                    }
-                });
-            });
-        } catch (error: any) {
-            return error.message;
-        }
-    };
-    
-
+    const clearRide = () => {
+        console.log("ride cleared");
+        setcancelledModal(false)
+        localStorage.removeItem("currentRide-driver")
+        navigate('/driver/dashboard')
+    }
   return (
     <div>
+        <>
+        <Dialog open={cancelledModal} handler={clearRide} className='bg-transparent'  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+
+<div className='w-full h-fit rounded-lg bg-gray-50 px-5 pt-8 flex flex-col text-center'>
+    <div className=''>
+        <h1 className='text-3xl font-semibold text-red-600'>
+            Ride Cancelled by Passenger!
+        </h1>
+    </div>
+    <div className='mt-3'>
+        <h1 className='text-md font-semibold'>
+            Sorry for the inconvenience
+        </h1>
+    </div>
+    <div className='mt-3 w-full px-8'>
+        <h1 className='text-sm'>
+            Passenger Has Cancelled the Ride. Feel Free to Return to Your Preferred Location or Start Looking for a New Passenger Opportunity.<br /> Your Next Fare Awaits!
+        </h1>
+    </div>
+    <div className='flex justify-center items-end mt-4 mb-7 gap-5'>
+        <button
+            onClick={clearRide}
+            className='btn btn-xs bg-blue-300  text-black hover:bg-blue-600 relative right-2 rounded-full px-4 py-2 transition-colors duration-300'>dismiss
+        </button>
+    </div>
+</div>
+</Dialog>
+        </>
       {rideData && (
                 <>
                     <div className="w-[98%] h-fit mx-auto my-1 bg-indigo-50 py-6 rounded-lg drop-shadow-lg">

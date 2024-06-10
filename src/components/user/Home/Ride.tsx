@@ -7,7 +7,7 @@ import {
   Autocomplete,
   DirectionsRenderer,
 } from "@react-google-maps/api";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -15,11 +15,31 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import socketIOClient, { Socket } from 'socket.io-client'
 import { cancelSearching, startSearching } from '../../../service/redux/slices/driverSearchSlice';
+import { geocoeLocation } from "../../../Hooks/Map";
+import { generateRandomString } from "../../../Hooks/Map";
+import { Charges } from "../../../utils/interfaces";
+import { toLocation } from "../../../Hooks/Map";
+import { fromLocation } from "../../../Hooks/Map";
+import { handleModelSelection } from '../../../Hooks/formik'
+import { useNavigate } from "react-router-dom";
 
 
 function Ride() {
   const dispatch=useDispatch()
-
+  const navigate=useNavigate()
+  const { user_id } = useSelector((store: any) => store.user);
+  const initialValues = {
+    ride_id: generateRandomString(),
+    user_id:user_id,
+    pickupLocation: "",
+    dropoffLocation: "",
+    pickupCoordinates: {},
+    dropoffCoordinates: {},
+    distance: "",
+    duration: "",
+    vehicleModel: "",
+    price: 0,
+  };
   const [noDriversModal, setnoDriversModal] = useState(false)
   const [pickupLocation, setPickupLocation] = useState<string>("");
   const [dropoffLocation, setDropoffLocation] = useState<string>("");
@@ -32,7 +52,6 @@ function Ride() {
     longitude: "",
   });
 
-  const { user_id } = useSelector((store: any) => store.user);
 
   const [map, setmap] = useState<google.maps.Map | undefined>(undefined);
   const [center, setcenter] = useState({ lat: 13.003371, lng: 77.589134 });
@@ -41,8 +60,7 @@ function Ride() {
   const originRef: any = useRef<HTMLInputElement | null>(null);
   const destinationRef = useRef<HTMLInputElement | null>(null);
 
-  const [directionsResponse, setdirectionsResponse] =
-    useState<google.maps.DirectionsResult | null>(null);
+  const [directionsResponse, setdirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
   const [distance, setdistance] = useState<string | undefined>(undefined);
   const [duration, setduration] = useState<string | undefined>(undefined);
 
@@ -51,14 +69,13 @@ function Ride() {
 
   useEffect(()=>{
     const socketInstance=socketIOClient(driverServerUrl)
-
     setSocket(socketInstance);
     console.log("Socket connected to client");
 
     socketInstance.on("userConfirmation",(rideId)=>{
       localStorage.setItem("currentRide-user",rideId)
       dispatch(cancelSearching())
-      // navigate('/rides')
+      navigate('/rides')
     })
     return () => {
       if (socketInstance) {
@@ -69,109 +86,8 @@ function Ride() {
     
   },[])
 
-  const reverseGeocode = async (latitude: number, longitude: number) => {
-    try {
-      const geocoder = new google.maps.Geocoder();
-      const latlng = new google.maps.LatLng(latitude, longitude);
 
-      return new Promise<string>((resolve, reject) => {
-        geocoder.geocode({ location: latlng }, (results, status) => {
-          if (status === "OK" && results?.[0]) {
-            const addressComponents = results[0].address_components;
-            let address = "";
-
-            for (const component of addressComponents) {
-              if (component.types.includes("route")) {
-                address += component.long_name + ", ";
-              }
-              if (component.types.includes("neighborhood")) {
-                address += component.long_name + ", ";
-              }
-              if (component.types.includes("sublocality_level_3")) {
-                address += component.long_name + ", ";
-              }
-              if (component.types.includes("sublocality_level_2")) {
-                address += component.long_name + ", ";
-              }
-              if (component.types.includes("sublocality_level_1")) {
-                address += component.long_name + ", ";
-              }
-              if (component.types.includes("locality")) {
-                address += component.long_name + ", ";
-              }
-              if (component.types.includes("administrative_area_level_1")) {
-                address += component.long_name + ", ";
-              }
-              if (component.types.includes("country")) {
-                address += component.long_name;
-              }
-            }
-
-            // Remove trailing commas and spaces
-            address = address.replace(/,\s*$/, "");
-
-            console.log("Geocoded address:", address);
-            resolve(address);
-          } else {
-            console.error("Geocoding failed:", status, results);
-            reject("Getting location failed");
-          }
-        });
-      });
-    } catch (error: any) {
-      console.error("Geocoding error:", error);
-      return error.message;
-    }
-  };
-
-  const fromLocation = async () => {
-    console.log("dfsbsdbshd");
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          const locationDetails: string = await reverseGeocode(
-            latitude,
-            longitude
-          );
-          if (originRef.current) {
-            originRef.current.value = locationDetails;
-            setPickupLocation(locationDetails);
-          }
-          setcenter({ lat: latitude, lng: longitude });
-          map?.panTo(center);
-          setzoom(16);
-        },
-        (error) => {
-          toast.error(error.message);
-        }
-      );
-    }
-  };
-
-  const toLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-
-          const locationDetails = await reverseGeocode(latitude, longitude);
-          if (destinationRef.current) {
-            destinationRef.current.value = locationDetails;
-            setDropoffLocation(locationDetails);
-          }
-          setcenter({ lat: latitude, lng: longitude });
-          map?.panTo(center);
-          setzoom(16);
-        },
-        (error) => {
-          toast.error(error.message);
-        }
-      );
-    }
-  };
-
+  
   const calculateRoute = async () => {
     const originValue: any = originRef.current?.value;
     const destinationValue: any = destinationRef.current?.value;
@@ -212,27 +128,6 @@ function Ride() {
     }
   };
 
-  const geocoeLocation = async (locationName: string) => {
-    try {
-      const geocoder = new google.maps.Geocoder();
-
-      return new Promise((resolve, reject) => {
-        geocoder.geocode({ address: locationName }, (results, status) => {
-          if (status === "OK" && results?.[0]) {
-            const location = results?.[0].geometry.location;
-            const latitude = location.lat();
-            const longitude = location.lng();
-            resolve({ latitude, longitude });
-          } else {
-            reject("Google failed");
-          }
-        });
-      });
-    } catch (error: any) {
-      return error.message;
-    }
-  };
-
   const clearRoutes = () => {
     setdirectionsResponse(null);
     setdistance(undefined);
@@ -244,14 +139,6 @@ function Ride() {
       destinationRef.current.value = "";
     }
   };
-
-  interface Charges {
-    standard: number;
-    sedan: number;
-    suv: number;
-    premium: number;
-  }
-
   let charges: Charges = {
     standard: 0,
     sedan: 0,
@@ -272,58 +159,6 @@ function Ride() {
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
     libraries: ["places"],
   });
-
-  const handleModelSelection = (e: ChangeEvent<HTMLInputElement>) => {
-    switch (e.target.value) {
-      case "Standard":
-        formik.setFieldValue("vehicleModel", "Standard");
-        formik.setFieldValue("price", charges.standard);
-        break;
-      case "SUV":
-        formik.setFieldValue("vehicleModel", "SUV");
-        formik.setFieldValue("price", charges.suv);
-        break;
-      case "Premium":
-        formik.setFieldValue("vehicleModel", "Premium");
-        formik.setFieldValue("price", charges.premium);
-        break;
-      case "Sedan":
-        formik.setFieldValue("vehicleModel", "Sedan");
-        formik.setFieldValue("price", charges.sedan);
-        break;
-    }
-  };
-
-  const generateRandomString = () => {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const digits = "0123456789";
-    let randomString = "";
-
-    for (let i = 0; i < 4; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      randomString += characters[randomIndex];
-    }
-
-    for (let i = 0; i < 4; i++) {
-      const randomIndex = Math.floor(Math.random() * digits.length);
-      randomString += digits[randomIndex];
-    }
-
-    return randomString;
-  };
-
-  const initialValues = {
-    ride_id: generateRandomString(),
-    user_id: user_id,
-    pickupLocation: "",
-    dropoffLocation: "",
-    pickupCoordinates: {},
-    dropoffCoordinates: {},
-    distance: "",
-    duration: "",
-    vehicleModel: "",
-    price: 0,
-  };
 
   const formik = useFormik({
     initialValues,
@@ -458,7 +293,7 @@ function Ride() {
               </div>
               <div className="tooltip" data-tip="Choose your current location">
                 <button
-                  onClick={() => fromLocation()}
+                  onClick={() => fromLocation(setPickupLocation,setcenter,center,map,originRef,setzoom)}
                   className="bg-black px-5 py-1.5 rounded-lg hover:bg-gray-800 transition duration-300"
                 >
                   <GpsFixedIcon className="text-white" />
@@ -481,7 +316,7 @@ function Ride() {
               </div>
               <div className="tooltip" data-tip="Choose your current location">
                 <button
-                  onClick={() => toLocation()}
+                  onClick={() => toLocation(destinationRef,setDropoffLocation,setcenter,setzoom,center,map)}
                   className="bg-black px-5 py-1.5 rounded-lg hover:bg-gray-800 transition duration-300"
                 >
                   <GpsFixedIcon className="text-white" />
@@ -560,7 +395,7 @@ function Ride() {
                             <input
                               type="radio"
                               value={car.value}
-                              onChange={handleModelSelection}
+                              onChange={(e)=>handleModelSelection(e,formik,charges)}
                               name="vehicleModel"
                               className="radio-xs checked:bg-blue-500"
                             />

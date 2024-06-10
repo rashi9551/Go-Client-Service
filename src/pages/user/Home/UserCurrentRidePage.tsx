@@ -2,11 +2,10 @@ import Navbar from '../../../components/user/Home/NavBar'
 import Footer from '../../../components/user/Home/Footer'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { useState } from 'react';
-// import { useSelector } from "react-redux";
+import UserCurrentRide from '../../../components/user/Home/UserCurrentRide';
 
 
-const CurrentRidePage = () => {
-    // const { isOpenUserRideData, ride_id } = useSelector((store: any) => store.userRideData);
+const UserCurrentRidePage = () => {
 
     const [tab, settab] = useState(1);
 
@@ -29,11 +28,10 @@ const CurrentRidePage = () => {
                         </div>
                         <TabPanels>
                             <TabPanel>
-                               ""
+                               <UserCurrentRide/>
                             </TabPanel>
                             <TabPanel>
-                                {/* {isOpenUserRideData ? <UserRideDetails ride_id={ride_id} /> :
-                                    <UserRideHistory />} */}
+                            ""
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
@@ -44,4 +42,4 @@ const CurrentRidePage = () => {
     )
 }
 
-export default CurrentRidePage
+export default UserCurrentRidePage

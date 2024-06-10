@@ -13,17 +13,14 @@ import { driverLogin } from "../../../../service/redux/slices/driverAuthSlice";
 import { jwtDecode } from "jwt-decode";
 
 import {
-    ApplicationVerifier,
-    Auth,
     ConfirmationResult,
-    RecaptchaVerifier,
-    signInWithPhoneNumber,
   } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {  openPendingModal } from "../../../../service/redux/slices/pendingModalSlice";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { openRejectedModal } from "../../../../service/redux/slices/rejectModalSlice";
+import { sendOtp } from "../../../../Hooks/auth";
   
 function DriverLogin() {
     const dispatch=useDispatch()
@@ -57,7 +54,7 @@ function DriverLogin() {
                 console.log(data);
                 
                 if(data.message==="Success"){
-                    sendOtp()
+                    sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
                     setdriverData({name:data.name,driverToken: data.token, driver_id: data._id })
                 }else if (data.message === "Incomplete registration") {
                     toast.info("Please complete the verification!");
@@ -79,37 +76,8 @@ function DriverLogin() {
             }
         }
     })
-    const sendOtp = async () => {
-        try {
-            onCaptchaVerify(auth);
-            const number = "+91" + formik.values.mobile;
-            const appVerifier: ApplicationVerifier | undefined = window.recaptchaVerifier;
-            if(appVerifier){
-                const result = await signInWithPhoneNumber(auth, number, appVerifier);
-                setConfirmationResult(result);
-            }
-        } catch (error) {
-            toast.error((error as Error).message);
-        }
-    };
-    const onCaptchaVerify = (auth: Auth) => {
-        if (!window.recaptchaVerifier) {
-          window.recaptchaVerifier = new RecaptchaVerifier(
-            auth,
-            "recaptcha-container",
-            {
-              size: "invisible",
-              callback: () => {
-                toast.success("Otp sent successfully");
-                setotpInput(true);
-              },
-              "expired-callback": () => {
-                toast.error("TimeOut");
-              },
-            }
-          );
-        }
-      };
+    
+   
 
     const otpVerify = (
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -270,10 +238,10 @@ function DriverLogin() {
                                             ) : (
                                                 <p
                                                     className="text-sm text-blue-800 cursor-pointer"
-                                                    onClick={() => {
+                                                    onClick={(e) => {e.preventDefault()
                                                         setCounter(40);
                                                         setOtp(0)
-                                                        sendOtp;
+                                                        sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
                                                     }}
                                                 >
                                                     Resend OTP

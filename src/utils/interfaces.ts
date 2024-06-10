@@ -5,6 +5,7 @@ export interface RideDetails {
     userId: string;
     pickupCoordinates: PickupLocation;
     dropoffCoordinates: DropoffLocation;
+    driverCoordinates:driverCoordinates;
     pickupLocation: string;
     dropoffLocation: string;
     distance: string;
@@ -17,6 +18,7 @@ export interface RideDetails {
     rating:number 
     paymentMode:string   
     ratings:number
+    pin:number
 }
 
 interface PickupLocation {
@@ -27,6 +29,10 @@ interface PickupLocation {
 interface DropoffLocation {
     lat: number;
     lng: number;
+}
+interface driverCoordinates {
+    latitude: number;
+    longitude: number;
 }
 
 
@@ -87,3 +93,9 @@ interface Vehicle {
     rcImageUrl: string;
     carImageUrl: string;
 }
+export interface Charges {
+    standard: number;
+    sedan: number;
+    suv: number;
+    premium: number;
+  }
