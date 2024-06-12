@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { axiosAdmin } from "../../../service/axios/axiosAdmin";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { UserInterface } from "../../../utils/interfaces";
 
-const AdminBlockedUsers = ({params}:any) => {
+const AdminBlockedUsers = ({params}:{params:string}) => {
     const [usersData, setusersData] = useState([]);
 
     const navigate=useNavigate()
@@ -44,7 +45,7 @@ const AdminBlockedUsers = ({params}:any) => {
             </thead>
             <tbody>
                 {/* row 1 */}
-                {usersData && usersData.map((users: any, index) => {
+                {usersData && usersData.map((users: UserInterface, index) => {
                     return (
                         <tr key={index + 1} className="bg-white border-b">
                             <th className="px-4 py-2">{index + 1}</th>

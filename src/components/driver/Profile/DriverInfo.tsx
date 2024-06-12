@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axiosDriver from "../../../service/axios/axiosDriver";
@@ -7,10 +6,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Input, Switch } from "@material-tailwind/react";
 import { Spinner } from "@chakra-ui/react";
+import { DriverInterface } from "../../../utils/interfaces";
 
 const DriverInfo = () => {
-  const { driverId } = useSelector((store: any) => store.driver);
-  const [driverData, setdriverData] = useState<any | object>({});
+  const { driverId } = useSelector((store: {driver:{driverId:string}}) => store.driver);
+  const [driverData, setdriverData] = useState<DriverInterface | null >(null);
 
   const getData = async () => {
     try {
@@ -98,7 +98,7 @@ const DriverInfo = () => {
               <h1 className="text-xl font-semibold">{driverData?.name}</h1>
             </div>
             <div className="flex gap-1">
-              <h1 className="text-sm">Safely Rating :</h1>
+              <h1 className="text-sm">Go Rating :</h1>
               <h1 className="text-sm"> {driverData?.ratings} ratings</h1>
             </div>
             <div className="flex gap-3 mt-2">

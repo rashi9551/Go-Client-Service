@@ -184,7 +184,7 @@ function DriverSignup() {
                                     <div className="hidden md:block" style={{ marginTop: "-30px" }}>
                                         <img
                                             style={{ height: "360px", width: "auto" }}
-                                            src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_db9470d4-ef32-48f1-a055-183c21878584-13246824_5191079.png"
+                                            src="images/otp.jpg"
                                             alt=""
                                         />
                                     </div>
@@ -199,7 +199,7 @@ function DriverSignup() {
                                     <div className="hidden  md:flex md:items-center" style={{ marginTop: "-40px" }}>
                                         {load ? <Loader/> :<img
                                             style={{ height: "330px", width: "auto" }}
-                                            src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_7d8b958b-03bb-4249-8817-6e555f711362-12892968_5095140.png"
+                                            src="/images/login.jpg"
                                             alt=""
                                         />}
                                         

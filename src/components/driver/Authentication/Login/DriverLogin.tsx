@@ -168,7 +168,7 @@ function DriverLogin() {
                 <div className="w-5/6 md:w-4/6 md:h-4/5  md:flex justify-center bg-white rounded-3xl my-5 drop-shadow-2xl">
                     <div className="relative overflow-hidden h-full sm:pl-14 md:pl-16 md:w-1/2 i justify-around items-center mb-3 md:m-0">
                         <div className=" w-full pt-10 ">
-                            <h1 className="text-blue-800 font-bold md:mt-4 text-4xl mx-7 md:mx-0  md:text-5xl user-signup-title md:max-w-sm">
+                            <h1 className="text-blue-900 font-bold md:mt-4 text-4xl mx-7 md:mx-0  md:text-5xl user-signup-title md:max-w-sm">
                                 Please sign in with your mobile number! 
                             </h1>
                             <h1 className="text-blue-800 md:max-w-xs text-sm my-3 mx-7 md:mx-0  md:text-sm md:mt-3 user-signup-title">
@@ -176,12 +176,21 @@ function DriverLogin() {
                             </h1>
                         </div>
 
-                        <div className="hidden  md:flex md:items-center" style={{ marginTop: "-45px" }}>
-                            <img
-                                style={{ height: "300px", width: "auto" }}
-                                src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_4c7ba0ac-90b6-43f1-b097-932d54d9f8b0-sssdsdsd.png"
+                        <div className="hidden   md:flex md:items-center" style={{ marginTop: "-45px" }}>
+                        {otpInput?(
+                        <img
+                            className="mt-2"
+                                style={{ height: "330px", width: "auto" }}
+                                src="/images/otp.jpg"
+                                alt=""
+                            />):(
+                        <img
+                            className="mt-2"
+                                style={{ height: "330px", width: "auto" }}
+                                src="/images/login.jpg"
                                 alt=""
                             />
+                        )}
                         </div>
                     </div>
                     <div className="flex md:w-1/2 justify-center  pb-10 md:py-10 items-center">

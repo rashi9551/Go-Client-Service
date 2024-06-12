@@ -37,9 +37,11 @@ interface driverCoordinates {
 
 
 export interface DriverInterface {
+    ratings: string;
+    _id:string;
     name: string;
     email: string;
-    mobile: number;
+    mobile: string;
     password: string;
     driverImage: string;
     referral_code: string;
@@ -49,7 +51,8 @@ export interface DriverInterface {
     account_status: string;
     identification: boolean;
     vehicle_details: Vehicle;
-    joiningDate: Date;
+    joiningDate: string;
+    formattedDate: string;
     wallet: {
         balance: number;
         transactions: {
@@ -72,6 +75,7 @@ export interface DriverInterface {
         }
     ];
 }
+
 
 interface Aadhar {
     aadharId: string;
@@ -99,3 +103,34 @@ export interface Charges {
     suv: number;
     premium: number;
   }
+
+
+
+export interface UserInterface extends Document {
+    _id:string;
+    name: string;
+    email: string;
+    formattedDate: string;
+    mobile: string;
+    referralCode:string;
+    password: string;
+    userImage: string;
+    referral_code: string;
+    account_status: string;
+    accountStatus:string;
+    joiningDate: string;
+    wallet: {
+        balance: number;
+        transactions: {
+            date: Date;
+            details: string;
+            amount: number;
+            status: string;
+        }[];
+    };
+    RideDetails: {
+        completedRides: number;
+        cancelledRides: number;
+    };
+}
+

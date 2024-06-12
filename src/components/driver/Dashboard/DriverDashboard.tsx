@@ -48,7 +48,6 @@ export const DriverDashboard = () => {
   const COLORS = ["#0088FE", "#FFBB28", "#00C49F"];
 
   const RADIAN = Math.PI / 180;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -81,10 +80,10 @@ export const DriverDashboard = () => {
   const audioRef = useRef<HTMLAudioElement|null>(null);
   const navigate=useNavigate()
   audioRef.current = new Audio('/uber_tune.mp3');
-  const driverServerUrl=import.meta.env.DRIVER_SERVER_URL || "http://localhost:3003"
+  const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
   
   useEffect(() => {
-    const socketInstance = socketIOClient(driverServerUrl);
+    const socketInstance = socketIOClient(ENDPOINT);
     console.log("socket connected to driver side ",socket);
     setSocket(socketInstance);
     socketInstance.on("connect", () => {

@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosAdmin } from "../../../service/axios/axiosAdmin";
 import { toast } from "react-toastify";
+import { DriverInterface } from "../../../utils/interfaces";
 
 
-function DriverData({params}:any) {
+function DriverData({params}:{params:string}) {
   const [driversData, setdriverData] = useState([]);
   const navigate = useNavigate();
 
@@ -13,7 +14,7 @@ function DriverData({params}:any) {
     try {
       const { data } = await axiosAdmin().get(`${params}`);
       setdriverData(data);
-    } catch (error: any) {
+    } catch (error:any) {
       toast.error(error.message);
       console.log(error);
     }
@@ -38,7 +39,7 @@ function DriverData({params}:any) {
             </thead>
             <tbody>
                 {/* row 1 */}
-                {driversData.map((drivers: any, index) => {
+                {driversData.map((drivers: DriverInterface, index) => {
                     return (
                         <tr key={index + 1} className="bg-white border-b">
                             <th className="px-4 py-2">{index + 1}</th>
@@ -61,7 +62,7 @@ function DriverData({params}:any) {
                             <td className="px-4 py-2">{drivers.email}</td>
                             <th className="px-4 py-2">
                                 <button
-                                    onClick={() => navigate('/admin/verifiedDriver/'+drivers._id)}
+                                    onClick={() =>{params==='pendingDrivers'? navigate('/admin/pendingDriver/'+drivers._id) :   navigate('/admin/verifiedDriver/'+drivers._id)}}
                                     className="btn btn-xs bg-white text-black hover:bg-blue-600 relative right-2 rounded-full px-4 py-2 transition-colors duration-300"
                                 >
                                     MORE DETAILS

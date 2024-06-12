@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import SignupMap from "../../Map/SignupMap";
 import { useFormik } from "formik";
@@ -7,7 +8,6 @@ import axiosDriver from '../../../../service/axios/axiosDriver'
 import { useNavigate } from "react-router-dom";
 import ExploreIcon from "@mui/icons-material/Explore";
 import WhereToVoteIcon from '@mui/icons-material/WhereToVote';
-// index.js or App.js
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -29,8 +29,7 @@ function DriverLocation() {
     const [longitude, setlongitude] = useState(68.7);
     const [latitude, setlatitude] = useState(8.4);
     const [load,setLoad]=useState(false)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleGeolocation = (lat: any, lng: any, status: any) => {
+    const handleGeolocation = (lat: number, lng: number, status: any) => {
         setlocation(status);
         setlongitude(lng);
         setlatitude(lat);
@@ -67,7 +66,6 @@ function DriverLocation() {
                 } else {
                     toast.error(data.message);
                 }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 toast.error(error.message);
             } finally {
@@ -98,7 +96,7 @@ function DriverLocation() {
                             {load ? <Loader/> : (
                                 <img
                                     style={{ height: "300px", width: "auto" }}
-                                    src="https://d2y3cuhvusjnoc.cloudfront.net/[removal.ai]_e8b3373d-808f-43b2-85d2-374ab65847e9-11641795_4752200.png"
+                                    src="/images/location.jpg"
                                 />
 
                             )}

@@ -109,7 +109,7 @@ function Signup() {
         return toast.error("Time expired tap to resend")
       }
 
-      const {data} = await axiosUser("").post(`/register`,formData,{
+      const {data} = await axiosUser().post(`/register`,formData,{
         headers:{
           "Content-Type":"multipart/form-data"
       }
@@ -129,7 +129,7 @@ function Signup() {
 
   const signipHandle = async (email:string,mobile:string) => {
     try {
-      const { data } = await axiosUser("").post("/checkUser", {email,mobile});
+      const { data } = await axiosUser().post("/checkUser", {email,mobile});
             
       if (data.message === "user already have an account !") {
         toast.info("user Already registered Please Login to continue");
@@ -146,7 +146,7 @@ function Signup() {
 
   const resendOtp=async()=>{
     try {
-      const {data}=await axiosUser("").post("/resendOtp",formik.values);
+      const {data}=await axiosUser().post("/resendOtp",formik.values);
 
       if(data.message==="OTP resent successfully"){
         toast.success(data.mesaage)
@@ -258,11 +258,19 @@ function Signup() {
               </h1>
             </div>
             <div className="hidden md:flex md:items-center justify-center">
-              <img
-                style={{ height: "280px", width: "auto" }}
-                src="https://d2y3cuhvusjnoc.cloudfront.net/11668479_20943593.jpg"
+            {otpPage?(<img
+              className="mt-2"
+                style={{ height: "330px", width: "auto" }}
+                src="/images/otp.jpg"
+                alt=""
+              />):(
+                <img
+              className="mt-2"
+                style={{ height: "330px", width: "auto" }}
+                src="/images/login.jpg"
                 alt=""
               />
+              )}
             </div>
           </div>
           {otpPage ? (

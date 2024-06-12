@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
 import axiosDriver from '../../../service/axios/axiosDriver';
 import toast from 'react-hot-toast'
 import { useSelector } from 'react-redux';
+import { DriverInterface } from '../../../utils/interfaces';
 
 const DriverVehicleInfo = () => {
-    const {driverId} =useSelector((store: any) => store.driver)
-    const [driverData, setdriverData] = useState<any | object>({})
+    const {driverId} =useSelector((store: {driver:{driverId:string}}) => store.driver)
+    const [driverData, setdriverData] = useState<DriverInterface | null>(null)
 
     
     const getData = async () => {

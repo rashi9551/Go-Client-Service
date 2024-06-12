@@ -10,7 +10,6 @@ const createAxios=()=>{
         }
     });
     axiosUser.interceptors.request.use(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (config: any) => {
             const token = localStorage.getItem('userToken');
             return {

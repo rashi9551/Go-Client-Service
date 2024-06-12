@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts'
 
 export const AdminDashboard = () => {
@@ -30,7 +31,6 @@ export const AdminDashboard = () => {
   const COLORS = ['#0088FE', '#FFBB28', '#00C49F'];
 
   const RADIAN = Math.PI / 180;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }:any) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);

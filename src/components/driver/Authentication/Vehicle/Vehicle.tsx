@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useFormik } from "formik"
 import { useState } from "react"
 import {VehcleValidation} from '../../../../utils/validation'
@@ -49,7 +50,6 @@ function Vehicle() {
         }
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string, setImageUrl: any)=>{
         const file = e.currentTarget.files?.[0];
         if(file){
@@ -81,8 +81,8 @@ function Vehicle() {
                             <div className="hidden  md:flex md:items-center justify-center">
                                 {load ? <Loader/>:(
                                     <img
-                                        style={{ height: "320px", width: "auto" }}
-                                        src="https://img.freepik.com/free-vector/files-sent-concept-illustration_114360-3020.jpg?w=740&t=st=1693677666~exp=1693678266~hmac=d2b8470cda1668f0b6b107b888297653d914b10c633cef1bec894126613dacd1"
+                                        style={{ height: "250px", width: "auto" ,marginTop:'50px'}}
+                                        src="/images/image.jpg"
                                         alt=""
                                     />
 

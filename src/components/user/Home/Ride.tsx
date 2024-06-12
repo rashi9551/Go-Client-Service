@@ -27,7 +27,7 @@ import { useNavigate } from "react-router-dom";
 function Ride() {
   const dispatch=useDispatch()
   const navigate=useNavigate()
-  const { user_id } = useSelector((store: any) => store.user);
+  const { user_id } = useSelector((store: {user:{user_id:string}}) => store.user);
   const initialValues = {
     ride_id: generateRandomString(),
     user_id:user_id,
@@ -58,17 +58,17 @@ function Ride() {
   const [zoom, setzoom] = useState(9);
 
   const originRef: any = useRef<HTMLInputElement | null>(null);
-  const destinationRef = useRef<HTMLInputElement | null>(null);
-
+  const destinationRef:any = useRef<HTMLInputElement | null>(null);
+  
   const [directionsResponse, setdirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
   const [distance, setdistance] = useState<string | undefined>(undefined);
   const [duration, setduration] = useState<string | undefined>(undefined);
 
   const [socket,setSocket]=useState<Socket|null>(null)
-  const driverServerUrl=import.meta.env.DRIVER_SERVER_URL || "http://localhost:3003"
+  const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
 
   useEffect(()=>{
-    const socketInstance=socketIOClient(driverServerUrl)
+    const socketInstance=socketIOClient(ENDPOINT)
     setSocket(socketInstance);
     console.log("Socket connected to client");
 
@@ -89,8 +89,8 @@ function Ride() {
 
   
   const calculateRoute = async () => {
-    const originValue: any = originRef.current?.value;
-    const destinationValue: any = destinationRef.current?.value;
+    const originValue: string = originRef.current?.value;
+    const destinationValue: string  = destinationRef.current?.value;
     if (!originRef || !destinationRef) {
       return toast.error("Please choose the pickup and drop0ff locations");
     }
@@ -106,9 +106,11 @@ function Ride() {
     ) {
       setPickupLocation(originValue);
       setDropoffLocation(destinationValue);
-      const pickupCoords: any = await geocoeLocation(originValue);
+      const [pickupCoords, dropCoords] = await Promise.all([
+        geocoeLocation(originValue),
+        geocoeLocation(destinationValue)
+    ]);
       setpickupCoordinates(pickupCoords);
-      const dropCoords: any = await geocoeLocation(destinationValue);
       setdropoffCoordinates(dropCoords);
     }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
 export const axiosAdmin=()=>{
@@ -8,7 +9,6 @@ export const axiosAdmin=()=>{
         }
     });
     axiosAdmin.interceptors.request.use(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (config: any) => {
             const token = localStorage.getItem('adminToken')
             return {
@@ -19,7 +19,6 @@ export const axiosAdmin=()=>{
                 },
             };
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (error: any) => {
             return Promise.reject(error);
         }

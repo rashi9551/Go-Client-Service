@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {axiosAdmin} from '../../../service/axios/axiosAdmin'
@@ -6,6 +5,7 @@ import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Dialog } from "@material-tailwind/react";
+import { UserInterface } from "../../../utils/interfaces";
 
 
 const UserDetails = () => {
@@ -13,7 +13,7 @@ const UserDetails = () => {
 
     const [statusModal, setstatusModal] = useState(false);
 
-    const [userData, setuserData] = useState<any | null>(null);
+    const [userData, setuserData] = useState<UserInterface | null>(null);
     const { id } = useParams();
     const navigate = useNavigate();
 

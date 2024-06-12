@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "./SignupMap.scss";
@@ -5,7 +6,6 @@ import { toast } from "react-toastify";
 
 mapboxgl.accessToken = import.meta.env.VITE_MPBOX_ACCESS_TOKEN;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SignupMap = ({ handleGeolocation, isGeolocationActive }: any) => {
     const mapContainer = useRef<HTMLDivElement | null>(null);
     const map = useRef<mapboxgl.Map | null>(null);

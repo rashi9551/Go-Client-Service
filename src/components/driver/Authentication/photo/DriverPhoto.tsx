@@ -88,8 +88,8 @@ function DriverPhoto() {
                                     <div className="hidden  md:flex md:items-center justify-center">
                                         {load ? <Loader/>:(
                                             <img
-                                            style={{ height: "300px", width: "auto" }}
-                                            src="https://d2y3cuhvusjnoc.cloudfront.net/20135087_6213634-removebg-preview.png"
+                                            style={{ height: "250px", width: "auto" ,marginTop:'50px'}}
+                                            src="/images/image.jpg"
                                         />
                                         )}
                                         
@@ -143,8 +143,8 @@ function DriverPhoto() {
                                             </div>
                                             <div className="hidden  md:flex md:items-center justify-center">
                                                 <img
-                                                    style={{ height: "330px", width: "auto" }}
-                                                    src="https://d2y3cuhvusjnoc.cloudfront.net/20135087_6213634-removebg-preview.png"
+                                                    style={{ height: "250px", width: "auto" ,marginTop:'50px'}}
+                                                    src="/images/image.jpg"
                                                 />
                                             </div>
                                         </div>

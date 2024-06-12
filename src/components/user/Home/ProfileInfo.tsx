@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 import { Input } from "@material-tailwind/react";
@@ -7,11 +5,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import toast from 'react-hot-toast';
 import axiosUser from '../../../service/axios/axiosUser'; 
+import { UserInterface } from '../../../utils/interfaces';
 
 const ProfileInfo = () => {
 
-    const {user_id} = useSelector((store: any) => store.user)
-    const [userData, setuserData] = useState<any | {}>({})
+    const {user_id} = useSelector((store: {user:{user_id:string}}) => store.user)
+    const [userData, setuserData] = useState<UserInterface | null>(null)
 
     console.log(userData);
     const getData = async () => {

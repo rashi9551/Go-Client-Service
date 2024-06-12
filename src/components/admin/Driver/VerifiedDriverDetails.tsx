@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosAdmin } from "../../../service/axios/axiosAdmin";
@@ -7,7 +6,7 @@ import { DriverInterface } from "../../../utils/interfaces";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Dialog } from "@material-tailwind/react";
-import SpinnerLoader from "../../shimmer/SpinnerLoader";
+import SpinnerLoader from "../../shimmer/Shimmer";
 
 function VerifiedDriverDetails() {
 
