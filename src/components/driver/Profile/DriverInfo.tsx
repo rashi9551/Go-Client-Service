@@ -262,7 +262,7 @@ const DriverInfo = () => {
                 />
                 <p className="w-1/2 md:hidden">Joining Date</p>
                 <Input
-                  label={driverData?.joiningDate}
+                  label={driverData?.formattedDate}
                   disabled
                   crossOrigin={undefined}
                   onPointerEnterCapture={undefined}

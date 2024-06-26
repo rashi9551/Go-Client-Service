@@ -8,22 +8,19 @@ import axiosUser from '../../../service/axios/axiosUser';
 import { UserInterface } from '../../../utils/interfaces';
 
 const ProfileInfo = () => {
-
     const {user_id} = useSelector((store: {user:{user_id:string}}) => store.user)
     const [userData, setuserData] = useState<UserInterface | null>(null)
 
     console.log(userData);
     const getData = async () => {
         try {
-            const { data } = await axiosUser().get(`userData?id=${user_id}`)
-            
+            const { data } = await axiosUser().get(`userData?id=${user_id}`)            
             setuserData(data)
         } catch (error) {
             toast.error((error as Error).message)
             console.log(error);
         }
     }
-
     useEffect(() => {
         getData()
     }, [])
@@ -129,16 +126,16 @@ const ProfileInfo = () => {
                             <div className='md:flex gap-6'>
                                 <input name='email' onChange={formik.handleChange} type="text" placeholder={userData?.email} className="input input-bordered input-sm py-[1.16rem] w-full max-w-[21.5rem]" />
                                 <p className='w-1/2 md:hidden'>Refferl Code</p>
-                                <Input label={userData?.referral_code} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                                <Input label={userData?.referralCode} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                             </div>
                             <div className='w-full flex gap-6 -mb-3'>
                                 <p className='w-1/2'>Account Status</p>
                                 <p className='w-1/2 hidden md:block'>Joining Date</p>
                             </div>
                             <div className='md:flex gap-6'>
-                                <Input label={userData?.account_status} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                                <Input label={userData?.accountStatus} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                                 <p className='w-1/2 md:hidden'>Joining Date</p>
-                                <Input label={userData?.joiningDate} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                                <Input label={userData?.formattedDate} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                             </div>
                             <div className='flex gap-3'>
                                 <button

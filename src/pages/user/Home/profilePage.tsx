@@ -3,6 +3,7 @@ import Footer from "../../../components/user/Home/Footer";
 import ProfileInfo from "../../../components/user/Home/ProfileInfo";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { useState } from 'react';
+import UserWalletInfo from "../../../components/user/Home/UserWalletInfo";
 // import UserWalletInfo from "../../../components/user/Home/UserWalletInfo";
 
 const Profilepage = () => {
@@ -30,7 +31,7 @@ const Profilepage = () => {
                                 <ProfileInfo />
                             </TabPanel>
                             <TabPanel>
-                                <ProfileInfo />
+                                <UserWalletInfo/>
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

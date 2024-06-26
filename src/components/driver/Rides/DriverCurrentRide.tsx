@@ -27,7 +27,9 @@ const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
 
 function DriverCurrentRide() {
   const navigate = useNavigate();
-  const { driverId } = useSelector((store: {driver:{driverId:string}}) => store.driver);
+  const { driverId } = useSelector(
+    (store: { driver: { driverId: string } }) => store.driver
+  );
   const token: string | null = localStorage.getItem("driverToken");
   const [cancelledModal, setcancelledModal] = useState(false);
 
@@ -56,6 +58,13 @@ function DriverCurrentRide() {
       }
     };
   }, []);
+
+  const [openPayment, setopenPayment] = useState(false);
+
+    const handlePaymentModal = () => {
+        setopenPayment(!openPayment)
+        socket?.emit("driverRideFinish")
+    }
 
   const [driverData, setdriverData] = useState({});
   const [rideConfirmed, setrideConfirmed] = useState(false);
@@ -92,6 +101,25 @@ function DriverCurrentRide() {
     setpin(parseInt(newpin.join("")));
   };
 
+  const verifyPIN = async () => {
+    const newPin = pin.toString()
+    if (newPin.length < 6) {
+        toast.error("Please enter a PIN")
+    } else if (pin === rideData?.pin) {
+        try {
+            socket?.emit("verifyRide", pin)
+            toast.success("Ride Confirmed Successfully")
+        } catch (error) {
+            toast.error("something went wrong")
+        }
+    } else {
+        toast.error("Please enter a valid PIN")
+    }
+}
+
+const [openFinishModal, setopenFinishModal] = useState(false);
+const handleOpenFinishModal = () => setopenFinishModal(!openFinishModal);
+
   useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
     libraries: ["places"],
@@ -121,6 +149,8 @@ function DriverCurrentRide() {
         }
       };
       getDirectionsData();
+    } else {
+      console.log("ride data vannitilla");
     }
   }, [rideData]);
 
@@ -135,12 +165,20 @@ function DriverCurrentRide() {
           destination: destination,
           travelMode: google.maps.TravelMode.DRIVING,
         });
+        console.log(result, "ithu result");
         setdirectionsResponse(result);
       } catch (error) {
+        console.log(error, "ithu error");
         toast.error((error as Error).message);
       }
     }
   };
+
+  useEffect(() => {
+    if (rideData) {
+        getDirections(rideData.pickupLocation, rideData.dropoffLocation)
+    }
+}, [rideConfirmed])
 
   const clearRide = () => {
     console.log("ride cleared");
@@ -151,6 +189,33 @@ function DriverCurrentRide() {
   return (
     <div>
       <>
+      <Dialog open={openFinishModal} handler={handleOpenFinishModal} className='bg-transparent' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+          <div className='w-full h-60 rounded-lg bg-gray-50 px-5 pt-8 flex flex-col text-center'>
+              <div className=''>
+                  <h1 className='text-2xl font-semibold'>
+                      Are you sure you reached the destination?
+                  </h1>
+              </div>
+              <div className='mt-4 w-full px-14'>
+                  <h1 className='text-md'>
+                      If the destination is reached then finish the ride and passenger will pay the fare amount.
+                  </h1>
+              </div>
+              <div className='flex justify-center items-end h-32 mb-7 gap-5'>
+                  <button
+                      onClick={handleOpenFinishModal}
+                      className='btn btn-xs bg-blue-300  text-black hover:bg-blue-600 relative right-2 rounded-full px-4 py-2 transition-colors duration-300'>dismiss</button>
+                  <button
+                      onClick={() => {
+                          handleOpenFinishModal()
+                          handlePaymentModal()
+                      }}
+                      className='w-[30%] h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300'>finish ride</button>
+              </div>
+          </div>
+      </Dialog>
+
+
         <Dialog
           open={cancelledModal}
           handler={clearRide}
@@ -188,6 +253,30 @@ function DriverCurrentRide() {
             </div>
           </div>
         </Dialog>
+
+        <Dialog open={openPayment} handler={handlePaymentModal} className='bg-transparent h-72 text-black' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+
+          <div className='w-full h-full rounded-lg bg-gray-50 px-5 pt-8 grid grid-rows-6 text-center'>
+              <div className='row-span-1'>
+                  <h1 className='text-2xl font-semibold'>
+                      Waiting for the payment completion
+                  </h1>
+              </div>
+              <div className='flex justify-center items-center gap-3 row-span-1'>
+                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="38" height="38" viewBox="0 0 48 48">
+                      <path fill="#BF360C" d="M35,44c0,0-6-2-11-2s-11,2-11,2V32h22V44z"></path><path fill="#FFA726" d="M14 28c0 2.209-1.791 4-4 4s-4-1.791-4-4 1.791-4 4-4S14 25.791 14 28M42 28c0 2.209-1.791 4-4 4s-4-1.791-4-4 1.791-4 4-4S42 25.791 42 28"></path><path fill="#FFB74D" d="M38,18c0-12.725-28-8.284-28,0v9c0,8.284,6.269,15,14,15s14-6.716,14-15V18z"></path><path fill="#784719" d="M32 26c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2S32 24.895 32 26M20 26c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2S20 24.895 20 26"></path><path fill="#FF5722" d="M24,4C15.495,4,3,9,2.875,36L13,44V24l16.75-9l5.125,7L35,44l10-8c0-12-0.543-29-15-29l-2-3H24z"></path><path fill="#FB8C00" d="M19,35h10c0,0-2,3-5,3S19,35,19,35z"></path>
+                  </svg>
+                  <span className="loading loading-dots loading-lg"></span>
+                  <img width="38" height="38" src="https://img.icons8.com/external-basicons-color-edtgraphics/50/external-Bank-finance-basicons-color-edtgraphics.png" alt="external-Bank-finance-basicons-color-edtgraphics" />
+              </div>
+              <div className='text center flex flex-col gap-3 row-span-4 mt-4'>
+                  {/* <h1 className='uppercase text-left text-xs'>Fare<br/>amount</h1>  */}
+                  <h1 className='text-7xl text-green-800'>₹{rideData?.price}</h1>
+                  <h1 className='text-xs px-10'>After the successful payment completion, please note that it may take some time for the changes to reflect. Thank you for your patience.</h1>
+              </div>
+          </div>
+        </Dialog>
+
       </>
       {rideData && (
         <>
@@ -310,7 +399,7 @@ function DriverCurrentRide() {
                               </button>
                               <button
                                 type="button"
-                                // onClick={() => verifyPIN()}
+                                onClick={() => verifyPIN()}
                                 className="w-[30%] h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300"
                               >
                                 confirm the ride
@@ -325,8 +414,8 @@ function DriverCurrentRide() {
                                   Confirm when you've reached your destination.
                                 </h1>
                                 <button
-                                  // onClick={handleOpenFinishModal}
-                                  className="btn btn-accent btn-sm text-white"
+                                  onClick={handleOpenFinishModal}
+                                  className="w-[30%] h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300"
                                 >
                                   finish the ride
                                 </button>
