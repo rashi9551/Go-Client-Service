@@ -8,6 +8,8 @@ import { userAuthSlice } from "./slices/userAuthSlice";
 import driverAuthSlice from "./slices/driverAuthSlice";
 import adminAuthSlice from "./slices/adminAuthSlice";
 import driverSearchSlice from "./slices/driverSearchSlice";
+import userRideDataSlice from "./slices/userRideDataSlice";
+import driverRideDataSlice from "./slices/driverRideDataSlice";
 
 const userPersistConfig={key:"userAuth",storage,version:1}
 const driverPersistConfig={key:"driverAuth",storage,version:1}
@@ -24,6 +26,8 @@ export const store=configureStore({
         admin:adminAuthPersistReducer,
         pendingModal: pendingModalSlice,
         rejectModal:rejectModalSlice,
+        userRideData:userRideDataSlice,
+        driverRideData:driverRideDataSlice,
         driverSearch:driverSearchSlice
     },
     middleware: (getDefaultMiddleware) => {

@@ -2,6 +2,7 @@ import  DriverNavbar  from "../../../components/driver/DirverNavbar";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { useState } from "react";
 import DriverCurrentRide from '../../../components/driver/Rides/DriverCurrentRide';
+import DriverRideHistory from "../../../components/driver/Rides/DriverRideHistory";
 
 
 const  DriverRidesPage = () => {
@@ -29,7 +30,7 @@ const  DriverRidesPage = () => {
                             <DriverCurrentRide />
                         </TabPanel>
                         <TabPanel>
-                            ""
+                            <DriverRideHistory/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

@@ -3,6 +3,7 @@ import Footer from '../../../components/user/Home/Footer'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { useState } from 'react';
 import UserCurrentRide from '../../../components/user/Home/UserCurrentRide';
+import UserRideHistory from '../../../components/user/Home/UserRideHistory';
 
 
 const UserCurrentRidePage = () => {
@@ -31,7 +32,7 @@ const UserCurrentRidePage = () => {
                                <UserCurrentRide/>
                             </TabPanel>
                             <TabPanel>
-                            ""
+                            <UserRideHistory/>
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

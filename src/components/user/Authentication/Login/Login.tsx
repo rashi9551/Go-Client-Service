@@ -33,6 +33,7 @@ interface UserData {
   user: string;
   user_id: string;
   userToken:string;
+  refreshToken:string;
   loggedIn: boolean;
 }
 
@@ -43,6 +44,7 @@ function Login() {
     user: "",
     user_id: "",
     userToken:"",
+    refreshToken:"",
     loggedIn:false
   });
   const dispatch=useDispatch()
@@ -66,6 +68,7 @@ function Login() {
             user: data.name,
             user_id: data._id,
             userToken:data.token,
+            refreshToken:data.refreshToken,
             loggedIn:true
           });          
         } else if (data.message === "Blocked") {
@@ -107,6 +110,7 @@ function Login() {
         .then(async () => {
           console.log(userData,"-------")
           localStorage.setItem("userToken",userData.userToken)
+          localStorage.setItem("refreshToken",userData.refreshToken)
           dispatch(userLogin(userData))
           toast.success("login success");
           navigate("/");
@@ -124,9 +128,10 @@ function Login() {
       if (token) {
         const decode = jwtDecode(token) as any
         const { data } = await axiosUser().post("checkGoogleLoginUser", { email: decode.email });        
-            if (data.message === "Success") {
-                toast.success("Login success!");
-                localStorage.setItem("userToken",data.token)
+        if (data.message === "Success") {
+          toast.success("Login success!");
+          localStorage.setItem("userToken",data.token)
+          localStorage.setItem("refreshToken",data.refreshToken)
                 dispatch(userLogin({user: data.name,user_id: data._id,loggedIn:true}));
                 navigate("/");
             } else if (data.message === "Blocked") {
