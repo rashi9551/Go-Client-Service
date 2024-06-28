@@ -60,7 +60,9 @@ function UserCurrentRide() {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketInstance = socketIOClient(ENDPOINT);
+    const socketInstance = socketIOClient(ENDPOINT, {
+      query: {token: userToken }
+    });
     setSocket(socketInstance);
     socketInstance.on("connect", () => {
       console.log("Socket connected");
@@ -191,6 +193,8 @@ function UserCurrentRide() {
       console.log("ride canceled triggeres");
 
       localStorage.removeItem("currentRide-user");
+      localStorage.removeItem("currentRide-driver")
+
       navigate("/");
       toast.success("Ride cancelled successfully!");
     }

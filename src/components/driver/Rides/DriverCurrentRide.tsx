@@ -30,14 +30,18 @@ function DriverCurrentRide() {
   const { driverId } = useSelector(
     (store: { driver: { driverId: string } }) => store.driver
   );
-  const token: string | null = localStorage.getItem("driverToken");
+  const driverToken: string | null = localStorage.getItem("driverToken");
   const [cancelledModal, setcancelledModal] = useState(false);
 
   // socket setup
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketInstance = socketIOClient(ENDPOINT);
+    console.log(driverToken,"_+_+_+_+_+_");
+    
+    const socketInstance = socketIOClient(ENDPOINT, {
+      query: {token: driverToken }
+    });
     setSocket(socketInstance);
     socketInstance.on("rideConfirmed", () => {
       console.log("ride confirmed");
@@ -72,7 +76,7 @@ function DriverCurrentRide() {
   const getData = async () => {
     try {
       const rideId = localStorage.getItem("currentRide-driver");
-      const response = await axiosRide(token).get(
+      const response = await axiosRide(driverToken).get(
         `getCurrentRide?rideId=${rideId}`
       );
       if (response.data.ride_id) {

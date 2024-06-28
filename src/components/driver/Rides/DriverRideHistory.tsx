@@ -75,8 +75,11 @@ const DriverRideHistory = () => {
         if (filterValue === 'All') {
             setFilteredRideData(rideData);
         } else {
-            const filteredData = rideData?.filter(ride => ride.status === filterValue);
-            setFilteredRideData(filteredData);
+            if(rideData){
+                const filteredData = rideData?.filter(ride => ride?.status === filterValue);
+                setFilteredRideData(filteredData);
+
+            }
         }
     }, [filterValue, rideData]);
 
@@ -84,11 +87,14 @@ const DriverRideHistory = () => {
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        const filteredData = rideData?.filter(ride =>
-            ride.pickupLocation.toLowerCase().includes(search.toLowerCase()) ||
-            ride.dropoffLocation.toLowerCase().includes(search.toLowerCase())
-        );
-        setFilteredRideData(filteredData);
+        if(rideData){
+            const filteredData = rideData?.filter(ride =>
+                ride.pickupLocation.toLowerCase().includes(search.toLowerCase()) ||
+                ride.dropoffLocation.toLowerCase().includes(search.toLowerCase())
+            );
+            setFilteredRideData(filteredData);
+
+        }
     }, [search, rideData]);
 
 

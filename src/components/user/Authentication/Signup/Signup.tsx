@@ -116,6 +116,7 @@ function Signup() {
       });
       if (data.message === "Success") {
         toast.success("OTP verified succesfully");
+        toast.success("Account created succesfully");
         navigate("/login");
       }else if(data.message === "Invalid OTP"){
         console.log("ewndfvsh");
@@ -280,7 +281,7 @@ function Signup() {
                 <form>
                   <div className="flex justify-center items-center mb-5">
                     <h1 className="text-gray-800 font-bold text-xl text-center">
-                      Enter the OTP sent to your mobile
+                      Enter the OTP sent to your email
                     </h1>
                   </div>
 
