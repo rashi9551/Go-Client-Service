@@ -2,6 +2,7 @@ export interface RideDetails {
     formattedDate: string;
     _id: number;
     ride_id: string;
+    driver_id:string;
     userId: string;
     pickupCoordinates: PickupLocation;
     dropoffCoordinates: DropoffLocation;

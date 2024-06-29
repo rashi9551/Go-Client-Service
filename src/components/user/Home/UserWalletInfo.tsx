@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import axiosUser from "../../../service/axios/axiosUser";
 import { useSelector } from "react-redux";
 import { loadStripe } from '@stripe/stripe-js';
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 
 const UserWalletInfo = () => {
@@ -36,6 +36,23 @@ const UserWalletInfo = () => {
 
     useEffect(() => {
         getData()
+        const sessionId=localStorage.getItem('sessionId')
+        const balance=localStorage.getItem('balance')
+        const updateWallet=async()=>{
+            try {
+                const{data}=await axiosUser().post(`addWalletBalance`,{sessionId,id:user_id,balance})
+                console.log(data);
+                
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        console.log(balance,sessionId,"-----=-=-=-=-=-=-");
+        if(sessionId){
+            updateWallet()
+            localStorage.removeItem('sessionId')
+            localStorage.removeItem('balance')
+        }
     }, [])
 
     const [paymentModal, setpaymentModal] = useState(false)
@@ -45,11 +62,15 @@ const UserWalletInfo = () => {
         try {
             const formData = new FormData
             formData.append("balance", balance)
+            if(Number(balance)<500){
+                toast.error("Enter 500 ore more")
+                return
+            }
             const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
             const { data } = await axiosUser().post("paymentStripe", formData, { params: { user_id: user_id } })
             console.log(data,"ithu id");
-            
-
+            localStorage.setItem('sessionId',data.id)
+            localStorage.setItem('balance',balance)
             const result = await stripe?.redirectToCheckout({
                 sessionId: data.id
             });
@@ -69,25 +90,27 @@ const UserWalletInfo = () => {
             <Dialog className='bg-transparent' open={paymentModal} handler={addBalance} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                 {paymentModal &&
                     <>
-                        <div className='w-full h-fit rounded-lg bg-gray-50 px-8 pt-8 flex flex-col text-center'>
-                            <div className='text-center'>
-                                <h1 className='text-2xl font-bold text-black px-5'>
-                                    Enter the amount you want to add to the wallet
-                                </h1>
-                            </div>
-                            <div className='mt-4 text-center w-full '>
-                                <input type="number" onChange={(e) => setbalance(e.target.value)} placeholder="Type here" className="input input-bordered input-success w-full max-w-xs" />
-                            </div>
-                            <div className='flex justify-center items-end h-fit mt-7 mb-7 gap-5'>
-                                <button
-                                    onClick={() => setpaymentModal(false)}
-                                    className='btn text-white bg-blue-700'>dismiss</button>
-                                <button
-                                    onClick={() => addBalance()}
-                                    className='btn btn-success bg-light-green-600 text-white'>ADD BALANCE</button>
-                            </div>
+                    <div className='w-full h-fit rounded-lg bg-gray-50 px-8 pt-8 flex flex-col text-center'>
+                        <div className='text-center'>
+                            <h1 className='text-2xl font-bold text-black px-5'>
+                                Enter the amount you want to add to the wallet
+                            </h1>
                         </div>
-                    </>
+                        <div className='mt-4 text-center w-full '>
+                            <input type="number" onChange={(e) => setbalance(e.target.value)} placeholder="Type here" className="input input-bordered input-success w-full max-w-xs" />
+                        </div>
+                        <div className='flex justify-center items-end h-fit mt-7 mb-7 gap-5'>
+                            <button
+                                onClick={() => setpaymentModal(false)}
+                                className='w-[30%] h-10 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-300'>Dismiss</button>
+                            <button
+                                onClick={() => addBalance()}
+                                className='w-[30%] h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300'>ADD BALANCE</button>
+                        </div>
+                    </div>
+                </>
+                
+                
                 }
             </Dialog>
 

@@ -126,6 +126,7 @@ function UserCurrentRide() {
         if(response?.data?.message!='something went wrong'){
           
           setrideData(response.data);
+          formik.setFieldValue('amount',rideData?.price)
         }
         setdriverData(data);
         setfeedbacks(data?.formattedFeedbacks || null);
@@ -213,49 +214,57 @@ function UserCurrentRide() {
         paymentMode: Yup.string().required("Please choose a Payment method")
       }),
       onSubmit: async (values: any) => {
-  
-        if (values.paymentMode === "Wallet" && userData && values.amount > userData?.wallet?.balance) {
-          return 0
-        }
-  
-        const rideId = localStorage.getItem("currentRide-user")
-  
-  
-        if (values.paymentMode === "Wallet" || values.paymentMode === "Cash in hand") {
-          const { data } = await axiosUser().post('payment', values, { params: { rideId: rideId } })
-          if (data.message === "Success") {
-            toast.success("Payment successfull")
-            localStorage.removeItem("currentRide-user")
-            setpaymentModal(false)
-            socket?.emit("paymentCompleted", values.paymentMode, values.amount)
-            navigate('/')
-          } else {
-            toast.error(data.message)
+        try {
+          console.log(values,"values=-=-=-=-=-=");
+          if (values.paymentMode === "Wallet" && userData && values.amount > userData?.wallet?.balance) {
+            return 0
           }
-        }
-        else if (values.paymentMode === "Stripe") {
-  
-          // const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
-  
-          // try {
-          //   const { data } = await axiosUser(userToken).post("payment-stripe", values, { params: { rideId: rideId } })
-  
-          //   try {
-          //     const result = await stripe?.redirectToCheckout({
-          //       sessionId: data.id
-          //     });
-          //     if (result?.error) {
-          //       toast.error(result.error.message || "An error occurred during payment.");
-          //     }
-          //   } catch (error) {
-          //     console.error("Error during redirectToCheckout:", error);
-          //     toast.error("An error occurred during payment. Please try again later.");
-          //   }
-  
-          // } catch (error) {
-          //   console.error("An error occurred:", error)
-          //   toast.error("An error occurred. Please try again later.")
-          // }
+    
+          const rideId = localStorage.getItem("currentRide-user")
+    
+    
+          if (values.paymentMode === "Wallet" || values.paymentMode === "Cash in hand") {
+            if(!values.amount){
+              values.amount=rideData?.price
+            }
+            const { data } = await axiosUser().post('payment', {...values,userId:user_id,driver_id:rideData?.driver_id}, { params: { rideId: rideId } })
+            if (data.message === "Success") {
+              toast.success("Payment successfull")
+              localStorage.removeItem("currentRide-user")
+              setpaymentModal(false)
+              socket?.emit("paymentCompleted", values.paymentMode, values.amount)
+              navigate('/')
+            } else {
+              toast.error(data.message)
+            }
+          }
+          else if (values.paymentMode === "Stripe") {
+    
+            // const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
+    
+            // try {
+            //   const { data } = await axiosUser(userToken).post("payment-stripe", values, { params: { rideId: rideId } })
+    
+            //   try {
+            //     const result = await stripe?.redirectToCheckout({
+            //       sessionId: data.id
+            //     });
+            //     if (result?.error) {
+            //       toast.error(result.error.message || "An error occurred during payment.");
+            //     }
+            //   } catch (error) {
+            //     console.error("Error during redirectToCheckout:", error);
+            //     toast.error("An error occurred during payment. Please try again later.");
+            //   }
+    
+            // } catch (error) {
+            //   console.error("An error occurred:", error)
+            //   toast.error("An error occurred. Please try again later.")
+            // }
+          }
+          
+        } catch (error) {
+          console.log(error);
         }
       }
     })
