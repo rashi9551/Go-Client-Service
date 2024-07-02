@@ -47,7 +47,8 @@ function UserRideHistory() {
     const getData=async()=>{
         try {
             const userToken = localStorage.getItem("userToken");
-            const {data}=await axiosRide(userToken).get(`/getAllRides?id=${user_id}&message=user`)            
+            const {data}=await axiosRide(userToken).get(`/getAllRides?id=${user_id}&message=user`)
+            console.log(data,"ithu ride data");
             setrideData(data)
         } catch (error) {
             toast.error((error as Error).message)

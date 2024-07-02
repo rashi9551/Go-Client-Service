@@ -21,6 +21,20 @@ export interface RideDetails {
     ratings:number
     pin:number
 }
+export interface RazorPayOrder {
+    amount: number;
+    amount_due: number;
+    amount_paid: number;
+    attempts: number;
+    created_at: number;
+    currency: string;
+    entity: string;
+    id: string;
+    notes: string[];
+    offer_id: string | null;
+    receipt: string;
+    status: string;
+  }
 
 interface PickupLocation {
     lat: number;

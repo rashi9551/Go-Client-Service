@@ -42,7 +42,7 @@ const UserWalletInfo = () => {
             try {
                 const{data}=await axiosUser().post(`addWalletBalance`,{sessionId,id:user_id,balance})
                 console.log(data);
-                
+                getData()
             } catch (error) {
                 console.log(error);
             }
@@ -60,14 +60,13 @@ const UserWalletInfo = () => {
 
     const addBalance = async () => {
         try {
-            const formData = new FormData
-            formData.append("balance", balance)
             if(Number(balance)<500){
                 toast.error("Enter 500 ore more")
                 return
             }
             const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
-            const { data } = await axiosUser().post("paymentStripe", formData, { params: { user_id: user_id } })
+            console.log("stripe poonu wallet",balance);
+            const { data } = await axiosUser().post("paymentStripe", {amount:Number(balance),success_url:'http://localhost:5173/account'})
             console.log(data,"ithu id");
             localStorage.setItem('sessionId',data.id)
             localStorage.setItem('balance',balance)

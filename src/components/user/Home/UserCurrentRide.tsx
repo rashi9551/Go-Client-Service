@@ -1,15 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// global.d.ts
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axiosUser from "../../../service/axios/axiosUser";
 import { toast } from "react-toastify";
 import { reverseGeocodeForLocality } from "../../../Hooks/Map";
-import *  as Yup from 'yup'
+import * as Yup from "yup";
 import {
   Accordion,
   AccordionHeader,
   AccordionBody,
-  Radio
+  Radio,
 } from "@material-tailwind/react";
 import {
   DirectionsRenderer,
@@ -17,7 +24,11 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import socketIOClient, { Socket } from "socket.io-client";
-import { DriverInterface, RideDetails, UserInterface } from "../../../utils/interfaces";
+import {
+  DriverInterface,
+  RideDetails,
+  UserInterface,
+} from "../../../utils/interfaces";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "@material-tailwind/react";
 import {
@@ -36,7 +47,7 @@ import { useFormik } from "formik";
 const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
 
 function UserCurrentRide() {
-  const { user_id, user } = useSelector((store:any) => store.user);
+  const { user_id, user } = useSelector((store: any) => store.user);
   const userToken = localStorage.getItem("userToken");
   const [userData, setuserData] = useState<UserInterface | null>(null);
   userData;
@@ -61,7 +72,7 @@ function UserCurrentRide() {
 
   useEffect(() => {
     const socketInstance = socketIOClient(ENDPOINT, {
-      query: {token: userToken }
+      query: { token: userToken },
     });
     setSocket(socketInstance);
     socketInstance.on("connect", () => {
@@ -73,8 +84,8 @@ function UserCurrentRide() {
     });
 
     socketInstance.on("userPaymentPage", () => {
-      setpaymentModal(true)
-    })
+      setpaymentModal(true);
+    });
 
     return () => {
       if (socketInstance) {
@@ -91,10 +102,10 @@ function UserCurrentRide() {
   const [open, setOpen] = React.useState(0);
   const handleOpen = (value: any) => setOpen(open === value ? 0 : value);
 
-  const [paymentModal, setpaymentModal] = useState(false)
+  const [paymentModal, setpaymentModal] = useState(false);
   const handlePaymentModal = () => {
-    setpaymentModal(!paymentModal)
-  }
+    setpaymentModal(!paymentModal);
+  };
   const [rideData, setrideData] = useState<RideDetails>();
   const [driverData, setdriverData] = useState<DriverInterface | null>(null);
   const [feedbacks, setfeedbacks] = useState<null | any>([]);
@@ -123,10 +134,9 @@ function UserCurrentRide() {
         const { data } = await axiosDriver().get(
           `driverData?driver_id=${response.data.driver_id}`
         );
-        if(response?.data?.message!='something went wrong'){
-          
+        if (response?.data?.message != "something went wrong") {
           setrideData(response.data);
-          formik.setFieldValue('amount',rideData?.price)
+          formik.setFieldValue("amount", rideData?.price);
         }
         setdriverData(data);
         setfeedbacks(data?.formattedFeedbacks || null);
@@ -135,10 +145,7 @@ function UserCurrentRide() {
       toast.error((error as Error).message);
       console.log(error);
     }
-  };  
-  useEffect(() => {
-    getRideData();
-  }, []);
+  };
 
   useEffect(() => {
     if (rideData) {
@@ -194,7 +201,7 @@ function UserCurrentRide() {
       console.log("ride canceled triggeres");
 
       localStorage.removeItem("currentRide-user");
-      localStorage.removeItem("currentRide-driver")
+      localStorage.removeItem("currentRide-driver");
 
       navigate("/");
       toast.success("Ride cancelled successfully!");
@@ -203,78 +210,129 @@ function UserCurrentRide() {
 
   const [tab, settab] = useState(1);
 
-    ///PAYMENT HANDLING
+  ///PAYMENT HANDLING
 
-    const formik = useFormik({
-      initialValues: {
-        paymentMode: "",
-        amount: 0
-      },
-      validationSchema: Yup.object({
-        paymentMode: Yup.string().required("Please choose a Payment method")
-      }),
-      onSubmit: async (values: any) => {
-        try {
-          console.log(values,"values=-=-=-=-=-=");
-          if (values.paymentMode === "Wallet" && userData && values.amount > userData?.wallet?.balance) {
-            return 0
-          }
-    
-          const rideId = localStorage.getItem("currentRide-user")
-    
-    
-          if (values.paymentMode === "Wallet" || values.paymentMode === "Cash in hand") {
-            if(!values.amount){
-              values.amount=rideData?.price
-            }
-            const { data } = await axiosUser().post('payment', {...values,userId:user_id,driver_id:rideData?.driver_id}, { params: { rideId: rideId } })
-            if (data.message === "Success") {
-              toast.success("Payment successfull")
-              localStorage.removeItem("currentRide-user")
-              setpaymentModal(false)
-              socket?.emit("paymentCompleted", values.paymentMode, values.amount)
-              navigate('/')
-            } else {
-              toast.error(data.message)
-            }
-          }
-          else if (values.paymentMode === "Stripe") {
-    
-            // const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
-    
-            // try {
-            //   const { data } = await axiosUser(userToken).post("payment-stripe", values, { params: { rideId: rideId } })
-    
-            //   try {
-            //     const result = await stripe?.redirectToCheckout({
-            //       sessionId: data.id
-            //     });
-            //     if (result?.error) {
-            //       toast.error(result.error.message || "An error occurred during payment.");
-            //     }
-            //   } catch (error) {
-            //     console.error("Error during redirectToCheckout:", error);
-            //     toast.error("An error occurred during payment. Please try again later.");
-            //   }
-    
-            // } catch (error) {
-            //   console.error("An error occurred:", error)
-            //   toast.error("An error occurred. Please try again later.")
-            // }
-          }
-          
-        } catch (error) {
-          console.log(error);
+  const formik = useFormik({
+    initialValues: {
+      paymentMode: "",
+      amount: 0,
+    },
+    validationSchema: Yup.object({
+      paymentMode: Yup.string().required("Please choose a Payment method"),
+    }),
+    onSubmit: async (values: any) => {
+      try {
+        console.log(values, "values=-=-=-=-=-=");
+        if (
+          values.paymentMode === "Wallet" &&
+          userData &&
+          values.amount > userData?.wallet?.balance
+        ) {
+          return 0;
         }
+
+        const rideId = localStorage.getItem("currentRide-user");
+        if (!values.amount) {
+          values.amount = rideData?.price;
+        }
+
+        if (
+          values.paymentMode === "Wallet" ||
+          values.paymentMode === "Cash in hand"
+        ) {
+          const { data } = await axiosUser().post(
+            "payment",
+            { ...values, userId: user_id, driverId: rideData?.driver_id },
+            { params: { rideId: rideId } }
+          );
+          if (data.message === "Success") {
+            toast.success("Payment successfull");
+            localStorage.removeItem("currentRide-user");
+            setpaymentModal(false);
+            socket?.emit("paymentCompleted", values.paymentMode, values.amount);
+            navigate("/");
+          } else {
+            toast.error(data.message);
+          }
+        } else if (values.paymentMode === "Stripe") {
+          const {data} = await axiosUser().post('razorpayPayment',{amount:values.amount})
+          console.log(data,"ithu razorpay data");
+          const amount:number = data.amount; 
+          const options = {
+            key: import.meta.env.RAZORPAY_KEY_ID,
+            amount: data.amount,
+            currency: data.currency,
+            name: "GO",
+            description: "Test Mode",
+            order_id: data.id,
+            handler: async (data:any) => {
+                console.log("response", data)
+                try {
+                    const res = await axiosUser().post('payment',{paymentMode:'Stripe',rideId,userId:user_id,driverId:driverData?._id,amount,razorpayOrderId: data.razorpay_order_id,
+                      razorpayPaymentId: data.razorpay_payment_id,
+                      razorpaySignature: data.razorpay_signature,})
+                      const verifyData= res.data
+                      if (verifyData.message === "Success") {
+                        toast.success("Payment successfull");
+                        localStorage.removeItem("currentRide-user");
+                        setpaymentModal(false);
+                        socket?.emit("paymentCompleted", values.paymentMode, values.amount);
+                        navigate("/");
+                      } else {
+                        toast.error(verifyData.message);
+                      }
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+            theme: {
+                color: "#5f63b8"
+            }
+        };
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+        }
+      } catch (error) {
+        console.log(error);
       }
-    })
+    },
+  });
+  useEffect(() => {
+    getRideData();
+    const sessionId = localStorage.getItem("sessionId");
+    const amount = localStorage.getItem("balance");
+    const ridePayment = async () => {
+      try {
+        const { data } = await axiosUser().post(
+          `payment`,
+          {
+            paymentMode: "Stripe",
+            amount,
+            sessionId,
+            userId: user_id,
+            driver_id: rideData?.driver_id,
+          },
+          { params: { rideId: rideData?.ride_id } }
+        );
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    console.log(amount, sessionId, "-----=-=-=-=-=-=-");
+    if (sessionId) {
+      ridePayment();
+      localStorage.removeItem("sessionId");
+      localStorage.removeItem("balance");
+    }
+  }, []);
 
   const errors = () => {
     if (formik.errors) {
-      const errorMessages = Object.values(formik.errors)
-      errorMessages.forEach((errors: any) => toast.error(errors))
+      const errorMessages = Object.values(formik.errors);
+      errorMessages.forEach((errors: any) => toast.error(errors));
     }
-  }
+  };
 
   if (!isLoaded) {
     return (
@@ -332,10 +390,20 @@ function UserCurrentRide() {
         )}
       </Dialog>
 
-      <Dialog className='bg-transparent' open={paymentModal} handler={handlePaymentModal} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-        {paymentModal &&
+      <Dialog
+        className="bg-transparent"
+        open={paymentModal}
+        handler={handlePaymentModal}
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      >
+        {paymentModal && (
           <>
-            <div x-data={{ isOpen: true }} className="relative flex justify-center">
+            <div
+              x-data={{ isOpen: true }}
+              className="relative flex justify-center"
+            >
               <div
                 className="fixed inset-0 z-10 overflow-y-auto"
                 aria-labelledby="modal-title"
@@ -343,68 +411,153 @@ function UserCurrentRide() {
                 aria-modal="true"
               >
                 <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                  <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+                  <span
+                    className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                    aria-hidden="true"
+                  >
                     &#8203;
                   </span>
 
                   <div className="relative inline-block px-4 pt-5 h-fit w-[35rem] pb-4 overflow-hidden  bg-white rounded-lg shadow-xl sm:align-middle  ">
-                    <div className='mb-1'>
+                    <div className="mb-1">
                       <div className="mt-2 text-center">
                         <h1 className="text-4xl font-bold text-black">
                           Your destination has been reached!
                         </h1>
-                        <h1 className="mt-4 text-sm text-black">Thank you for choosing safely</h1>
+                        <h1 className="mt-4 text-sm text-black">
+                          Thank you for choosing safely
+                        </h1>
 
                         <p className="mt-4 px-5 text-xs text-gray-500 dark:text-gray-400">
-                          Now please pay the fare charge to the driver by choosing any of  the payment options available below
+                          Now please pay the fare charge to the driver by
+                          choosing any of the payment options available below
                         </p>
 
-                        <div className='text-2xl mt-4 flex gap-2 w-full justify-center text-black'>
+                        <div className="text-2xl mt-4 flex gap-2 w-full justify-center text-black">
                           <h1>Fare charge</h1>
-                          <h1 className='text-green-800'>
-                            ₹{rideData?.price}
-                          </h1>
+                          <h1 className="text-green-800">₹{rideData?.price}</h1>
                         </div>
                       </div>
                     </div>
                     <form onSubmit={formik.handleSubmit}>
-                      <div className='text-left px-8'>
-                        <Accordion open={open === 1}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                          <div className='flex items-center' onClick={() => handleOpen(1)}>
-                            <Radio onChange={formik.handleChange} value="Wallet" name="paymentMode" className='text-xs' color="blue" crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-                            <AccordionHeader className='text-sm'  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Safely Wallet</AccordionHeader>
+                      <div className="text-left px-8">
+                        <Accordion
+                          open={open === 1}
+                          placeholder={undefined}
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        >
+                          <div
+                            className="flex items-center"
+                            onClick={() => handleOpen(1)}
+                          >
+                            <Radio
+                              onChange={formik.handleChange}
+                              value="Wallet"
+                              name="paymentMode"
+                              className="text-xs"
+                              color="blue"
+                              crossOrigin={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            />
+                            <AccordionHeader
+                              className="text-sm"
+                              placeholder={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            >
+                              Safely Wallet
+                            </AccordionHeader>
                           </div>
-                          <div className='px-11'>
+                          <div className="px-11">
                             <AccordionBody>
-                              <div className='flex gap-4'>
-                                <span> Wallet balance ₹{userData?.wallet?.balance}</span> <span>{rideData && userData &&
-                                  (userData?.wallet?.balance < rideData?.price) &&
-                                  <p className='text-red-400'>Insufficient wallet balance</p>
-                                }</span>
+                              <div className="flex gap-4">
+                                <span>
+                                  {" "}
+                                  Wallet balance ₹{userData?.wallet?.balance}
+                                </span>{" "}
+                                <span>
+                                  {rideData &&
+                                    userData &&
+                                    userData?.wallet?.balance <
+                                      rideData?.price && (
+                                      <p className="text-red-400">
+                                        Insufficient wallet balance
+                                      </p>
+                                    )}
+                                </span>
                               </div>
                             </AccordionBody>
-
                           </div>
                         </Accordion>
 
-                        <Accordion open={open === 2}  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                          <div className='flex items-center' onClick={() => handleOpen(2)}>
-                            <Radio onChange={formik.handleChange} value="Stripe" name="paymentMode" className='text-xs' color="blue" crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-                            <AccordionHeader className='text-sm' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Stripe - Payements made easy</AccordionHeader>
+                        <Accordion
+                          open={open === 2}
+                          placeholder={undefined}
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        >
+                          <div
+                            className="flex items-center"
+                            onClick={() => handleOpen(2)}
+                          >
+                            <Radio
+                              onChange={formik.handleChange}
+                              value="Stripe"
+                              name="paymentMode"
+                              className="text-xs"
+                              color="blue"
+                              crossOrigin={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            />
+                            <AccordionHeader
+                              className="text-sm"
+                              placeholder={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            >
+                              Stripe - Payements made easy
+                            </AccordionHeader>
                           </div>
-                          <div className='px-11'>
+                          <div className="px-11">
                             <AccordionBody>
                               Use the stripe payment service for online payments
                             </AccordionBody>
                           </div>
                         </Accordion>
 
-                        <Accordion open={open === 3}placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                          <div className='flex items-center' onClick={() => handleOpen(3)}>
-                            <Radio onChange={formik.handleChange} value="Cash in hand" name="paymentMode" className='text-xs' color="blue" crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-                            <AccordionHeader className='text-sm' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Pay in Cash</AccordionHeader>
+                        <Accordion
+                          open={open === 3}
+                          placeholder={undefined}
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        >
+                          <div
+                            className="flex items-center"
+                            onClick={() => handleOpen(3)}
+                          >
+                            <Radio
+                              onChange={formik.handleChange}
+                              value="Cash in hand"
+                              name="paymentMode"
+                              className="text-xs"
+                              color="blue"
+                              crossOrigin={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            />
+                            <AccordionHeader
+                              className="text-sm"
+                              placeholder={undefined}
+                              onPointerEnterCapture={undefined}
+                              onPointerLeaveCapture={undefined}
+                            >
+                              Pay in Cash
+                            </AccordionHeader>
                           </div>
-                          <div className='px-11'>
+                          <div className="px-11">
                             <AccordionBody>
                               Pay the fare charge in cash
                             </AccordionBody>
@@ -414,9 +567,10 @@ function UserCurrentRide() {
                       <div className="mt-5 mb-3 sm:flex sm:items-center sm:justify-center">
                         <div className="sm:flex sm:items-center ">
                           <button
-                            type='submit'
+                            type="submit"
                             onClick={() => errors()}
-                            className="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                            className="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                          >
                             PAY THE FARE
                           </button>
                         </div>
@@ -427,7 +581,7 @@ function UserCurrentRide() {
               </div>
             </div>
           </>
-        }
+        )}
       </Dialog>
 
       {rideData && driverData && (
@@ -714,54 +868,55 @@ function UserCurrentRide() {
                         <div className="bg-indigo-50 rounded-2xl pt-3 px-3 md:h-[38.5rem] w-full">
                           <div className="h-[20rem] md:h-[35.5rem] pb-2 chat-container overflow-y-auto">
                             <div className="grid gap-3">
-                              {feedbacks && feedbacks.map((feedbacks: any) => {
-                                return (
-                                  <div className="card bg-base-100 shadow-xl">
-                                    <div className="card-body">
-                                      <h2 className="card-title">
-                                        "{feedbacks.feedback}"
-                                      </h2>
-                                      <div className="card-actions mt-1 ml-2">
-                                        <div className="rating gap-1">
-                                          <input
-                                            checked={feedbacks.rating === 1}
-                                            type="radio"
-                                            name="rating"
-                                            className="mask mask-heart bg-red-400"
-                                          />
-                                          <input
-                                            checked={feedbacks.rating === 2}
-                                            type="radio"
-                                            name="rating"
-                                            className="mask mask-heart bg-red-400"
-                                          />
-                                          <input
-                                            checked={feedbacks.rating === 3}
-                                            type="radio"
-                                            name="rating"
-                                            className="mask mask-heart bg-red-400"
-                                          />
-                                          <input
-                                            checked={feedbacks.rating === 4}
-                                            type="radio"
-                                            name="rating"
-                                            className="mask mask-heart bg-red-400"
-                                          />
-                                          <input
-                                            checked={feedbacks.rating === 5}
-                                            type="radio"
-                                            name="rating"
-                                            className="mask mask-heart bg-red-400"
-                                          />
+                              {feedbacks &&
+                                feedbacks.map((feedbacks: any) => {
+                                  return (
+                                    <div className="card bg-base-100 shadow-xl">
+                                      <div className="card-body">
+                                        <h2 className="card-title">
+                                          "{feedbacks.feedback}"
+                                        </h2>
+                                        <div className="card-actions mt-1 ml-2">
+                                          <div className="rating gap-1">
+                                            <input
+                                              checked={feedbacks.rating === 1}
+                                              type="radio"
+                                              name="rating"
+                                              className="mask mask-heart bg-red-400"
+                                            />
+                                            <input
+                                              checked={feedbacks.rating === 2}
+                                              type="radio"
+                                              name="rating"
+                                              className="mask mask-heart bg-red-400"
+                                            />
+                                            <input
+                                              checked={feedbacks.rating === 3}
+                                              type="radio"
+                                              name="rating"
+                                              className="mask mask-heart bg-red-400"
+                                            />
+                                            <input
+                                              checked={feedbacks.rating === 4}
+                                              type="radio"
+                                              name="rating"
+                                              className="mask mask-heart bg-red-400"
+                                            />
+                                            <input
+                                              checked={feedbacks.rating === 5}
+                                              type="radio"
+                                              name="rating"
+                                              className="mask mask-heart bg-red-400"
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="w-full text-right">
+                                          <p>{feedbacks.formattedDate}</p>
                                         </div>
                                       </div>
-                                      <div className="w-full text-right">
-                                        <p>{feedbacks.formattedDate}</p>
-                                      </div>
                                     </div>
-                                  </div>
-                                );
-                              })}
+                                  );
+                                })}
                             </div>
                           </div>
                         </div>

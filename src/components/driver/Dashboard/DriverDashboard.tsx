@@ -83,9 +83,9 @@ export const DriverDashboard = () => {
   const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
   
   useEffect(() => {
-    const userToken=localStorage.getItem('userToken')
+    const driverToken=localStorage.getItem('driverToken')
     const socketInstance = socketIOClient(ENDPOINT, {
-      query: {token: userToken }
+      query: {token: driverToken }
     });
     console.log("socket connected to driver side ",socket);
     setSocket(socketInstance);
