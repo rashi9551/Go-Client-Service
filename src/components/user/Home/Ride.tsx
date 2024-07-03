@@ -69,12 +69,23 @@ function Ride() {
 
   useEffect(()=>{
     const userToken=localStorage.getItem('userToken')    
+    const refreshToken=localStorage.getItem('refreshToken')    
     const socketInstance=socketIOClient(ENDPOINT, {
-      query: { token:userToken }
+      query: { token:userToken,refreshToken }
     })
     setSocket(socketInstance);
     console.log("Socket connected to client");
-
+    socketInstance.on('tokens-updated', (data) => {
+      const token=data.token
+      const refreshToken=data.refreshToken
+      localStorage.setItem(token,'userToken')
+      localStorage.setItem(refreshToken,'refreshToken')
+    
+      socketInstance.io.opts.query = {
+        token: token,
+        refreshToken: refreshToken
+      };
+    });
     socketInstance.on("userConfirmation",(rideId)=>{
       localStorage.setItem("currentRide-user",rideId)
       dispatch(cancelSearching())

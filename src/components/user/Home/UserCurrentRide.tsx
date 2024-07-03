@@ -71,13 +71,27 @@ function UserCurrentRide() {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketInstance = socketIOClient(ENDPOINT, {
-      query: { token: userToken },
-    });
+    const refreshToken=localStorage.getItem('refreshToken')    
+    const socketInstance=socketIOClient(ENDPOINT, {
+      query: { token:userToken,refreshToken }
+    })
     setSocket(socketInstance);
     socketInstance.on("connect", () => {
       console.log("Socket connected");
     });
+
+    socketInstance.on('tokens-updated', (data) => {
+      const token=data.token
+      const refreshToken=data.refreshToken
+      localStorage.setItem(token,'userToken')
+      localStorage.setItem(refreshToken,'refreshToken')
+    
+      socketInstance.io.opts.query = {
+        token: token,
+        refreshToken: refreshToken
+      };
+    });
+
     socketInstance.on("rideConfirmed", () => {
       console.log("ride confirmed");
       setrideConfirmed(true);
@@ -236,10 +250,7 @@ function UserCurrentRide() {
           values.amount = rideData?.price;
         }
 
-        if (
-          values.paymentMode === "Wallet" ||
-          values.paymentMode === "Cash in hand"
-        ) {
+        if (values.paymentMode === "Wallet" || values.paymentMode === "Cash in hand") {
           const { data } = await axiosUser().post(
             "payment",
             { ...values, userId: user_id, driverId: rideData?.driver_id },
@@ -254,7 +265,7 @@ function UserCurrentRide() {
           } else {
             toast.error(data.message);
           }
-        } else if (values.paymentMode === "Stripe") {
+        } else if (values.paymentMode === "Upi") {
           const {data} = await axiosUser().post('razorpayPayment',{amount:values.amount})
           console.log(data,"ithu razorpay data");
           const amount:number = data.amount; 
@@ -265,10 +276,12 @@ function UserCurrentRide() {
             name: "GO",
             description: "Test Mode",
             order_id: data.id,
+            image:'/images/razorpayLogo.jpeg',
+
             handler: async (data:any) => {
                 console.log("response", data)
                 try {
-                    const res = await axiosUser().post('payment',{paymentMode:'Stripe',rideId,userId:user_id,driverId:driverData?._id,amount,razorpayOrderId: data.razorpay_order_id,
+                    const res = await axiosUser().post('payment',{paymentMode:'Upi',rideId,userId:user_id,driverId:driverData?._id,amount,razorpayOrderId: data.razorpay_order_id,
                       razorpayPaymentId: data.razorpay_payment_id,
                       razorpaySignature: data.razorpay_signature,})
                       const verifyData= res.data
@@ -285,9 +298,7 @@ function UserCurrentRide() {
                     console.log(error);
                 }
             },
-            theme: {
-                color: "#5f63b8"
-            }
+            
         };
         const rzp1 = new window.Razorpay(options);
         rzp1.open();
@@ -306,7 +317,7 @@ function UserCurrentRide() {
         const { data } = await axiosUser().post(
           `payment`,
           {
-            paymentMode: "Stripe",
+            paymentMode: "Upi",
             amount,
             sessionId,
             userId: user_id,
@@ -504,7 +515,7 @@ function UserCurrentRide() {
                           >
                             <Radio
                               onChange={formik.handleChange}
-                              value="Stripe"
+                              value="Upi"
                               name="paymentMode"
                               className="text-xs"
                               color="blue"
@@ -518,12 +529,12 @@ function UserCurrentRide() {
                               onPointerEnterCapture={undefined}
                               onPointerLeaveCapture={undefined}
                             >
-                              Stripe - Payements made easy
+                              Upi - Payements made easy
                             </AccordionHeader>
                           </div>
                           <div className="px-11">
                             <AccordionBody>
-                              Use the stripe payment service for online payments
+                              Use the Upi payment service for online payments
                             </AccordionBody>
                           </div>
                         </Accordion>

@@ -30,7 +30,8 @@ function DriverLogin() {
     const [driverData,setdriverData]=useState({
         name:"",
         driverToken:"",
-        driver_id:""
+        driver_id:"",
+        refreshToken:""
     })
     const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
@@ -55,11 +56,11 @@ function DriverLogin() {
                 
                 if(data.message==="Success"){
                     sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
-                    setdriverData({name:data.name,driverToken: data.token, driver_id: data._id })
+                    setdriverData({name:data.name,refreshToken:data.refreshToken,driverToken: data.token, driver_id: data._id })
                 }else if (data.message === "Incomplete registration") {
                     toast.info("Please complete the verification!");
                     localStorage.setItem("driverId", data.driverId);
-                    navigate("/driver/identification");
+                    navigate('/driver/signup')
                 } else if (data.message === "Blocked") {
                     toast.info("Your account is blocked!");
                 } else if (data.message === "Not verified") {
@@ -90,6 +91,7 @@ function DriverLogin() {
                 .then(async () => {
                     toast.success("Login success");
                     localStorage.setItem("driverToken",driverData.driverToken)
+                    localStorage.setItem("DriverRefreshToken",driverData.refreshToken)
                     dispatch(driverLogin(driverData));
                     navigate("/driver/dashboard");
                     localStorage.removeItem("driverId");
@@ -118,6 +120,7 @@ function DriverLogin() {
                 if (response.data.message === "Success") {
                     toast.success("Login success!");
                     localStorage.setItem("driverToken",response.data.token)
+                    localStorage.setItem("DriverRefreshToken",response.data.refreshToken)
                     dispatch(
                         driverLogin({
                             name: response.data.name,
@@ -130,7 +133,7 @@ function DriverLogin() {
                 } else if (response.data.message === "Incomplete registration") {
                     toast.info("Please complete the registration!");
                     localStorage.setItem("driverId", response.data.driverId);
-                    navigate("/driver/identification");
+                    navigate('/driver/signup')
                 } else if (response.data.message === "Blocked") {
                     toast.info("Your account is blocked!");
                 } else if (response.data.message === "Not verified") {

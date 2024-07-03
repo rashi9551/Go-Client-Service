@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import socketIOClient, { Socket } from "socket.io-client";
@@ -21,37 +22,84 @@ import {
 import { reverseGeocodeForLocality } from "../../../Hooks/Map";
 import { Dialog } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { RideDetails } from "../../../utils/interfaces";
+import { ChatMessage, DriverInterface, RideDetails } from "../../../utils/interfaces";
+import ChatBoxReciever from "../../ChatBoxReciever";
+import ChatBoxSender from "../../ChatBoxSender";
+import ChatInputField from "../../ChatInputField";
 
 const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
 
 function DriverCurrentRide() {
   const navigate = useNavigate();
-  const { driverId } = useSelector(
-    (store: { driver: { driverId: string } }) => store.driver
+  const { driverId,driver } = useSelector(
+    (store: { driver: { driverId: string,driver:string } }) => store.driver
   );
   const driverToken: string | null = localStorage.getItem("driverToken");
+  const refreshTokn: string | null =localStorage.getItem('DriverRefreshToken')
   const [cancelledModal, setcancelledModal] = useState(false);
+  const [paymentMode, setpaymentMode] = useState("")
+  const [charge, setcharge] = useState(0)
+  
+  const sendMessageToSocket = (chat: ChatMessage[]) => {
+    socket?.emit("chat", chat)
+}
 
+
+
+const ChatList = () => {
+    return chats.map((chat, index) => {
+        if (chat.sender === driver) return <ChatBoxSender avatar={chat.avatar} message={chat.message} />
+        return <ChatBoxReciever key={index} message={chat.message} avatar={chat.avatar} />
+    })
+}
   // socket setup
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [chats, setchats] = useState<any[]>([])
+
 
   useEffect(() => {
     console.log(driverToken,"_+_+_+_+_+_");
     
     const socketInstance = socketIOClient(ENDPOINT, {
-      query: {token: driverToken }
+      query: {token: driverToken,refreshToken:refreshTokn}
     });
     setSocket(socketInstance);
+
+    socketInstance.on('tokens-updated', (data) => {
+      console.log('Tokens updated:', data);
+      const token=data.token
+      const refreshToken=data.refreshToken
+      localStorage.setItem(token,'driverToken')
+      localStorage.setItem(refreshToken,'DriverRefreshToken')
+    
+      socketInstance.io.opts.query = {
+        token: token,
+        refreshToken: refreshToken
+      };
+    });
+
     socketInstance.on("rideConfirmed", () => {
       console.log("ride confirmed");
       setrideConfirmed(true);
-    });
-
+      });
+      
+      socketInstance.on("driverPaymentSuccess", (paymentMode, amount) => {
+        setopenPayment(false)
+        setpaymentMode(paymentMode)
+        setcharge(amount)
+        setpaymentModeInfo(true)
+        if (paymentMode !== 'Cash in hand') {
+            setstartCounter(true)
+        }
+    })
     socketInstance.on("rideCancelled", () => {
       console.log("ride cancelled -----------------------------");
       setcancelledModal(true);
     });
+
+    socketInstance.on("chat", (senderChats) => {
+      setchats(senderChats)
+  })
 
     return () => {
       if (socketInstance) {
@@ -70,7 +118,10 @@ function DriverCurrentRide() {
         socket?.emit("driverRideFinish")
     }
 
-  const [driverData, setdriverData] = useState({});
+    const [paymentModeInfo, setpaymentModeInfo] = useState(false)
+
+
+  const [driverData, setdriverData] = useState<DriverInterface|null>(null);
   const [rideConfirmed, setrideConfirmed] = useState(false);
   const [rideData, setrideData] = useState<RideDetails | null>(null);
   const getData = async () => {
@@ -96,7 +147,16 @@ function DriverCurrentRide() {
     getData();
   }, []);
 
-  const [tab, settab] = useState(1);
+  const addMessage = (message: string) => {
+    const newChat = {
+        message,
+        sender: driver,
+        avatar: driverData?.driverImage
+    };
+    setchats((prevChats) => [...prevChats, newChat])
+    sendMessageToSocket([...chats, newChat])
+}
+
 
   const [pin, setpin] = useState<number>(0);
   const handleOtpChange = (index: number, newValue: number) => {
@@ -190,6 +250,29 @@ const handleOpenFinishModal = () => setopenFinishModal(!openFinishModal);
     localStorage.removeItem("currentRide-driver");
     navigate("/driver/dashboard");
   };
+
+  const [counter, setCounter] = useState(15);
+    const [startCounter, setstartCounter] = useState(false)
+
+    useEffect(() => {
+        if (startCounter) {
+            counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+        }
+        if (counter === 0 && startCounter) {
+            confirmPayment()
+        }
+    }, [counter, startCounter]);
+
+
+    const confirmPayment = () => {
+      setpaymentModeInfo(false)
+      toast.success("Payment recieved successfully")
+      localStorage.removeItem("currentRide-driver")
+      navigate('/driver/dashboard')
+    }
+
+    const [tab, settab] = useState(1);
+
   return (
     <div>
       <>
@@ -218,6 +301,52 @@ const handleOpenFinishModal = () => setopenFinishModal(!openFinishModal);
               </div>
           </div>
       </Dialog>
+      <Dialog open={paymentModeInfo} handler={confirmPayment} className='bg-transparent' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                    <div className='w-full h-fit rounded-lg bg-gray-50 px-5 pt-8 flex flex-col text-center'>
+                        <div className=''>
+                            <h1 className='text-3xl mb-4 text-green-700 font-semibold'>Payment successfull!</h1>
+                            {paymentMode !== "Cash in hand" ? (
+                                <h1 className='text-2xl font-semibold px-10 leading-9 text-black'>
+                                    Passenger has completed the payment using <span className='text-green-600'>{paymentMode === "Wallet" ? "wallet" : "online method"}</span>
+                                </h1>
+                            ) : (
+                                <h1 className='text-2xl font-semibold px-10 leading-9 text-black'>
+                                    Passenger will pay the fare charge <span className='text-green-600'>₹{charge}</span> as CASH IN HAND
+                                </h1>
+                            )}
+                        </div>
+                        {paymentMode !== "Cash in hand" ? (
+                            <>
+                                <div className='mt-4 w-full px-14'>
+                                    <h1 className='text-sm px-8 mt-1'>
+                                        Payment will be reflected in your wallet within 5 minutes. If not, contact the customer support.
+                                    </h1>
+                                </div>
+                                <div className='flex justify-center items-end h-fit mt-10 mb-7 gap-5'>
+                                    {counter > 0 && (
+                                        <p className="text-xs font-medium text-green-600">Page will redirect in 00:{counter}</p>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className='mt-4 w-full px-14'>
+                                    <h1 className='text-sm px-10'>
+                                        Collect the fare amount from passanger and confirm by double checking the cash.
+                                    </h1>
+                                </div>
+                                <div className='flex justify-center items-end h-fit mt-4 mb-7 gap-5'>
+                                    <button
+                                        className='w-[30%] h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300'
+                                        onClick={() => confirmPayment()}
+                                    >
+                                        confirm payment
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </Dialog>
 
 
         <Dialog
@@ -432,10 +561,10 @@ const handleOpenFinishModal = () => setopenFinishModal(!openFinishModal);
                     <TabPanel>
                       <div className="bg-white rounded-2xl pt-4 px-4 h-80 w-full flex flex-col justify-between">
                         <div className="h-[17rem] pb-2 chat-container overflow-y-auto">
-                          {/* <ChatList /> */}
+                          <ChatList />
                         </div>
                         <div className="mb-3">
-                          {/* <ChatInputField addMessage={addMessage} /> */}
+                          <ChatInputField addMessage={addMessage} />
                         </div>
                       </div>
                     </TabPanel>

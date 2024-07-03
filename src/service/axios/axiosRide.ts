@@ -5,7 +5,7 @@ import { userLogout } from "../redux/slices/userAuthSlice";
 
 const createAxios=(token:string | null)=>{
     const axiosRide=axios.create({
-        baseURL:"http://localhost:3000/api/ride",
+        baseURL:`${import.meta.env.VITE_API_GATEWAY_URL}/ride`,
         withCredentials:true,
         headers:{
             "Content-Type":"application/json"

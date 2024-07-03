@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const axiosAdmin=()=>{
     const axiosAdmin=axios.create({
-        baseURL:"http://localhost:3000/api/admin",
+        baseURL:`${import.meta.env.VITE_API_GATEWAY_URL}/admin`,
         headers:{
             "Content-Type":"application/json"
         }

@@ -84,16 +84,30 @@ export const DriverDashboard = () => {
   
   useEffect(() => {
     const driverToken=localStorage.getItem('driverToken')
+    const refreshTokn=localStorage.getItem('DriverRefreshToken')
     const socketInstance = socketIOClient(ENDPOINT, {
-      query: {token: driverToken }
+      query: {token: driverToken,refreshToken:refreshTokn}
     });
     console.log("socket connected to driver side ",socket);
     setSocket(socketInstance);
     socketInstance.on("connect", () => {
       console.log("Connected to server with ID:", socketInstance.id);
     });
+
+    socketInstance.on('tokens-updated', (data) => {
+      const token=data.token
+      const refreshToken=data.refreshToken      
+      localStorage.setItem(token,'driverToken')
+      localStorage.setItem(refreshToken,'DriverRefreshToken')
+    
+      socketInstance.io.opts.query = {
+        token: token,
+        refreshToken: refreshToken
+      };
+    });
     socketInstance.on("getNearByDrivers", () => {
       console.log("location edukkunnu");
+      console.log(navigator.geolocation);
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {

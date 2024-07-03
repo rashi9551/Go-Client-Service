@@ -62,6 +62,7 @@ function DriverLocation() {
                 if (data.message === "Success") {
                     setLoad(false)
                     navigate("/driver/login");
+                    localStorage.removeItem('driverId')
                     dispatch(openPendingModal())
                 } else {
                     toast.error(data.message);

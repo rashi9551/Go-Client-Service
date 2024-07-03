@@ -42,6 +42,7 @@ const UserWalletInfo = () => {
             try {
                 const{data}=await axiosUser().post(`addWalletBalance`,{sessionId,id:user_id,balance})
                 console.log(data);
+                toast.success("Wallet Credited Succesfully")
                 getData()
             } catch (error) {
                 console.log(error);

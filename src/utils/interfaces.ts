@@ -149,3 +149,8 @@ export interface UserInterface extends Document {
     };
 }
 
+export interface ChatMessage {
+    message: string;
+    avatar: string;
+  }
+

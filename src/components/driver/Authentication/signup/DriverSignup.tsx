@@ -20,7 +20,6 @@ import { sendOtp } from "../../../../Hooks/auth";
 function DriverSignup() {
 
     const [counter, setCounter] = useState(40);
-
     const navigate = useNavigate();
     const [load,setLoad]=useState(false)
     const [otpPage, setOtpPage] = useState(false);
@@ -199,7 +198,7 @@ function DriverSignup() {
                                     <div className="hidden  md:flex md:items-center" style={{ marginTop: "-40px" }}>
                                         {load ? <Loader/> :<img
                                             style={{ height: "330px", width: "auto" }}
-                                            src="/images/login.jpg"
+                                            src="images/login.jpg"
                                             alt=""
                                         />}
                                         
