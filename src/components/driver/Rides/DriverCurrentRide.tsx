@@ -48,7 +48,7 @@ function DriverCurrentRide() {
 
 const ChatList = () => {
     return chats.map((chat, index) => {
-        if (chat.sender === name) return <ChatBoxSender avatar={chat.avatar} message={chat.message} w="330px" />
+        if (chat.sender === name) return <ChatBoxSender avatar={chat.avatar} message={chat.message}  />
         return <ChatBoxReciever key={index} message={chat.message} avatar={chat.avatar} />
     })
 }
@@ -562,7 +562,7 @@ const handleOpenFinishModal = () => setopenFinishModal(!openFinishModal);
                     </TabPanel>
                     <TabPanel>
                     <div className="bg-white rounded-2xl pt-4 px-4 h-80 w-full flex flex-col justify-between">
-                      <div className="h-[17rem] pb-2 chat-container overflow-y-auto">
+                      <div className="h-[17rem] bg-black pb-2 chat-container overflow-y-auto" style={{ backgroundImage: `url(${import.meta.env.VITE_BG_WTS})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                         <ChatList />
                       </div>
                       <div className="mb-3">

@@ -86,7 +86,7 @@ function UserCurrentRide() {
 
   const ChatList = () => {
     return chats.map((chat, index) => {
-      if (chat.sender === user) return <ChatBoxSender avatar={chat.avatar} message={chat.message} w={'230px'} />
+      if (chat.sender === user) return <ChatBoxSender avatar={chat.avatar} message={chat.message} />
       return <ChatBoxReciever key={index} message={chat.message} avatar={chat.avatar} />
     })
   }
@@ -181,6 +181,9 @@ function UserCurrentRide() {
         );
         if (response?.data?.message != "something went wrong") {
           setrideData(response.data);
+          setfeedbacks(data?.formattedFeedbacks || null)
+          console.log(feedbacks,"ithu feed");
+          
           formik.setFieldValue("amount", rideData?.price);
         }
         setdriverData(data);
@@ -898,7 +901,7 @@ function UserCurrentRide() {
                       </TabPanel>
                       <TabPanel>
                     <div className="bg-white rounded-2xl pt-4 px-4 h-80 w-full flex flex-col justify-between">
-                      <div className="h-[17rem] pb-2 chat-container overflow-y-auto">
+                      <div className="h-[17rem] pb-2chat-container overflow-y-auto" style={{ backgroundImage: `url(${import.meta.env.VITE_BG_WTS})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                         <ChatList />
                       </div>
                       <div className="mb-3">

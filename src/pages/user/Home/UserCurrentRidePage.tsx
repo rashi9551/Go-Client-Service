@@ -4,10 +4,12 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-u
 import { useState } from 'react';
 import UserCurrentRide from '../../../components/user/Home/UserCurrentRide';
 import UserRideHistory from '../../../components/user/Home/UserRideHistory';
+import { useSelector } from 'react-redux';
+import UserRideDetails from '../../../components/user/Home/UserRideDetails';
 
 
 const UserCurrentRidePage = () => {
-
+    const { isOpenUserRideData, ride_id } = useSelector((store: {userRideData:{isOpenUserRideData:boolean,ride_id:string}}) => store.userRideData);
     const [tab, settab] = useState(1);
 
     return (
@@ -32,7 +34,8 @@ const UserCurrentRidePage = () => {
                                <UserCurrentRide/>
                             </TabPanel>
                             <TabPanel>
-                            <UserRideHistory/>
+                            {isOpenUserRideData ? <UserRideDetails ride_id={ride_id} /> :
+                                    <UserRideHistory />}
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
