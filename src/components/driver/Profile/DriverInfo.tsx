@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axiosDriver from "../../../service/axios/axiosDriver";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -7,11 +7,12 @@ import * as Yup from "yup";
 import { Input, Switch } from "@material-tailwind/react";
 import { Spinner } from "@chakra-ui/react";
 import { DriverInterface } from "../../../utils/interfaces";
+import  { driverLogin } from "../../../service/redux/slices/driverAuthSlice";
 
 const DriverInfo = () => {
   const { driverId } = useSelector((store: {driver:{driverId:string}}) => store.driver);
   const [driverData, setdriverData] = useState<DriverInterface | null >(null);
-
+  const dispatch=useDispatch()
   const getData = async () => {
     try {
       const { data } = await axiosDriver().get(
@@ -48,7 +49,9 @@ const DriverInfo = () => {
           values
         );
         if (data.message === "Success") {
-          setdriverData(data.driverData);
+          const driver=data.driverData
+          dispatch(driverLogin(driver))
+          setdriverData(driver);
           seteditProfile(false);
           toast.success("Profile updated successfully");
         }
@@ -64,9 +67,7 @@ const DriverInfo = () => {
     try {
       const { data } = await axiosDriver().get(
         `updateStatus?driver_id=${driverId}`
-      );
-      console.log(data);
-      
+      );      
       if (data.message === "Success") {
         setdriverData(data.driverData);
         toast.success("Status updated successfully!");

@@ -31,8 +31,8 @@ const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
 
 function DriverCurrentRide() {
   const navigate = useNavigate();
-  const { driverId,driver } = useSelector(
-    (store: { driver: { driverId: string,driver:string } }) => store.driver
+  const { driverId,name } = useSelector(
+    (store: { driver: { driverId: string,name:string } }) => store.driver
   );
   const driverToken: string | null = localStorage.getItem("driverToken");
   const refreshTokn: string | null =localStorage.getItem('DriverRefreshToken')
@@ -42,13 +42,13 @@ function DriverCurrentRide() {
   
   const sendMessageToSocket = (chat: ChatMessage[]) => {
     socket?.emit("chat", chat)
-}
+  }
 
 
 
 const ChatList = () => {
     return chats.map((chat, index) => {
-        if (chat.sender === driver) return <ChatBoxSender avatar={chat.avatar} message={chat.message} />
+        if (chat.sender === name) return <ChatBoxSender avatar={chat.avatar} message={chat.message} w="330px" />
         return <ChatBoxReciever key={index} message={chat.message} avatar={chat.avatar} />
     })
 }
@@ -148,9 +148,11 @@ const ChatList = () => {
   }, []);
 
   const addMessage = (message: string) => {
+    console.log(message,driverData?.driverImage,name);
     const newChat = {
+        who:'driver',
         message,
-        sender: driver,
+        sender: name,
         avatar: driverData?.driverImage
     };
     setchats((prevChats) => [...prevChats, newChat])
@@ -559,15 +561,15 @@ const handleOpenFinishModal = () => setopenFinishModal(!openFinishModal);
                       </div>
                     </TabPanel>
                     <TabPanel>
-                      <div className="bg-white rounded-2xl pt-4 px-4 h-80 w-full flex flex-col justify-between">
-                        <div className="h-[17rem] pb-2 chat-container overflow-y-auto">
-                          <ChatList />
-                        </div>
-                        <div className="mb-3">
-                          <ChatInputField addMessage={addMessage} />
-                        </div>
+                    <div className="bg-white rounded-2xl pt-4 px-4 h-80 w-full flex flex-col justify-between">
+                      <div className="h-[17rem] pb-2 chat-container overflow-y-auto">
+                        <ChatList />
                       </div>
-                    </TabPanel>
+                      <div className="mb-3">
+                        <ChatInputField addMessage={addMessage} />
+                      </div>
+                    </div>
+                  </TabPanel>
                   </TabPanels>
                 </Tabs>
               </div>

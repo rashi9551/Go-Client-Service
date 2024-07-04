@@ -44,14 +44,16 @@ import axiosRide from "../../../service/axios/axiosRide";
 import axiosDriver from "../../../service/axios/axiosDriver";
 import React from "react";
 import { useFormik } from "formik";
+import ChatBoxSender from "../../ChatBoxSender";
+import ChatBoxReciever from "../../ChatBoxReciever";
+import ChatInputField from "../../ChatInputField";
 const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
 
 function UserCurrentRide() {
-  const { user_id, user } = useSelector((store: any) => store.user);
+  const { user_id, user } = useSelector((store: { user: { user_id: string,user:string } }) => store.user);
   const userToken = localStorage.getItem("userToken");
   const [userData, setuserData] = useState<UserInterface | null>(null);
-  userData;
-  user;
+
   const getUserData = async () => {
     try {
       const { data } = await axiosUser().get(`userData?id=${user_id}`);
@@ -65,6 +67,31 @@ function UserCurrentRide() {
   useEffect(() => {
     getUserData();
   }, []);
+
+  const [chats, setchats] = useState<any[]>([])
+  const sendMessageToSocket = (chat: any[]) => {
+    socket?.emit("chat", chat)
+  }
+
+  const addMessage = (message: string) => {
+
+    const newChat = {
+      message,
+      sender: user,
+      avatar: userData?.userImage
+    };
+    setchats((prevChats) => [...prevChats, newChat])
+    sendMessageToSocket([...chats, newChat])
+  }
+
+  const ChatList = () => {
+    return chats.map((chat, index) => {
+      if (chat.sender === user) return <ChatBoxSender avatar={chat.avatar} message={chat.message} w={'230px'} />
+      return <ChatBoxReciever key={index} message={chat.message} avatar={chat.avatar} />
+    })
+  }
+
+
 
   ///SOCKET SETUP
 
@@ -100,6 +127,10 @@ function UserCurrentRide() {
     socketInstance.on("userPaymentPage", () => {
       setpaymentModal(true);
     });
+    socketInstance.on("chat", (senderChats) => {
+      console.log(senderChats,"its coming")
+      setchats(senderChats)
+    })
 
     return () => {
       if (socketInstance) {
@@ -866,15 +897,15 @@ function UserCurrentRide() {
                         )}
                       </TabPanel>
                       <TabPanel>
-                        <div className="bg-white rounded-2xl pt-3 px-3 md:h-[38.5rem] w-full flex flex-col justify-between">
-                          <div className="h-[20rem] md:h-[35.5rem] pb-2 chat-container overflow-y-auto">
-                            {/* <ChatList /> */}
-                          </div>
-                          <div className="mb-3 w-full">
-                            {/* <ChatInputField addMessage={""} /> */}
-                          </div>
-                        </div>
-                      </TabPanel>
+                    <div className="bg-white rounded-2xl pt-4 px-4 h-80 w-full flex flex-col justify-between">
+                      <div className="h-[17rem] pb-2 chat-container overflow-y-auto">
+                        <ChatList />
+                      </div>
+                      <div className="mb-3">
+                        <ChatInputField addMessage={addMessage} />
+                      </div>
+                    </div>
+                  </TabPanel>
                       <TabPanel>
                         <div className="bg-indigo-50 rounded-2xl pt-3 px-3 md:h-[38.5rem] w-full">
                           <div className="h-[20rem] md:h-[35.5rem] pb-2 chat-container overflow-y-auto">
