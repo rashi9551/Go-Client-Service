@@ -56,7 +56,7 @@ const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
         onSubmit: async (values, { setSubmitting }) => {
             try {
                 values.rating = rating;
-                const { data } = await axiosDriver().post(`feedback?_id=${rideData?._id}&driver_id=${rideData?.driver_id}`, values)                
+                const { data } = await axiosDriver().post(`feedback?ride_id=${rideData?.ride_id}&_id=${rideData?._id}&driver_id=${rideData?.driver_id}`, values)                
                 if (data.message === "Success") {
                     toast.success("Feedback submitted successfully")
                     dispatch(closeUserRideData())

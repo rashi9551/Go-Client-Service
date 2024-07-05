@@ -164,7 +164,7 @@ export  const geocoeLocation = async (locationName: string) => {
 
   export  const fromLocation = async (setPickupLocation:any,setcenter:any,center:any,map:any,originRef:any,setzoom:any) => {
     console.log("dfsbsdbshd");
-
+    console.log(navigator.geolocation,"from location");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {

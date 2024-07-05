@@ -182,9 +182,7 @@ function UserCurrentRide() {
         );
         if (response?.data?.message != "something went wrong") {
           setrideData(response.data);
-          setfeedbacks(data?.formattedFeedbacks || null)
-          console.log(feedbacks,"ithu feed");
-          
+          setfeedbacks(data?.formattedFeedbacks || null)          
           formik.setFieldValue("amount", rideData?.price);
         }
         setdriverData(data);

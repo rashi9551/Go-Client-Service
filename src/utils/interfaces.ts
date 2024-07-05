@@ -1,5 +1,5 @@
  export interface feedback{
-    _id:string,
+    ride_id:string,
     rating:number,
     feedback:string,
     driver_id:string,

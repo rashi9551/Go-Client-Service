@@ -19,9 +19,6 @@ const AdminUserVerified = () => {
                                 <h1 className={tab === 1 ? "font-bold" : "font-normal"}>User Info</h1>
                             </Tab>
                             <Tab sx={{ fontSize: "24px" }} onClick={() => settab(2)}>
-                                <h1 className={tab === 2 ? "font-bold " : "font-normal"}>Feedbacks</h1>
-                            </Tab>
-                            <Tab sx={{ fontSize: "24px" }} onClick={() => settab(3)}>
                                 <h1 className={tab === 3 ? "font-bold " : "font-normal"}>Rides</h1>
                             </Tab>
                         </TabList>
@@ -30,9 +27,6 @@ const AdminUserVerified = () => {
                     <TabPanels>
                         <TabPanel>
                             <UserDetails />
-                        </TabPanel>
-                        <TabPanel>
-                           ""
                         </TabPanel>
                         <TabPanel>
                            <VerifiedRides params={"user"}/>

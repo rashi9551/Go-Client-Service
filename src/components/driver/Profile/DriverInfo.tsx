@@ -67,9 +67,10 @@ const DriverInfo = () => {
     try {
       const { data } = await axiosDriver().get(
         `updateStatus?driver_id=${driverId}`
-      );      
-      if (data.message === "Success") {
-        setdriverData(data.driverData);
+      );
+      console.log(data,"updated"); 
+      if (data._id) {
+        setdriverData(data);
         toast.success("Status updated successfully!");
       } else {
         toast.error(data.message);

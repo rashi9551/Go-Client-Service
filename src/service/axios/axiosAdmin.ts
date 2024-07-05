@@ -26,6 +26,7 @@ export const axiosAdmin=()=>{
 
     axiosAdmin.interceptors.response.use(
         (response) => {
+            console.log(response);
             return response;
         },
         (error) => {

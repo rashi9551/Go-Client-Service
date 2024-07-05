@@ -3,6 +3,7 @@ import { AdminNavbar } from "../../../components/admin/AdminNavbar";
 import VerifiedDriverDetails from "../../../components/admin/Driver/VerifiedDriverDetails";
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import VerifiedRides from "../../../components/admin/VerifiedRide";
+import VerifiedFeedbacks from "../../../components/admin/Driver/VerifiedFeedbacks";
 
 const AdminDriverDetailsVerified = () => {
 
@@ -32,7 +33,7 @@ const AdminDriverDetailsVerified = () => {
                             <VerifiedDriverDetails />
                         </TabPanel>
                         <TabPanel>
-                           ""
+                           <VerifiedFeedbacks/>
                         </TabPanel>
                         <TabPanel>
                            <VerifiedRides params={"driver"}/>

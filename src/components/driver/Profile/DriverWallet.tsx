@@ -11,6 +11,7 @@ import axiosDriver from '../../../service/axios/axiosDriver';
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { DriverInterface, Transaction } from "../../../utils/interfaces";
+import moment from 'moment'
 
 const DriverWallet = () => {
     const TABLE_HEAD = ["No", "Date", "Details", "Status", "Amount"];
@@ -107,7 +108,7 @@ const DriverWallet = () => {
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                                                    >
-                                                        {date}
+                                                        { moment(date).format("dddd, DD-MM-YYYY")}
                                                     </Typography>
                                                 </td>
                                                 <td className={classes + " max-w-[15rem]"}>
