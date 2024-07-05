@@ -47,6 +47,7 @@ import { useFormik } from "formik";
 import ChatBoxSender from "../../ChatBoxSender";
 import ChatBoxReciever from "../../ChatBoxReciever";
 import ChatInputField from "../../ChatInputField";
+import StarRating from "../../StarRating";
 const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
 
 function UserCurrentRide() {
@@ -923,36 +924,8 @@ function UserCurrentRide() {
                                         </h2>
                                         <div className="card-actions mt-1 ml-2">
                                           <div className="rating gap-1">
-                                            <input
-                                              checked={feedbacks.rating === 1}
-                                              type="radio"
-                                              name="rating"
-                                              className="mask mask-heart bg-red-400"
-                                            />
-                                            <input
-                                              checked={feedbacks.rating === 2}
-                                              type="radio"
-                                              name="rating"
-                                              className="mask mask-heart bg-red-400"
-                                            />
-                                            <input
-                                              checked={feedbacks.rating === 3}
-                                              type="radio"
-                                              name="rating"
-                                              className="mask mask-heart bg-red-400"
-                                            />
-                                            <input
-                                              checked={feedbacks.rating === 4}
-                                              type="radio"
-                                              name="rating"
-                                              className="mask mask-heart bg-red-400"
-                                            />
-                                            <input
-                                              checked={feedbacks.rating === 5}
-                                              type="radio"
-                                              name="rating"
-                                              className="mask mask-heart bg-red-400"
-                                            />
+                                          <StarRating totalStars={5} initialRating={feedbacks.rating} onStarClick={()=>{}} />
+
                                           </div>
                                         </div>
                                         <div className="w-full text-right">

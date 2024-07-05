@@ -11,13 +11,14 @@ import * as Yup from 'yup'
 import { toast } from 'react-hot-toast'
 import { Spinner } from '@chakra-ui/react'
 import axiosDriver from '../../../service/axios/axiosDriver'
+import StarRating from '../../StarRating'
 
 
 const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
 
     const [rideData, setrideData] = useState<RideDetails | null>(null)
     const [driverData, setdriverData] = useState<DriverInterface | null>(null)
-
+    const [rating,setRating]=useState(0)
     const userToken=localStorage.getItem('userToken')
     const dispatch = useDispatch()
 
@@ -29,7 +30,7 @@ const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
               const { data } = await axiosDriver().get(
                 `driverData?driver_id=${response.data.driver_id}`
             );              
-            console.log(data,response.data);
+            console.log(response.data,"ithu ride");
             setrideData(response.data)
             setdriverData(data)
             
@@ -54,6 +55,7 @@ const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
+                values.rating = rating;
                 const { data } = await axiosDriver().post(`feedback?_id=${rideData?._id}&driver_id=${rideData?.driver_id}`, values)                
                 if (data.message === "Success") {
                     toast.success("Feedback submitted successfully")
@@ -69,6 +71,8 @@ const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
             }
         }
     })
+
+    
 
     if (!rideData || !driverData) {
         return (
@@ -159,11 +163,7 @@ const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
                                                 "{rideData?.feedback}"
                                             </h1>
                                             <div className="rating gap-1 w-3/4">
-                                                <input checked={rideData?.rating === 1} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                <input checked={rideData?.rating === 2} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                <input checked={rideData?.rating === 3} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                <input checked={rideData?.rating === 4} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                <input checked={rideData?.rating === 5} type="radio" name="rating" className="mask mask-heart bg-red-400" />
+                                                <StarRating totalStars={5} initialRating={rideData.rating} onStarClick={()=>{}} />
                                             </div>
                                         </div>
                                     </>
@@ -176,17 +176,13 @@ const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
                                             <div className=''>
                                                 <h1 className='text-sm'>Choose the rating</h1>
                                                 <div className="rating mt-1 gap-1 w-full">
-                                                    <input onChange={formik.handleChange} value={1} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                    <input onChange={formik.handleChange} value={2} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                    <input onChange={formik.handleChange} value={3} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                    <input onChange={formik.handleChange} value={4} type="radio" name="rating" className="mask mask-heart bg-red-400" />
-                                                    <input onChange={formik.handleChange} value={5} type="radio" name="rating" className="mask mask-heart bg-red-400" />
+                                                    <StarRating totalStars={5} initialRating={formik.values.rating} onStarClick={setRating}/>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className='mt-1'>
-                                            <button className='w-[30%] h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300'>submit feedback</button>
+                                            <button type='submit' className='w-[30%] h-10 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300'>submit feedback</button>
                                         </div>
                                     </form>
                                 }</>) : (
@@ -223,7 +219,7 @@ const UserRideDetails = ({ ride_id }: { ride_id: string }) => {
                             <div className='h-20 py-3'>
                                 <div className='w-full h-full flex gap-2 justify-center items-center border border-blue-gray-400 rounded-2xl '>
                                     <h1 className='font-bold '>Go RATING :</h1>
-                                    <h1>{driverData?.ratings} Ratings</h1>
+                                    <h1>{driverData?.totalRatings} Ratings</h1>
                                 </div>
                             </div>
                         </div>

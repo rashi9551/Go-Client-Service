@@ -100,7 +100,7 @@ const DriverInfo = () => {
             </div>
             <div className="flex gap-1">
               <h1 className="text-sm">Go Rating :</h1>
-              <h1 className="text-sm"> {driverData?.ratings} ratings</h1>
+              <h1 className="text-sm"> {driverData?.totalRatings} ratings</h1>
             </div>
             <div className="flex gap-3 mt-2">
               <h1 className="font-medium text-lg">Currently Available </h1>

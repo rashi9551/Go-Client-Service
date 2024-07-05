@@ -1,3 +1,11 @@
+ export interface feedback{
+    _id:string,
+    rating:number,
+    feedback:string,
+    driver_id:string,
+    formattedDate:string
+}
+
 export interface RideDetails {
     formattedDate: string;
     _id: number;
@@ -50,6 +58,21 @@ interface driverCoordinates {
     longitude: number;
 }
 
+export interface Transaction {
+    date: string;
+    details: string;
+    amount: number;
+    status: string;
+    _id: string;
+}
+
+export interface Wallet {
+    balance: number;
+    transactions: Transaction[];
+}
+
+
+
 
 export interface DriverInterface {
     ratings: string;
@@ -68,6 +91,7 @@ export interface DriverInterface {
     vehicle_details: Vehicle;
     joiningDate: string;
     formattedDate: string;
+    totalRatings:number;
     wallet: {
         balance: number;
         transactions: {

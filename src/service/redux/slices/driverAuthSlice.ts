@@ -12,7 +12,7 @@ const driverAuthSlice=createSlice({
     reducers:{
         driverLogin:((state,action)=>{
             state.name=action.payload.name,
-            state.driverId=action.payload._id,
+            state.driverId=action.payload.driver_id,
             state.loggedIn=true
         }),
         driverLogout:((state)=>{

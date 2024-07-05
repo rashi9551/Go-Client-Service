@@ -4,6 +4,8 @@ import { useState } from "react";
 import DriverInfo from "../../../components/driver/Profile/DriverInfo";
 import DirverNavbar from "../../../components/driver/DirverNavbar";
 import DriverVehicleInfo from "../../../components/driver/Profile/DriverVehicleInfo";
+import DriverFeedbacks from "../../../components/driver/Profile/DriverFeedbacks";
+import DriverWallet from "../../../components/driver/Profile/DriverWallet";
 
 
 const DriverProfilePage = () => {
@@ -29,11 +31,6 @@ const DriverProfilePage = () => {
                                 <h1 className={tab === 4 ? "font-bold hidden md:block" : "font-normal hidden md:block"}>Wallet</h1>
                             </Tab>
                         </TabList>
-                        <TabList className="md:hidden block">
-                            <Tab sx={{ fontSize: "24px" }} onClick={() => settab(4)}>
-                                <h1 className={tab === 4 ? "font-bold md:hidden block" : "font-normal md:hidden block"}>Wallet</h1>
-                            </Tab>
-                        </TabList>
                         <TabIndicator mt="-1.5px" height="3px" bg="blue.500" borderRadius="1px" />
                     </div>
                     <TabPanels>
@@ -41,16 +38,13 @@ const DriverProfilePage = () => {
                             <DriverInfo />
                         </TabPanel>
                         <TabPanel>
-                            <DriverVehicleInfo />
+                            <DriverFeedbacks/>
                         </TabPanel>
                         <TabPanel>
                             <DriverVehicleInfo />
                         </TabPanel>
                         <TabPanel>
-                            <DriverInfo />
-                        </TabPanel>
-                        <TabPanel className="md:hidden block">
-                            <DriverInfo />
+                            <DriverWallet/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
