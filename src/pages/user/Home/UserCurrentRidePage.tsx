@@ -2,10 +2,10 @@ import Navbar from '../../../components/user/Home/NavBar'
 import Footer from '../../../components/user/Home/Footer'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import { useState } from 'react';
-import UserCurrentRide from '../../../components/user/Home/UserCurrentRide';
-import UserRideHistory from '../../../components/user/Home/UserRideHistory';
+import UserCurrentRide from '../../../components/user/Ride/UserCurrentRide';
+import UserRideHistory from '../../../components/user/Ride/UserRideHistory';
 import { useSelector } from 'react-redux';
-import UserRideDetails from '../../../components/user/Home/UserRideDetails';
+import UserRideDetails from '../../../components/user/Ride/UserRideDetails';
 
 
 const UserCurrentRidePage = () => {

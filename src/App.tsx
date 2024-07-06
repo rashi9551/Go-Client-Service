@@ -22,6 +22,7 @@ import AdminUserDetails from './pages/admin/adminUser/AdminUserDetailsPage.tsx';
 import DriverRidesPage from './pages/driver/Dashboard/DriverRidesPage.tsx';
 import UserCurrentRidePage from './pages/user/Home/UserCurrentRidePage.tsx';
 import About from './components/user/Home/About.tsx';
+import DriverAbout from './components/driver/DriverAbout.tsx';
 
 function App() {
   const  user  = useSelector((store:{ user: { loggedIn: boolean } })=>store.user.loggedIn);
@@ -50,6 +51,7 @@ function App() {
           <Route path='/driver/dashboard' element={!driver ? <Navigate to={'/driver/login'}/>:<DriverDashboardPage/>}/>
           <Route path='/driver/profile' element={!driver ? <Navigate to={'/driver/login'}/>:<DriverProfilePage/>}/>
           <Route path='/driver/rides' element={!driver ? <Navigate to={'/driver/login'}/>:<DriverRidesPage/>}/>
+          <Route path='/driver/about' element={<DriverAbout/>}/>
 
 
           {/* admin route  */}

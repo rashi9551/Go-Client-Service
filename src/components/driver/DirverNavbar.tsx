@@ -60,7 +60,9 @@ function DirverNavbar() {
           >
             Profile
           </a>
-          <a href="#" className="hover:text-gray-300">
+          <a href="#"
+          onClick={() => navigate("/driver/About")}
+           className="hover:text-gray-300">
             About
           </a>
 
