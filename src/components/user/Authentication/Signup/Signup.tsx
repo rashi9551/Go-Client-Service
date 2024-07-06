@@ -7,7 +7,7 @@
 import "./Sigunp.scss";
 import { useFormik } from "formik";
 import axiosUser from "../../../../service/axios/axiosUser";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import "react-toastify/dist/ReactToastify.css";
 
 // import {

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosAdmin } from "../../../service/axios/axiosAdmin";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import { DriverInterface } from "../../../utils/interfaces";
 
 

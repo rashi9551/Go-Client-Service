@@ -1,7 +1,7 @@
 import { useFormik } from "formik"
 import { useCallback, useRef, useState } from "react"
 import Webcam from "react-webcam"
-import {toast} from 'react-toastify'
+import {toast} from 'sonner' ;
 import axiosDriver from "../../../../service/axios/axiosDriver"
 import DriverVehiclePage from "../../../../pages/driver/Authentication/DriverVehiclePage"
 import * as yup from 'yup'

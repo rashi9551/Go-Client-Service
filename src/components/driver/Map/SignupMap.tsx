@@ -2,8 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "./SignupMap.scss";
-import { toast } from "react-toastify";
-
+import {toast} from 'sonner' ;
 mapboxgl.accessToken = import.meta.env.VITE_MPBOX_ACCESS_TOKEN;
 
 const SignupMap = ({ handleGeolocation, isGeolocationActive }: any) => {

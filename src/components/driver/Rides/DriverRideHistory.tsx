@@ -23,7 +23,7 @@ import { RideDetails } from "../../../utils/interfaces";
 import { useDispatch } from "react-redux";
 import { openDriverRideData } from '../../../service/redux/slices/driverRideDataSlice';
 import '../driverMain.scss'
-import toast from "react-hot-toast";
+import {toast} from 'sonner' ;
 
 const DriverRideHistory = () => {
 

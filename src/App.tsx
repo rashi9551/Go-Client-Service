@@ -1,7 +1,7 @@
 import './App.scss'
 import {Route,Routes,BrowserRouter, Navigate} from "react-router-dom";
 import {useSelector} from 'react-redux'
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { ChakraProvider } from '@chakra-ui/react';
 import HomePage from './pages/user/Home/HomePage.tsx';
 import LoginPage from './pages/user/Authentication/LoginPage.tsx';
@@ -31,7 +31,7 @@ function App() {
   return (
     <>
     <ToastContainer />
-    <Toaster />
+    <Toaster position="top-center" expand={false} richColors/>
     <ChakraProvider>
       <BrowserRouter>
         <Routes>

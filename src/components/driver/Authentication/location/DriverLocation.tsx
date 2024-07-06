@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import SignupMap from "../../Map/SignupMap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import axiosDriver from '../../../../service/axios/axiosDriver'
 import { useNavigate } from "react-router-dom";
 import ExploreIcon from "@mui/icons-material/Explore";

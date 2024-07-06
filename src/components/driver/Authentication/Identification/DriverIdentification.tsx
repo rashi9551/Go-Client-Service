@@ -2,7 +2,7 @@ import { useState } from "react"
 import { DriverIdentificationValidation } from "../../../../utils/validation";
 import { useFormik } from "formik";
 import axiosDriver from "../../../../service/axios/axiosDriver";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import DriverPhotoPage from "../photo/DriverPhoto";
 import Loader from "../../../shimmer/Loader";
 

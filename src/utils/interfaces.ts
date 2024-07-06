@@ -5,6 +5,20 @@
     driver_id:string,
     formattedDate:string
 }
+ export interface PieChartData {
+    name: string;
+    value: number;
+  }
+
+ export interface pieValue {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  percent: number;
+}
+
 
 export interface RideDetails {
     formattedDate: string;

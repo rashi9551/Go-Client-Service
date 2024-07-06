@@ -27,6 +27,7 @@
     "@stripe/stripe-js": "^4.0.0",
     "@types/recharts": "^1.8.29",
     "axios": "^1.6.8",
+    "daisyui": "^4.12.10",
     "firebase": "^10.11.1",
     "formik": "^2.4.6",
     "framer-motion": "^11.1.9",

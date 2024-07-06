@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosAdmin } from "../../../service/axios/axiosAdmin";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import { DriverInterface } from "../../../utils/interfaces";
 import { useFormik } from "formik";
 import * as yup from "yup";

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { adminValidation } from "../../utils/validation";
 import {axiosAdmin} from "../../service/axios/axiosAdmin";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import { adminLogin } from "../../service/redux/slices/adminAuthSlice";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";

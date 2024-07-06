@@ -8,7 +8,7 @@ import { Avatar } from "@material-tailwind/react";
 import { Chip } from '@material-tailwind/react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { toast } from 'react-hot-toast'
+import {toast} from 'sonner' ;
 import { Spinner } from '@chakra-ui/react'
 import axiosDriver from '../../../service/axios/axiosDriver'
 import StarRating from '../../StarRating'

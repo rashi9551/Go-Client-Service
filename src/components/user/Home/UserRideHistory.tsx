@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RideDetails } from "../../../utils/interfaces";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import axiosRide from "../../../service/axios/axiosRide";
 import {
     MagnifyingGlassIcon,

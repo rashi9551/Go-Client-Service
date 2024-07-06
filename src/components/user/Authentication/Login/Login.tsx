@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import axiosUser from "../../../../service/axios/axiosUser";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import {
   ConfirmationResult,
   RecaptchaVerifier,

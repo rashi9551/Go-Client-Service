@@ -5,8 +5,7 @@ import {
     RecaptchaVerifier,
     signInWithPhoneNumber,
   } from "firebase/auth";
-import { toast } from "react-toastify";
-
+import {toast} from 'sonner' ;
 
 export const onCaptchaVerify = (auth: Auth,setotpInput:any) => {
 if (!window.recaptchaVerifier) {

@@ -1,5 +1,4 @@
-import { toast } from "react-toastify";
-
+import {toast} from 'sonner' ;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const reverseGeocodeForAddress = async (latitude: number, longitude: number) => {
   try {

@@ -1,7 +1,7 @@
 import {  useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {axiosAdmin} from '../../../service/axios/axiosAdmin'
-import toast from 'react-hot-toast';
+import {toast} from 'sonner' ;
 import { feedback } from "../../../utils/interfaces";
 import StarRating from "../../StarRating";
 

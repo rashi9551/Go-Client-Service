@@ -11,8 +11,7 @@ import { useEffect, useState } from "react";
 import axiosUser from "../../../service/axios/axiosUser";
 import { useSelector } from "react-redux";
 import { loadStripe } from '@stripe/stripe-js';
-import { toast } from "react-toastify";
-
+import {toast} from 'sonner' ;
 
 const UserWalletInfo = () => {
     const TABLE_HEAD = ["No", "Date", "Details", "Status", "Amount"];

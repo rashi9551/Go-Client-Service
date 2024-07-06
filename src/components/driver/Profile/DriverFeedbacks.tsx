@@ -1,7 +1,7 @@
 import axiosDriver from '../../../service/axios/axiosDriver';
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import toast from 'react-hot-toast';
+import {toast} from 'sonner' ;
 import { feedback } from '../../../utils/interfaces';
 import StarRating from '../../StarRating';
 

@@ -3,7 +3,7 @@ import { useFormik } from "formik"
 import { useState } from "react"
 import {VehcleValidation} from '../../../../utils/validation'
 import axiosDriver from "../../../../service/axios/axiosDriver"
-import { toast } from "react-toastify"
+import {toast} from 'sonner' ;
 import DriverLocationPage from "../../../../pages/driver/Authentication/DriverLocationPage"
 import Loader from "../../../shimmer/Loader"
 

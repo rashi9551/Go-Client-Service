@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie,  Cell } from 'recharts';
 import { Spinner } from '@chakra-ui/react'
 import {axiosAdmin} from '../../../service/axios/axiosAdmin'
-import toast from "react-hot-toast";
+import {toast} from 'sonner' ;
 
 
 export const AdminDashboard = () => {
@@ -90,10 +90,10 @@ export const AdminDashboard = () => {
 
               <div className="bg-indigo-100  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
                 <div className=" row-span-2 flex items-center px-3">
-                  <h1 className="text-2xl font-medium text-white">New Users</h1>
+                  <h1 className="text-2xl font-medium text-white">Total Rides</h1>
                 </div>
                 <div className=" row-span-3 flex items-center justify-end">
-                  <h1 className="text-7xl px-2 text-white">{dashboardData?.newUsers}</h1>
+                  <h1 className="text-7xl px-2 text-white">{dashboardData?.totalRides}</h1>
                 </div>
               </div>
               
@@ -163,7 +163,7 @@ export const AdminDashboard = () => {
                 <div className="flex gap-5">
                   <h1 className="text-green-500">Wallet Payment</h1>
                   <h1 className="text-yellow-700">Cash in hand</h1>
-                  <h1 className="text-blue-700">Card Payment</h1>
+                  <h1 className="text-blue-700">Upi Payment</h1>
                 </div>
               </div>
             </div>

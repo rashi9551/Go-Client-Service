@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import axiosRide from "../../../service/axios/axiosRide";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import axiosDriver from "../../../service/axios/axiosDriver";
 import {
   useJsApiLoader,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axiosDriver from '../../../service/axios/axiosDriver';
-import toast from 'react-hot-toast'
+import {toast} from 'sonner' ;
 import { useSelector } from 'react-redux';
 import { DriverInterface } from '../../../utils/interfaces';
 

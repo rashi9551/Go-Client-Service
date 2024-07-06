@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axiosDriver from "../../../service/axios/axiosDriver";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Input, Switch } from "@material-tailwind/react";

@@ -17,7 +17,7 @@ import {
 } from "@material-tailwind/react";
 import axiosRide from '../../service/axios/axiosRide'
 import { RideDetails } from "../../utils/interfaces";
-import toast from "react-hot-toast";
+import {toast} from 'sonner' ;
 
 const VerifiedRides = ({params}:{params:string}) => {
     const { id } = useParams();

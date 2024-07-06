@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {axiosAdmin} from '../../../service/axios/axiosAdmin'
-import { toast } from "react-toastify";
-import { useFormik } from "formik";
+import {toast} from 'sonner' ;import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Dialog } from "@material-tailwind/react";
 import { UserInterface } from "../../../utils/interfaces";
@@ -165,11 +164,11 @@ const UserDetails = () => {
                             </div>
                             <div className="md:flex justify-evenly">
                                 <div className="flex">
-                                    <button className="btn btn-active btn-neutral btn-xs mx-2">Email</button>
+                                    <button className="btn btn-active font-bold btn-neutral btn-xs mx-2">Email :</button>
                                     <h1>{userData?.email}</h1>
                                 </div>
                                 <div className="flex">
-                                    <button className="btn btn-active btn-neutral btn-xs mx-2">Mobile</button>
+                                    <button className="btn btn-active font-bold btn-neutral btn-xs mx-2">Mobile</button>
                                     <h1>{userData?.mobile}</h1>
                                 </div>
                             </div>

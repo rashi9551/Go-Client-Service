@@ -9,7 +9,7 @@ declare global {
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axiosUser from "../../../service/axios/axiosUser";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import { reverseGeocodeForLocality } from "../../../Hooks/Map";
 import * as Yup from "yup";
 import {

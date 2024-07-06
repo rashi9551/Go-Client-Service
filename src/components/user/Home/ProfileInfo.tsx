@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Input } from "@material-tailwind/react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
-import toast from 'react-hot-toast';
+import {toast} from 'sonner' ;
 import axiosUser from '../../../service/axios/axiosUser'; 
 import { UserInterface } from '../../../utils/interfaces';
 

@@ -4,7 +4,7 @@ import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import { auth } from "../../../../service/firebase";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import {toast} from 'sonner' ;
 import * as yup from "yup"
 import { useNavigate } from "react-router-dom";
 import axiosDriver from "../../../../service/axios/axiosDriver";

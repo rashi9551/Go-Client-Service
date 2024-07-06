@@ -1,4 +1,4 @@
-import { toast } from 'react-hot-toast'
+import {toast} from 'sonner' ;
 import { Spinner } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { RideDetails } from '../../../utils/interfaces'

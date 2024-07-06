@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { ConfirmationResult } from "firebase/auth";
 import DriverIdentificationPage from "../../../../pages/driver/Authentication/DriverIdentificationPage";
 import { auth } from "../../../../service/firebase";
-import { toast } from "react-toastify";
+import {toast} from 'sonner';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
