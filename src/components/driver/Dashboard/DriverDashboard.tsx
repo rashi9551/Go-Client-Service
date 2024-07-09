@@ -193,7 +193,7 @@ useEffect(() => {
           </div>
           <div className="flex flex-col items-start">
             <span className="font-bold">Charge:</span>
-            <span>{rides.price}</span>
+            <span className="font-bold">{rides.price}</span>
           </div>
           <div className="flex space-x-4">
             <button

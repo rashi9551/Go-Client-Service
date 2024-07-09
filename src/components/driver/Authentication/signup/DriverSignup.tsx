@@ -183,7 +183,7 @@ function DriverSignup() {
                                     <div className="hidden md:block" style={{ marginTop: "-30px" }}>
                                         <img
                                             style={{ height: "360px", width: "auto" }}
-                                            src="images/otp.jpg"
+                                            src="/images/otp.jpg"
                                             alt=""
                                         />
                                     </div>
@@ -198,7 +198,7 @@ function DriverSignup() {
                                     <div className="hidden  md:flex md:items-center" style={{ marginTop: "-40px" }}>
                                         {load ? <Loader/> :<img
                                             style={{ height: "330px", width: "auto" }}
-                                            src="images/login.jpg"
+                                            src="/images/login.jpg"
                                             alt=""
                                         />}
                                         

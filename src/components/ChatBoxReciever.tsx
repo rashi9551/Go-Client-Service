@@ -1,4 +1,4 @@
-import React from 'react';
+import  { useEffect, useRef } from 'react';
 
 const ChatBoxReceiver = ({
   avatar,
@@ -7,6 +7,12 @@ const ChatBoxReceiver = ({
   avatar: string;
   message: string;
 }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+}, [message]);
   console.log(message, "receiver");
 
   return (
@@ -16,7 +22,7 @@ const ChatBoxReceiver = ({
           <img src={avatar} alt="User Avatar" className="w-full h-full object-cover" />
         </div>
       </div>
-      <div className="chat-bubble bg-blue-100 px-4 py-2 rounded-lg text-black  mt-7 shadow-xl">{message}</div>
+      <div ref={messagesEndRef}  className="chat-bubble bg-blue-100 px-4 py-2 rounded-lg text-black  mt-7 shadow-xl">{message}</div>
       <div className="chat-tail" />
     </div>
   );

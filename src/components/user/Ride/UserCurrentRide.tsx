@@ -122,6 +122,7 @@ function UserCurrentRide() {
 
     socketInstance.on("rideConfirmed", () => {
       console.log("ride confirmed");
+      toast.success("Ride Started Happy Journey")
       setrideConfirmed(true);
     });
 
@@ -290,8 +291,8 @@ function UserCurrentRide() {
             { params: { rideId: rideId } }
           );
           if (data.message === "Success") {
-            toast.success("Payment successfull");
             localStorage.removeItem("currentRide-user");
+            toast.success("Payment successfull");
             setpaymentModal(false);
             socket?.emit("paymentCompleted", values.paymentMode, values.amount);
             navigate("/");
@@ -299,8 +300,16 @@ function UserCurrentRide() {
             toast.error(data.message);
           }
         } else if (values.paymentMode === "Upi") {
-          const {data} = await axiosUser().post('razorpayPayment',{amount:values.amount})
+          // const ride_id = localStorage.getItem("currentRide-user");
+          const {data} = await axiosUser().post(`razorpayPayment?ride_id=${rideData?.ride_id}`,{amount:values.amount})
           console.log(data,"ithu razorpay data");
+          if(data.message==="Payment Completed"){
+            toast.success("Payment already done")
+            localStorage.removeItem("currentRide-user");
+            setpaymentModal(false);
+            navigate("/");
+            return 
+          }
           const amount:number = data.amount; 
           const options = {
             key: import.meta.env.RAZORPAY_KEY_ID,

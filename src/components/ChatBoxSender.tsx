@@ -1,4 +1,4 @@
-import React from 'react';
+import  { useEffect, useRef } from 'react';
 
 const ChatBoxSender = ({
   avatar,
@@ -7,15 +7,17 @@ const ChatBoxSender = ({
   avatar: string;
   message: string;
 }) => {
-  // const chatStyle = {
-  //   marginLeft: w,
-  // };
-
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+}, [message]);
   console.log(message, "sender");
 
   return (
     <div className={`chat mt-4 flex ml-auto items-start`} >
-      <div className="chat-bubble  p-4  rounded-lg text-black  mt-7 shadow-xl ml-auto chat-bubble bg-glass px-4 py-2  overflow-hidden">
+      <div ref={messagesEndRef} className="chat-bubble  p-4  rounded-lg text-black  mt-7 shadow-xl ml-auto chat-bubble bg-glass px-4 py-2  overflow-hidden">
         {message}
       </div>
       <div className="chat-image avatar ml-2">

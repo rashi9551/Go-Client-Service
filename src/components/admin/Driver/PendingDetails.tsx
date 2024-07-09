@@ -61,7 +61,7 @@ function PendingDetails() {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axiosAdmin().post(`rejectDriver?id=${id}`);
+        const { data } = await axiosAdmin().post(`rejectDriver?id=${id}`,values);
         if (data.message === "Success") {
           setrejectModal(false);
           toast.success("Driver rejected successfully");

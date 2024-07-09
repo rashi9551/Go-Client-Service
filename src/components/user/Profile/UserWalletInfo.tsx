@@ -130,14 +130,14 @@ const UserWalletInfo = () => {
                                 </div>
                             </div>
                             <div className="md:flex grid md:w-fit shrink-0 gap-3 md:gap-2">
-                            <div className="w-fit flex">
+                                <div className="w-fit flex">
                                 <button className="btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full flex items-center space-x-2">
                                     <span>WALLET BALANCE</span>
                                     <div className="badge badge-lg w-[100px] bg-blue-700 text-white p-1 rounded-full">
                                         ₹{userData?.wallet?.balance}
                                     </div>
                                 </button>
-                            </div>
+                                </div>
 
                                 <div
                                     onClick={() => setpaymentModal(true)}

@@ -253,7 +253,7 @@ const handleOpenFinishModal = () => setopenFinishModal(!openFinishModal);
     navigate("/driver/dashboard");
   };
 
-  const [counter, setCounter] = useState(15);
+  const [counter, setCounter] = useState(6);
     const [startCounter, setstartCounter] = useState(false)
 
     useEffect(() => {

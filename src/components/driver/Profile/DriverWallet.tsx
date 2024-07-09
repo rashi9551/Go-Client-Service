@@ -5,6 +5,7 @@ import {
     Typography,
     CardBody,
     Chip,
+    Dialog,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import axiosDriver from '../../../service/axios/axiosDriver';
@@ -26,11 +27,35 @@ const DriverWallet = () => {
         try {
             const { data } = await axiosDriver().get(`driverData?driver_id=${driverId}`)
             setdriverData(data)
-            setwalletTransactions(data.wallet.transactions)
+            const sortedTransactions = data.wallet.transactions.sort((a:any, b:any) => {
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+            });
+            setwalletTransactions(sortedTransactions)
         } catch (error) {
             toast.error((error as Error).message)
             console.log(error);
         }
+    }
+    const [paymentModal, setpaymentModal] = useState(false)
+    const [balance, setbalance] = useState("")
+    const [upiId, setUpiId] = useState('');
+
+
+    const RedeemWallet=async()=>{
+        try {
+            console.log(balance,upiId,"=--");
+            if(Number(balance)<500){
+                toast.error("Enter 500 ore more")
+                return
+            }
+            const {data} = await axiosDriver().post(`redeemWallet?driver_id=${driverId}`,{balance,upiId})
+            console.log(data);
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+        
     }
     
     useEffect(() => {
@@ -39,6 +64,47 @@ const DriverWallet = () => {
 
     return (
         <>
+        <Dialog className='bg-transparent' open={paymentModal} handler={RedeemWallet} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                {paymentModal &&
+                    <>
+                    <div className="w-full h-fit rounded-lg bg-white shadow-lg px-8 pt-8 flex flex-col text-center">
+                        <div className="text-center">
+                            <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                                Enter The Amount you Want To Redeem To Your Account
+                            </h1>
+                        </div>
+                        <div className="mt-4 text-center w-full">
+                            <input
+                                type="number"
+                                onChange={(e) => setbalance(e.target.value)}
+                                placeholder="Type here"
+                                className="input input-bordered input-success w-full max-w-xs mx-auto rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+                            />
+                        </div>
+                        <div className="mt-4 text-center w-full">
+                            <input
+                                type="text"
+                                onChange={(e) => setUpiId(e.target.value)}
+                                placeholder="Enter UPI ID"
+                                className="input input-bordered input-success w-full max-w-xs mx-auto rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+                            />
+                        </div>
+                        <div className="flex justify-center items-end h-fit mt-7 mb-7 gap-5">
+                            <button
+                                onClick={() => setpaymentModal(false)}
+                                className="w-[30%] h-12 bg-red-500 text-white font-bold rounded-full hover:bg-red-600 transition duration-300 shadow-lg">
+                                Dismiss
+                            </button>
+                            <button
+                                onClick={() => RedeemWallet()}
+                                className="w-[30%] h-12 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition duration-300 shadow-lg">
+                                Redeem
+                            </button>
+                        </div>
+                    </div>
+                </>
+                }
+            </Dialog>
             <div className='bg-gray-100 w-[96%] mx-auto h-fit rounded-2xl drop-shadow-2xl md:flex'>
                 <Card className="h-full - w-full"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                     <CardHeader floated={false} shadow={false} className="rounded-none"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
@@ -48,11 +114,22 @@ const DriverWallet = () => {
                                      <h1 className="text-2xl font-medium text-black">Wallet transactions</h1>
                                 </div>
                             </div>
-                            <div className="flex w-full shrink-0 gap-2 md:w-max">
-                                <div className="w-full ">
-                                    <button className="btn">
-                                        WALLET BALANCE
-                                        <div className="badge badge-lg badge-success text-black">₹{driverData?.wallet?.balance}</div>
+                           <div className="md:flex grid md:w-fit shrink-0 gap-3 md:gap-2">
+                                <div className="w-fit flex">
+                                <button className="btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full flex items-center space-x-2">
+                                    <span>WALLET BALANCE</span>
+                                    <div className="badge badge-lg w-[100px] bg-blue-700 text-white p-1 rounded-full">
+                                        ₹{driverData?.wallet?.balance}
+                                    </div>
+                                </button>
+                                </div>
+
+                                <div
+                                    onClick={() =>  setpaymentModal(true)}
+                                    className="w-fit flex">
+                                    <button className="btn bg-red-400 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full flex items-center space-x-2">
+                                        <span>REDEEM</span>
+                                        <div className="badge w-[25px] badge-lg badge-success bg-red-700 text-white p-1 rounded-full">-</div>
                                     </button>
                                 </div>
                             </div>

@@ -120,8 +120,8 @@ function Vehicle() {
                                                 <option disabled selected>
                                                     Select the model
                                                 </option>
-                                                <option>Standard</option>
                                                 <option>Sedan</option>
+                                                <option>Standard</option>
                                                 <option>SUV</option>
                                                 <option>Luxuary</option>
                                             </select>
