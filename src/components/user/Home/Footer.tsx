@@ -3,7 +3,7 @@ function Footer() {
     <footer className="bg-black text-white py-6">
       <div className="container mx-auto flex flex-col md:flex-row md:justify-between">
         <div className="flex flex-col md:mr-12 mb-8">
-          <h4 className="text-xl font-semibold mb-5">Company</h4>
+          <h4 className="text-xl font-semibold mb-5">Companyey</h4>
           <ul className="space-y-5">
             <li>About Us</li>
             <li>Our Offices</li>
