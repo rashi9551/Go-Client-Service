@@ -27,7 +27,7 @@ import ChatBoxReciever from "../../ChatBoxReciever";
 import ChatBoxSender from "../../ChatBoxSender";
 import ChatInputField from "../../ChatInputField";
 
-const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
+const ENDPOINT = import.meta.env.VITE_SERVER_URL;
 
 function DriverCurrentRide() {
   const navigate = useNavigate();

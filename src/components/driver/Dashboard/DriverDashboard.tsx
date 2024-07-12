@@ -70,7 +70,7 @@ useEffect(() => {
   const audioRef = useRef<HTMLAudioElement|null>(null);
   const navigate=useNavigate()
   audioRef.current = new Audio('/uber_tune.mp3');
-  const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
+  const ENDPOINT = import.meta.env.VITE_SERVER_URL;
   
   useEffect(() => {
     const driverToken=localStorage.getItem('driverToken')
@@ -85,11 +85,11 @@ useEffect(() => {
     });
 
     socketInstance.on('tokens-updated', (data) => {
+      console.log("in socket its updated");
       const token=data.token
       const refreshToken=data.refreshToken      
       localStorage.setItem(token,'driverToken')
       localStorage.setItem(refreshToken,'DriverRefreshToken')
-    
       socketInstance.io.opts.query = {
         token: token,
         refreshToken: refreshToken

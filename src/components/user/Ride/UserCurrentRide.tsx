@@ -48,7 +48,7 @@ import ChatBoxSender from "../../ChatBoxSender";
 import ChatBoxReciever from "../../ChatBoxReciever";
 import ChatInputField from "../../ChatInputField";
 import StarRating from "../../StarRating";
-const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
+const ENDPOINT = import.meta.env.VITE_SERVER_URL;
 
 function UserCurrentRide() {
   const { user_id, user } = useSelector((store: { user: { user_id: string,user:string } }) => store.user);

@@ -65,7 +65,7 @@ function Ride() {
   const [duration, setduration] = useState<string | undefined>(undefined);
 
   const [socket,setSocket]=useState<Socket|null>(null)
-  const ENDPOINT = import.meta.env.VITE_DRIVER_SERVER_URL;
+  const ENDPOINT = import.meta.env.VITE_SERVER_URL;
 
   useEffect(()=>{
     const userToken=localStorage.getItem('userToken')    
