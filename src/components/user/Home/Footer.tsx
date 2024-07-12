@@ -12,7 +12,7 @@ function Footer() {
           </ul>
         </div>
         <div className="flex flex-col md:mr-12 mb-8">
-          <h4 className="text-xl font-semibold mb-5">Products</h4>
+          <h4 className="text-xl font-semibold mb-5">Product</h4>
           <ul className="space-y-5">
             <li>Ride</li>
             <li>Drive</li>
