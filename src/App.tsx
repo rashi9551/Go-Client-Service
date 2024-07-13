@@ -39,7 +39,7 @@ function App() {
 
           {/* user roter  */}
           <Route path='/' element={<HomePage/>}/>
-          <Route path='/login' element={user ? <Navigate to={'/'}/>:<LoginPage/>}/>
+          <Route path='/login'  element={user ? <Navigate to={'/'}/>:<LoginPage/>}/>
           <Route path='/signup' element={user ? <Navigate to={'/'}/>:<SigunpPage/>}/>
           <Route path='/account' element={!user ? <Navigate to={'/login'}/>:<Profilepage/>}/>
           <Route path='/rides' element={!user ? <Navigate to={'/login'}/>:<UserCurrentRidePage/>}/>
