@@ -25,7 +25,7 @@ function DriverData({params}:{params:string}) {
 
   return (
     <>
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto ">
         <table className="table-auto w-full text-left whitespace-no-wrap">
             {/* head */}
             <thead className="bg-gray-100">
