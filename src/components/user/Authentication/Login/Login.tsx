@@ -81,6 +81,8 @@ function Login() {
       }
     },
   });
+  console.log(import.meta.env.VITE_API_GATEWAY_URL,"=-=-=-=-=-=-=-=-=");
+  
 
   const [otpInput, setotpInput] = useState(false);
   const [otp, setOtp] = useState<number>(0);
