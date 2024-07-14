@@ -11,7 +11,7 @@ export const onCaptchaVerify = (auth: Auth,setotpInput:any) => {
 if (!window.recaptchaVerifier) {
     window.recaptchaVerifier = new RecaptchaVerifier(
     auth,
-    "recaptcha-container",
+    "recaptcha-container" ,
     {
         size: "invisible",
         callback: () => {
