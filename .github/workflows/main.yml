@@ -40,7 +40,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync build/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
           echo "Deployment completed successfully"
 
       - name: Invalidate CloudFront
