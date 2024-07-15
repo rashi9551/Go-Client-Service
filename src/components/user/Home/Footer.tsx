@@ -21,7 +21,7 @@ function Footer() {
           </ul>
         </div>
         <div className="flex flex-col mb-8">
-          <h4 className="text-xl font-semibold mb-5">Travels</h4>
+          <h4 className="text-xl font-semibold mb-5">Travel</h4>
           <ul className="space-y-5">
             <li>Safety</li>
             <li>Insurance</li>
