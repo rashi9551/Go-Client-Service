@@ -27,6 +27,7 @@ jobs:
           echo "VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }}" >> .env
           echo "VITE_API_GATEWAY_URL=${{ secrets.VITE_API_GATEWAY_URL }}" >> .env
           echo "VITE_BG_WTS=https://cdn.wallpapersafari.com/54/0/HluF7g.jpg" >> .env
+          echo "VITE_NODE_ENV='pro" >> .env
           echo "VITE_STRIPE_PUBLISH_KEY=${{ secrets.VITE_STRIPE_PUBLISH_KEY }}" >> .env
           echo "VITE_STRIPE_SECRET_KEY=${{ secrets.VITE_STRIPE_SECRET_KEY }}" >> .env
 

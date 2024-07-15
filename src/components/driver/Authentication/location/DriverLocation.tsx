@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SignupMap from "../../Map/SignupMap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -74,11 +74,6 @@ function DriverLocation() {
             }
         },
     });
-
-    useEffect(() => {
-        toast.error(formik.errors.longitude);
-    }, [formik.errors.longitude]);
-
     return (
         <>
             <div className="driver-registration-container h-screen flex justify-center items-center">

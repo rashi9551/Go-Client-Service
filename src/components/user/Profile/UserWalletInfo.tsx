@@ -65,8 +65,9 @@ const UserWalletInfo = () => {
                 return
             }
             const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISH_KEY)
+            const success_url=import.meta.env.VITE_NODE_ENV==='dev'?'http://localhost:5173/account':'https://goocab.site/account';
             console.log("stripe poonu wallet",balance);
-            const { data } = await axiosUser().post("paymentStripe", {amount:Number(balance),success_url:'http://localhost:5173/account'})
+            const { data } = await axiosUser().post("paymentStripe", {amount:Number(balance),success_url})
             console.log(data,"ithu id");
             localStorage.setItem('sessionId',data.id)
             localStorage.setItem('balance',balance)
