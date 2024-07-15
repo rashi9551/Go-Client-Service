@@ -43,13 +43,19 @@ const DriverWallet = () => {
 
     const RedeemWallet=async()=>{
         try {
+            setpaymentModal(false)
             console.log(balance,upiId,"=--");
             if(Number(balance)<500){
                 toast.error("Enter 500 ore more")
                 return
             }
             const {data} = await axiosDriver().post(`redeemWallet?driver_id=${driverId}`,{balance,upiId})
-            console.log(data);
+            if(data.message==="Success"){
+                toast.success("Wallet Redeemed Succesfully")
+                getData()
+            }else{
+                toast.error("something happened in payout")
+            }
             
         } catch (error) {
             console.log(error);

@@ -32,7 +32,7 @@ function App() {
   return (
     <>
     <ToastContainer />
-    <Toaster position="top-right" expand={true} richColors/>
+    <Toaster position="top-center" expand={true} richColors/>
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
