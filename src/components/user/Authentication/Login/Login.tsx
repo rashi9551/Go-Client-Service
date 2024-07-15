@@ -259,6 +259,7 @@ function Login() {
                             setCounter(40);
                             setOtp(0)
                             sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+                            toast.success('OTP resent successfully')
                           }}
                         >
                           Resend OTP

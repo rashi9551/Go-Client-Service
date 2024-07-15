@@ -151,7 +151,7 @@ function Signup() {
       const {data}=await axiosUser().post("/resendOtp",formik.values);
 
       if(data.message==="OTP resent successfully"){
-        toast.success(data.mesaage)
+        toast.success('OTP resent successfully')
       }
     } catch (error) {
       toast.error((error as Error).message);

@@ -24,10 +24,10 @@ const AdminDriverDetailsVerified = () => {
                                 <h1 className={tab === 2 ? "font-bold " : "font-normal"}>Feedbacks</h1>
                             </Tab>
                             <Tab sx={{ fontSize: "24px" }} onClick={() => settab(3)}>
-                                <h1 className={tab === 2 ? "font-bold " : "font-normal"}>Reports</h1>
+                                <h1 className={tab === 3 ? "font-bold " : "font-normal"}>Reports</h1>
                             </Tab>
                             <Tab sx={{ fontSize: "24px" }} onClick={() => settab(4)}>
-                                <h1 className={tab === 3 ? "font-bold " : "font-normal"}>Rides</h1>
+                                <h1 className={tab === 4 ? "font-bold " : "font-normal"}>Rides</h1>
                             </Tab>
                         </TabList>
                         <TabIndicator mt="-1.5px" height="3px" bg="blue.500" borderRadius="1px" />
