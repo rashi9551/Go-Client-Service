@@ -13,13 +13,13 @@ const ChatInputField = ({ addMessage }: { addMessage: (message: string) => void 
         <>
             <div className="md:flex items-center w-full">
                 <div className="md:w-3/4 overflow-hidden">
-                    <Input onChange={(e) => setmessage(e.target.value)} value={message} variant="static" placeholder="Type somthing..." crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                    <Input onChange={(e) =>setmessage(e.target.value)} value={message} variant="static" placeholder="Type somthing..." crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                 </div>
                 <div className="md:w-1/4 w-full md:mt-0 mt-3">
                     <Button
                         className="flex w-full justify-center items-center gap-2"
                         size="sm"
-                        onClick={() => sendMessage()}
+                        onClick={() =>message.length>0? sendMessage():""}
                         color="green"  placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Send
                         <SendIcon className="text-white" style={{width:"auto",height:"15px"}} />
                     </Button>

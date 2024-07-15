@@ -4,6 +4,7 @@ import VerifiedDriverDetails from "../../../components/admin/Driver/VerifiedDriv
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from "@chakra-ui/react";
 import VerifiedRides from "../../../components/admin/VerifiedRide";
 import VerifiedFeedbacks from "../../../components/admin/Driver/VerifiedFeedbacks";
+import VerifiedReports from "../../../components/admin/Driver/VerifiedReports";
 
 const AdminDriverDetailsVerified = () => {
 
@@ -23,6 +24,9 @@ const AdminDriverDetailsVerified = () => {
                                 <h1 className={tab === 2 ? "font-bold " : "font-normal"}>Feedbacks</h1>
                             </Tab>
                             <Tab sx={{ fontSize: "24px" }} onClick={() => settab(3)}>
+                                <h1 className={tab === 2 ? "font-bold " : "font-normal"}>Reports</h1>
+                            </Tab>
+                            <Tab sx={{ fontSize: "24px" }} onClick={() => settab(4)}>
                                 <h1 className={tab === 3 ? "font-bold " : "font-normal"}>Rides</h1>
                             </Tab>
                         </TabList>
@@ -34,6 +38,9 @@ const AdminDriverDetailsVerified = () => {
                         </TabPanel>
                         <TabPanel>
                            <VerifiedFeedbacks/>
+                        </TabPanel>
+                        <TabPanel>
+                           <VerifiedReports/>
                         </TabPanel>
                         <TabPanel>
                            <VerifiedRides params={"driver"}/>

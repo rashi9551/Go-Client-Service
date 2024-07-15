@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Input } from "@material-tailwind/react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import {toast} from 'sonner' ;
 import axiosUser from '../../../service/axios/axiosUser'; 
 import { UserInterface } from '../../../utils/interfaces';
+import { userLogin } from '../../../service/redux/slices/userAuthSlice';
 
 const ProfileInfo = () => {
     const {user_id} = useSelector((store: {user:{user_id:string}}) => store.user)
     const [userData, setuserData] = useState<UserInterface | null>(null)
-
+    const dispatch=useDispatch()
     console.log(userData);
     const getData = async () => {
         try {
@@ -44,6 +45,11 @@ const ProfileInfo = () => {
                     console.log(data);
                     setuserData(data.newData)
                     seteditProfile(false)
+                    dispatch(userLogin({
+                        user: data.newData.name,
+                        user_id: user_id,
+                        loggedIn: true
+                    }))
                     toast.success("Profile updated successfully!")
                 }
             } catch (error) {
@@ -154,3 +160,5 @@ const ProfileInfo = () => {
 };
 
 export default ProfileInfo;
+
+

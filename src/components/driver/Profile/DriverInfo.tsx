@@ -50,9 +50,10 @@ const DriverInfo = () => {
         );
         if (data.message === "Success") {
           const driver=data.driverData
-          dispatch(driverLogin(driver))
           setdriverData(driver);
           seteditProfile(false);
+          console.log(data,"dateey");
+          dispatch(driverLogin({name: driver.name,driver_id: driver._id,loggedIn:true}))
           toast.success("Profile updated successfully");
         }
       } catch (error) {

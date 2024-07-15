@@ -1,4 +1,5 @@
  export interface feedback{
+    reason: string;
     ride_id:string,
     rating:number,
     feedback:string,
@@ -39,6 +40,7 @@ export interface RideDetails {
     date:number;
     feedback:string
     rating:number 
+    reportReason:string
     paymentMode:string   
     ratings:number
     pin:number
