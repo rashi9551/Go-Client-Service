@@ -22,6 +22,7 @@ import { toLocation } from "../../../Hooks/Map";
 import { fromLocation } from "../../../Hooks/Map";
 import { handleModelSelection } from '../../../Hooks/formik'
 import { useNavigate } from "react-router-dom";
+import isDistanceUnder100Km from "../../../utils/kmCheck";
 
 
 function Ride() {
@@ -136,9 +137,16 @@ function Ride() {
         destination: destinationValue,
         travelMode: google.maps.TravelMode.DRIVING,
       });
-      setdirectionsResponse(result);
-      setdistance(result.routes[0].legs[0].distance?.text);
-      setduration(result.routes[0].legs[0].duration?.text);
+      const routeDistance : any=result.routes[0].legs[0].distance?.text      
+      if(/\b\d+\s*m\b/.test(routeDistance)){
+        toast.info("maximum  1 distance km needed")
+      }else if(isDistanceUnder100Km(routeDistance)){
+        setdirectionsResponse(result);
+        setdistance(routeDistance);
+        setduration(result.routes[0].legs[0].duration?.text);
+      }else{
+        toast.info("Your Destination Exceeds Our Servuce Area")
+      }
     } catch (error: any) {
       toast.error(error.message);
     }

@@ -713,14 +713,14 @@ function UserCurrentRide() {
                           </div>
                         </div>
                         <div className=" text-center">
-                          <h1>{driverData?.name}</h1>
+                          <h1 className="font-extrabold">{driverData?.name}</h1>
                           <div className="md:flex gap-3 md:justify-center">
                             <div className="flex gap-2 justify-center">
-                              <h1>Cab model:</h1>
+                              <h1 className="font-bold">Cab model:</h1>
                               <h1> {driverData?.vehicle_details?.model}</h1>
                             </div>
                             <div className="flex gap-2 justify-center">
-                              <h1>Reg ID:</h1>
+                              <h1 className="font-bold">Reg ID:</h1>
                               <h1>
                                 {" "}
                                 {driverData?.vehicle_details?.registerationID.toUpperCase()}

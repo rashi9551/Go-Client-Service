@@ -60,7 +60,7 @@ function Signup() {
     mobile: "",
     password: "",
     re_password: "",
-    reffered_code: "",
+    refferredCode: "",
     userImage:null,
     otp:"",
   };
@@ -100,7 +100,7 @@ function Signup() {
       formData.append('mobile', formik.values.mobile);
       formData.append('password', formik.values.password);
       formData.append('re_password', formik.values.re_password);
-      formData.append('reffered_code', formik.values.reffered_code);
+      formData.append('refferredCode', formik.values.refferredCode);
       formData.append('otp', otp.toString());
       if (formik.values.userImage) {
         formData.append('userImage', formik.values.userImage);
@@ -117,10 +117,9 @@ function Signup() {
       if (data.message === "Success") {
         toast.success("OTP verified succesfully");
         toast.success("Account created succesfully");
+        if(formik.values.refferredCode.length>0)toast.success("Refferal Money Credited To Reffered Account");
         navigate("/login");
       }else if(data.message === "Invalid OTP"){
-        console.log("ewndfvsh");
-        
         toast.error("Invalid OTP");
       }
     } catch (error) {
@@ -429,24 +428,24 @@ function Signup() {
                     <GroupIcon className={iconsColor} />
                     <input
                       className={
-                        formik.touched.reffered_code &&
-                        formik.errors.reffered_code
+                        formik.touched.refferredCode &&
+                        formik.errors.refferredCode
                           ? with_error_class
                           : without_error_class
                       }
                       type="text"
-                      value={formik.values.reffered_code}
+                      value={formik.values.refferredCode}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      name="reffered_code"
+                      name="refferredCode"
                       id=""
                       placeholder="Referral Code"
                     />
                   </div>
-                  {formik.touched.reffered_code &&
-                    formik.errors.reffered_code && (
+                  {formik.touched.refferredCode &&
+                    formik.errors.refferredCode && (
                       <p className="form-error-p-tag">
-                        {formik.errors.reffered_code}
+                        {formik.errors.refferredCode}
                       </p>
                     )}
                     <div className="text-left md:pr-3">
