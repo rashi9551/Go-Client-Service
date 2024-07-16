@@ -87,10 +87,12 @@ function Ride() {
         refreshToken: refreshToken
       };
     });
-    socketInstance.on("userConfirmation",(rideId)=>{
-      localStorage.setItem("currentRide-user",rideId)
-      dispatch(cancelSearching())
-      navigate('/rides')
+    socketInstance.on("userConfirmation",(rideId,userId)=>{
+      if(userId===user_id){
+        localStorage.setItem("currentRide-user",rideId)
+        dispatch(cancelSearching())
+        navigate('/rides')
+      }
     })
     return () => {
       if (socketInstance) {

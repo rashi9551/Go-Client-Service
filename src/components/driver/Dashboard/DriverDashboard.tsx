@@ -132,10 +132,12 @@ useEffect(() => {
       console.log(driverIdArray,driverId,"------");
       
     })
-    socketInstance.on("driverConfirmation",(rideId)=>{
-      localStorage.setItem("currentRide-driver",rideId)
-      navigate("/driver/rides");
-      socketInstance.emit("forUser",rideId)
+    socketInstance.on("driverConfirmation",(rideId,driver_id)=>{
+      if(driverId===driver_id){
+        localStorage.setItem("currentRide-driver",rideId)
+        navigate("/driver/rides");
+        socketInstance.emit("forUser",rideId)
+      }
     })
 
     return () => {
@@ -157,7 +159,6 @@ useEffect(() => {
       }
   }
 
-  console.log(pieChartData,"ithu pie")
 
 
   return (

@@ -120,18 +120,24 @@ function UserCurrentRide() {
       };
     });
 
-    socketInstance.on("rideConfirmed", () => {
-      console.log("ride confirmed");
-      toast.success("Ride Started Happy Journey")
-      setrideConfirmed(true);
+    socketInstance.on("rideConfirmed", (data) => {
+      if(data.user_id==user_id){
+        console.log("ride confirmed in user side");
+        toast.success("Ride Started Happy Journey")
+        setrideConfirmed(true);
+      }
     });
 
-    socketInstance.on("userPaymentPage", () => {
-      setpaymentModal(true);
+    socketInstance.on("userPaymentPage", (userId) => {
+      if(userId===user_id){
+        setpaymentModal(true);
+      }
     });
-    socketInstance.on("chat", (senderChats) => {
-      console.log(senderChats,"its coming")
-      setchats(senderChats)
+    socketInstance.on("chat", (senderChats,data) => {
+      if(data.user_id===user_id){
+        console.log(senderChats,"its coming in user side")
+        setchats(senderChats)
+      }
     })
 
     return () => {

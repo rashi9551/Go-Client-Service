@@ -78,27 +78,36 @@ const ChatList = () => {
       };
     });
 
-    socketInstance.on("rideConfirmed", () => {
-      console.log("ride confirmed");
-      setrideConfirmed(true);
+    socketInstance.on("rideConfirmed", (data) => {
+        if(data.driverId===driverId){
+          console.log("ride confirmed in driver side");
+          setrideConfirmed(true);
+        }
       });
       
-      socketInstance.on("driverPaymentSuccess", (paymentMode, amount) => {
-        setopenPayment(false)
-        setpaymentMode(paymentMode)
-        setcharge(amount)
-        setpaymentModeInfo(true)
-        if (paymentMode !== 'Cash in hand') {
-            setstartCounter(true)
+      socketInstance.on("driverPaymentSuccess", (paymentMode, amount,driver_id) => {
+        if(driver_id===driverId){
+          setopenPayment(false)
+          setpaymentMode(paymentMode)
+          setcharge(amount)
+          setpaymentModeInfo(true)
+          if (paymentMode !== 'Cash in hand') {
+              setstartCounter(true)
+          }
         }
     })
-    socketInstance.on("rideCancelled", () => {
-      console.log("ride cancelled -----------------------------");
-      setcancelledModal(true);
+    socketInstance.on("rideCancelled", (driver_id) => {
+      if(driver_id===driverId){
+        console.log("ride cancelled in driver side ");
+        setcancelledModal(true)
+      }
     });
 
-    socketInstance.on("chat", (senderChats) => {
-      setchats(senderChats)
+    socketInstance.on("chat", (senderChats,data) => {
+      if(data.driverId===driverId){
+        console.log("its comin g in driver side");
+        setchats(senderChats)
+      }
   })
 
     return () => {
