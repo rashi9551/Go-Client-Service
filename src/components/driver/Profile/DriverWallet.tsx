@@ -27,10 +27,7 @@ const DriverWallet = () => {
         try {
             const { data } = await axiosDriver().get(`driverData?driver_id=${driverId}`)
             setdriverData(data)
-            const sortedTransactions = data.wallet.transactions.sort((a:any, b:any) => {
-                return new Date(b.date).getTime() - new Date(a.date).getTime();
-            });
-            setwalletTransactions(sortedTransactions)
+            setwalletTransactions(data.formattedTransactions)
         } catch (error) {
             toast.error((error as Error).message)
             console.log(error);

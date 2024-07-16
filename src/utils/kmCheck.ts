@@ -5,7 +5,7 @@ function isDistanceUnder100Km(input: string): boolean {
     if (kmMatch) {
         const distance = parseInt(kmMatch[1], 10);
         console.log(distance,"afdsadsf");
-        return distance < 100;
+        return distance < 250;
     }
     return false;
 }

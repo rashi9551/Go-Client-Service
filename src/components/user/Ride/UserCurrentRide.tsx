@@ -51,7 +51,7 @@ import StarRating from "../../StarRating";
 const ENDPOINT = import.meta.env.VITE_SERVER_URL;
 
 function UserCurrentRide() {
-  const { user_id, user } = useSelector((store: { user: { user_id: string,user:string } }) => store.user);
+  const { user_id } = useSelector((store: { user: { user_id: string,user:string } }) => store.user);
   const userToken = localStorage.getItem("userToken");
   const [userData, setuserData] = useState<UserInterface | null>(null);
 
@@ -78,7 +78,7 @@ function UserCurrentRide() {
 
     const newChat = {
       message,
-      sender: user,
+      sender: user_id,
       avatar: userData?.userImage
     };
     setchats((prevChats) => [...prevChats, newChat])
@@ -87,7 +87,7 @@ function UserCurrentRide() {
 
   const ChatList = () => {
     return chats.map((chat, index) => {
-      if (chat.sender === user) return <ChatBoxSender avatar={chat.avatar} message={chat.message} />
+      if (chat.sender === user_id) return <ChatBoxSender avatar={chat.avatar} message={chat.message} />
       return <ChatBoxReciever key={index} message={chat.message} avatar={chat.avatar} />
     })
   }

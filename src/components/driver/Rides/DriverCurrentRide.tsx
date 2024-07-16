@@ -31,8 +31,8 @@ const ENDPOINT = import.meta.env.VITE_SERVER_URL;
 
 function DriverCurrentRide() {
   const navigate = useNavigate();
-  const { driverId,name } = useSelector(
-    (store: { driver: { driverId: string,name:string } }) => store.driver
+  const { driverId } = useSelector(
+    (store: { driver: { driverId: string } }) => store.driver
   );
   const driverToken: string | null = localStorage.getItem("driverToken");
   const refreshTokn: string | null =localStorage.getItem('DriverRefreshToken')
@@ -48,7 +48,7 @@ function DriverCurrentRide() {
 
 const ChatList = () => {
     return chats.map((chat, index) => {
-        if (chat.sender === name) return <ChatBoxSender avatar={chat.avatar} message={chat.message}  />
+        if (chat.sender === driverId) return <ChatBoxSender avatar={chat.avatar} message={chat.message}  />
         return <ChatBoxReciever key={index} message={chat.message} avatar={chat.avatar} />
     })
 }
@@ -148,11 +148,11 @@ const ChatList = () => {
   }, []);
 
   const addMessage = (message: string) => {
-    console.log(message,driverData?.driverImage,name);
+    console.log(message,driverData?.driverImage,driverId);
     const newChat = {
         who:'driver',
         message,
-        sender: name,
+        sender: driverId,
         avatar: driverData?.driverImage
     };
     setchats((prevChats) => [...prevChats, newChat])
