@@ -17,6 +17,7 @@ import socketIOClient, { Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axiosDriver from "../../../service/axios/axiosDriver";
+// import axiosRide from "../../../service/axios/axiosRide";
 import { toast } from "sonner";
 import { Spinner } from "@chakra-ui/react";
 
@@ -64,7 +65,7 @@ useEffect(() => {
 }, [])
 
 
-
+  // const driverToken: string | null = localStorage.getItem("driverToken");
   const [rides, setRides] = useState<RideDetails | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const audioRef = useRef<HTMLAudioElement|null>(null);
@@ -147,9 +148,13 @@ useEffect(() => {
     };
   }, []);
 
-  const handleAcceptRide=()=>{
+  const handleAcceptRide=async()=>{
     if(socket)
       {
+        // const rideCheck = await axiosRide(driverToken).get(
+        //   `getCurrentRideCheck?rideId=${rides?.ride_id}`
+        // );
+        // console.log(rideCheck,rides,"=-=-=-=-=-=-=");
         const driver_id=driverId
         const updateRideDetais={...rides,driver_id}
         socket.emit("acceptRide",updateRideDetais)
