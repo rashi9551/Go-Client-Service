@@ -253,7 +253,6 @@ function UserCurrentRide() {
       const ride_id = localStorage.getItem("currentRide-user");
       socket.emit("rideCancelled", ride_id);
       console.log("ride canceled triggeres");
-
       localStorage.removeItem("currentRide-user");
       localStorage.removeItem("currentRide-driver");
 
@@ -298,6 +297,7 @@ function UserCurrentRide() {
           );
           if (data.message === "Success") {
             localStorage.removeItem("currentRide-user");
+            localStorage.removeItem("currentRide-driver");
             toast.success("Payment successfull");
             setpaymentModal(false);
             socket?.emit("paymentCompleted", values.paymentMode, values.amount);
@@ -306,12 +306,12 @@ function UserCurrentRide() {
             toast.error(data.message);
           }
         } else if (values.paymentMode === "Upi") {
-          // const ride_id = localStorage.getItem("currentRide-user");
           const {data} = await axiosUser().post(`razorpayPayment?ride_id=${rideData?.ride_id}`,{amount:values.amount})
           console.log(data,"ithu razorpay data");
           if(data.message==="Payment Completed"){
             toast.success("Payment already done")
             localStorage.removeItem("currentRide-user");
+            localStorage.removeItem("currentRide-driver");
             setpaymentModal(false);
             navigate("/");
             return 
@@ -336,6 +336,7 @@ function UserCurrentRide() {
                       if (verifyData.message === "Success") {
                         toast.success("Payment successfull");
                         localStorage.removeItem("currentRide-user");
+                        localStorage.removeItem("currentRide-driver");
                         setpaymentModal(false);
                         socket?.emit("paymentCompleted", values.paymentMode, values.amount);
                         navigate("/");

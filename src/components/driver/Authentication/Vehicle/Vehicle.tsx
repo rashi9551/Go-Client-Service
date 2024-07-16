@@ -123,7 +123,7 @@ function Vehicle() {
                                                 <option>Sedan</option>
                                                 <option>Standard</option>
                                                 <option>SUV</option>
-                                                <option>Luxuary</option>
+                                                <option>Premium</option>
                                             </select>
                                             <p className="text-xs mb-4 text-red-500">
                                                 {formik.touched.model && formik.errors.model}

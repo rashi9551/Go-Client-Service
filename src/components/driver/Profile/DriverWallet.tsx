@@ -42,16 +42,23 @@ const DriverWallet = () => {
         try {
             setpaymentModal(false)
             console.log(balance,upiId,"=--");
+            console.log(driverData?.wallet?.balance,"=-=-=-=");
+            const currentWalletBalance = (driverData?.wallet?.balance??5000)
             if(Number(balance)<500){
-                toast.error("Enter 500 ore more")
+                toast.info("Enter 500 ore more")
                 return
-            }
-            const {data} = await axiosDriver().post(`redeemWallet?driver_id=${driverId}`,{balance,upiId})
-            if(data.message==="Success"){
-                toast.success("Wallet Redeemed Succesfully")
-                getData()
+            }else if(Number(balance)>currentWalletBalance){
+                toast.info("your balance is less that wallet")
+                return
             }else{
-                toast.error("something happened in payout")
+                const {data} = await axiosDriver().post(`redeemWallet?driver_id=${driverId}`,{balance,upiId})
+                if(data.message==="Success"){
+                    toast.success("Wallet Redeemed Succesfully")
+                    getData()
+                }else{
+                    toast.error("something happened in payout")
+                }
+
             }
             
         } catch (error) {

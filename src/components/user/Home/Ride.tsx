@@ -174,10 +174,10 @@ function Ride() {
 
   if (duration && distance) {
     charges = {
-      sedan: Math.floor(parseFloat(distance) * 50),
-      standard: Math.floor(parseFloat(distance) * 70),
-      suv: Math.floor(parseFloat(distance) * 90),
-      premium: Math.floor(parseFloat(distance) * 120),
+      sedan: Math.floor(parseFloat(distance) * 30),
+      standard: Math.floor(parseFloat(distance) * 35),
+      suv: Math.floor(parseFloat(distance) * 50),
+      premium: Math.floor(parseFloat(distance) * 55),
     };
   }
 
@@ -198,9 +198,17 @@ function Ride() {
         return toast.error("Please login to book the cab!")
     }
     console.log("request confirm aayi")
-    socket?.emit('getNearByDrivers',values)
-    dispatch(startSearching())
-    noDrivers()
+    const driver=localStorage.getItem('currentRide-driver')
+    const ride=localStorage.getItem('currentRide-user')
+    console.log(ride,driver,"=-=-=-=-");
+    if(ride&&driver){
+      toast.info("You Are Already In A Ride")
+    }else{
+      socket?.emit('getNearByDrivers',values)
+      dispatch(startSearching())
+      noDrivers()
+
+    }
     },
   });
 
@@ -209,7 +217,9 @@ function Ride() {
         dispatch(cancelSearching())
         setnoDriversModal(true)
     }, 5000);
+  
 }
+
 
   const showError = () => {
     if (formik.errors.vehicleModel) {
