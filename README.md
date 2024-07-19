@@ -1,11 +1,13 @@
 # GO-Cab 🚕 - Your Ultimate Cab Booking Experience 🌟
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) <br/>
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 Welcome to **GO-Cab**, a comprehensive cab booking service designed for everyone. Built with the latest technologies, GO-Cab ensures a seamless and secure ride booking experience.
 
 ## Live Link & GitHub
 
-- **GO-Cab Cab Booking Service Live Link**: [Live Demo](#)
-- **GitHub Repository**: [GO-Cab on GitHub](https://github.com/rashi9551)
+- **GO-Cab Cab Booking Service Live Link**: [Live Demo](https://goocab.site)
+- **GitHub Repository**: [GO-Cab on GitHub](https://github.com/rashi9551/Mern-Microservices-Go-Cab)
 
 ## Features
 
@@ -48,7 +50,7 @@ Welcome to **GO-Cab**, a comprehensive cab booking service designed for everyone
 To get started with GO-Cab, clone the repository and follow the setup instructions:
 
 ```bash
-git clone https://github.com/rashi9551/Go-Client-Service 
-cd go-cab
+git clone https://github.com/rashi9551/Mern-Microservices-Go-Cab
+cd Mern-Microservices-Go-Cab
 npm install
 npm run dev
