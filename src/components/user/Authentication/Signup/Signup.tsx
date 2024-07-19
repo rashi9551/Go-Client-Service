@@ -137,7 +137,7 @@ function Signup() {
       }
       else {
         // sendOtp();
-        toast.success("pls check your otp")
+        toast.success("Enter Check Your Otp")
         setOtpPage(true);
       }
     } catch (error) {

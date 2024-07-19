@@ -96,7 +96,7 @@ function Login() {
   const [counter, setCounter] = useState(40);
   useEffect(() => {
     if (otpInput) {
-      counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+      counter > 0 && setTimeout(() => setCounter(counter - 1), 120000);
     }
   }, [counter, otpInput]);
 
@@ -147,6 +147,54 @@ function Login() {
     }
 };
 
+
+const [isOpen, setIsOpen] = useState(true);
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [countdown, setCountdown] = useState(80);
+
+const handleTestSubmit=async(e: React.FormEvent<HTMLFormElement>)=>{
+  e.preventDefault()
+  if(password.length==0||email.length==0){
+    toast.error("enter email and password")
+    return
+  }
+  console.log(email,password);
+  const {data} =await axiosUser().post('/testerLogin',{password,email})
+  console.log(data);
+  
+    if (data.message === "Success") {
+        toast.success("Login success!");
+        localStorage.setItem("userToken",data.token)
+        localStorage.setItem("refreshToken",data.refreshToken)
+        dispatch(userLogin({user: data.name,user_id: data._id,loggedIn:true}));
+        navigate("/");
+
+      } else if( data.message==="incorrect password"){
+
+        toast.error("password incorrect")
+      } else if (data.message === "Blocked") {
+
+          toast.error("Your Blocked By Admin");
+      } else {
+
+          toast.error("Not registered! Please register to  continue.");
+      }
+  
+  
+}
+
+useEffect(() => {
+  if (countdown > 0) {
+    const timer = setTimeout(() => {
+      setCountdown(countdown - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  } else {
+    setIsOpen(false);
+  }
+}, [countdown]);
+
   const iconsColor = "text-gray-400";
   return (
     <>
@@ -162,6 +210,73 @@ function Login() {
           </Link>
         </div>
       </nav>
+
+      <>
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full relative">
+            <div className="border-orange-400 border-2 rounded-md p-5 mb-4">
+              <h2 className="font-bold text-lg">Test Credentials</h2>
+              <p><strong>Email: </strong> <span className="bg-gray-100 p-2 rounded">test@gmail.com</span></p>
+              <p><strong>Password: </strong> <span className="bg-gray-100 p-2 rounded">Test@123</span></p>
+            </div>
+            <h1 className="text-2xl font-semibold tracking-tight mb-2">
+              Login to your account.
+            </h1>
+            <p className="text-sm text-gray-500 mb-2">
+            If the user wants to see the OTP via email, they have to sign up manually.
+            </p>
+            <p className="text-sm text-gray-500 mb-2">
+              Enter tester email and password below to login.
+            </p>
+            <p className="text-sm text-red-500 mb-4">
+              This tester modal will close in <strong>{countdown}</strong> seconds.
+            </p>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800"
+            >
+              &times;
+            </button>
+            <form onSubmit={handleTestSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
+                  placeholder="test@gmail.com"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
+                  placeholder="********"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Login
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </> 
+
+
+
 
       {/* nav   */}
       <div className="registration-container pb-10 h-screen flex justify-center items-center">

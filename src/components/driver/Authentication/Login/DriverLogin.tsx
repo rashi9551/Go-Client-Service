@@ -124,7 +124,6 @@ function DriverLogin() {
                     dispatch(
                         driverLogin({
                             name: response.data.name,
-                            driverToken: response.data.token,
                             driver_id: response.data._id,
                         })
                     );
@@ -153,6 +152,58 @@ function DriverLogin() {
     const iconsColor = "text-gray-400";
 
 
+const [isOpen, setIsOpen] = useState(true);
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [countdown, setCountdown] = useState(80);
+
+
+const handleTestSubmit=async(e: React.FormEvent<HTMLFormElement>)=>{
+  e.preventDefault()
+  if(password.length==0||email.length==0){
+    toast.error("enter email and password")
+    return
+  }
+  console.log(email,password);
+  const {data} =await axiosDriver().post('/testerLogin',{password,email})
+  console.log(data,"hchjjkb");
+  
+    if (data.message === "Success") {
+        toast.success("Login success!");
+        localStorage.setItem("driverToken",data.token)
+        localStorage.setItem("DriverRefreshToken",data.refreshToken)
+        dispatch(
+            driverLogin({
+                name: data.name,
+                driver_id:data._id,
+            })
+        );
+        localStorage.removeItem("driverId");
+        navigate("/driver/dashboard");
+      } else if( data.message==="incorrect password"){
+
+        toast.error("password incorrect")
+      } else if (data.message === "Blocked") {
+
+          toast.error("Your Blocked By Admin");
+      } else {
+        
+          toast.error("Not registered! Please register to  continue.");
+      }
+  
+  
+}
+useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setIsOpen(false);
+    }
+  }, [countdown]);
+
   return (
     <>
      <nav className="bg-black text-white flex justify-between items-center p-6 ">
@@ -167,6 +218,75 @@ function DriverLogin() {
         </div>
         
       </nav>
+
+
+    <>
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full relative">
+            <div className="border-orange-400 border-2 rounded-md p-5 mb-4">
+              <h2 className="font-bold text-lg">Test Credentials</h2>
+              <p><strong>Email: </strong> <span className="bg-gray-100 p-2 rounded">test@gmail.com</span></p>
+              <p><strong>Password: </strong> <span className="bg-gray-100 p-2 rounded">Test@123</span></p>
+            </div>
+            <h1 className="text-2xl font-semibold tracking-tight mb-2">
+              Login to your account.
+            </h1>
+            <p className="text-sm text-gray-500 mb-2">
+            If the tester wants to see live photo capturing and get location, they have to sign in.
+            </p>
+            <p className="text-sm text-gray-500 mb-2">
+              Enter tester email and password below to login.
+            </p>
+            <p className="text-sm text-red-500 mb-4">
+              This tester modal will close in <strong>{countdown}</strong> seconds.
+            </p>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800"
+            >
+              &times;
+            </button>
+            <form onSubmit={handleTestSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
+                  placeholder="test@gmail.com"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
+                  placeholder="********"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Login
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </> 
+
+
+
+
             <div className="driver-registration-container h-screen flex justify-center items-center">
                 <div className="w-5/6 md:w-4/6 md:h-4/5  md:flex justify-center bg-white rounded-3xl my-5 drop-shadow-2xl">
                     <div className="relative overflow-hidden h-full sm:pl-14 md:pl-16 md:w-1/2 i justify-around items-center mb-3 md:m-0">
