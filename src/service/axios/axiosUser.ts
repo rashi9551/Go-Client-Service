@@ -44,7 +44,7 @@ const createAxios=()=>{
                 localStorage.removeItem('userToken');
                 const dispatch=useDispatch()
                 dispatch(userLogout())
-                window.location.href = '/login';
+                window.location.href = '/';
                 return Promise.reject(error);
             }
 

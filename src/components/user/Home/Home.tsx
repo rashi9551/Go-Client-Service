@@ -3,11 +3,16 @@ import NavBar from "./NavBar";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import WhySafely from "./WhySafety";
 import Ride from "./Ride";
+import { useNavigate } from "react-router-dom";
 
 
 
 
 function Home() {
+  const navigate=useNavigate()
+  const handleNavigation=()=>{
+    navigate('/driver/login')
+  }
 
   return (
     <div className="">
@@ -80,18 +85,22 @@ function Home() {
                 <br /> or rides—or both. You can use your own car or
                 <br /> choose a rental through Go.
               </h1>
-              <div className="flex flex-col md:flex-row items-center mt-9">
-                <button className="bg-black h-9 mt-3 md:mt-0 rounded text-white w-28">
-                  Get Started
-                </button>
-                <a
-                  className="ml-0 md:ml-9 mt-3 md:mt-0 border-b-2 text-black border-black"
-                  href=""
-                >
-                  Already have an account? Sign in --
-                  <span className="ml-1">&gt;</span>
-                </a>
-              </div>
+              <div className="flex flex-col items-center mt-9 space-y-3">
+      <button
+        className="bg-black h-9 rounded text-white w-28"
+        onClick={handleNavigation}
+      >
+        Get Started
+      </button>
+      
+      <div
+        className="border-b-2 text-black border-black cursor-pointer"
+        onClick={handleNavigation}
+      >
+        Already have an account? Sign in -- 
+        <span className="ml-1">&gt;</span>
+      </div>
+    </div>
             </div>
           </div>
         </div>

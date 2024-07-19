@@ -68,8 +68,8 @@ useEffect(() => {
   // const driverToken: string | null = localStorage.getItem("driverToken");
   const [rides, setRides] = useState<RideDetails | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const audioRef = useRef<HTMLAudioElement|null>(null);
   const navigate=useNavigate()
+  const audioRef = useRef<HTMLAudioElement|null>(null);
   audioRef.current = new Audio('/uber_tune.mp3');
   const ENDPOINT = import.meta.env.VITE_SERVER_URL;
   
