@@ -125,6 +125,12 @@ const ProfileInfo = () => {
                                 <p className='w-1/2 md:hidden'>Mobile</p>
                                 <input name='mobile' onChange={formik.handleChange} type="number" placeholder={userData?.mobile} className="input input-bordered input-sm py-[1.16rem] w-full max-w-[21.5rem]" />
                             </div>
+                                {formik.touched.name && formik.errors.name && (
+                                    <p className="form-error-p-tag">{formik.errors.name}</p>
+                                    )}
+                                {formik.touched.mobile && formik.errors.mobile && (
+                                    <p className="form-error-p-tag ml-auto">{formik.errors.mobile}</p>
+                                    )}
                             <div className='w-full flex gap-6 -mb-3'>
                                 <p className='w-1/2'>Email</p>
                                 <p className='w-1/2 hidden md:block'>Referral Code</p>
@@ -134,6 +140,9 @@ const ProfileInfo = () => {
                                 <p className='w-1/2 md:hidden'>Refferl Code</p>
                                 <Input label={userData?.referralCode} disabled crossOrigin={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                             </div>
+                            {formik.touched.email && formik.errors.email && (
+                                    <p className="form-error-p-tag">{formik.errors.email}</p>
+                                    )}
                             <div className='w-full flex gap-6 -mb-3'>
                                 <p className='w-1/2'>Account Status</p>
                                 <p className='w-1/2 hidden md:block'>Joining Date</p>
