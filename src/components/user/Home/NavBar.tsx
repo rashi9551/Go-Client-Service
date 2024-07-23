@@ -11,7 +11,9 @@ function NavBar() {
   const dispatch = useDispatch();
   const user = useSelector((store:{user:{user:string}}) => store.user.user);
   const navigate = useNavigate();
-
+  console.log(import.meta.env.VITE_NODE_ENV);
+  
+  const EndPoint = import.meta.env.VITE_NODE_ENV === 'dev'? 'http://localhost:5173': 'https://goocab.site'
   useEffect(() => {
     const handleWindowResize = () => {
       setWindowSize(window.innerWidth);
@@ -45,7 +47,7 @@ function NavBar() {
           <a href="#" onClick={()=>navigate("/rides")} className="hover:text-gray-300">
             Ride
           </a>
-          <a href="#" onClick={() => navigate("/driver/login")} className="hover:text-gray-300">
+          <a href="#" onClick={() =>  window.open(`${EndPoint}/driver/login`, '_blank')} className="hover:text-gray-300">
             Drive
           </a>
           <a href="#" onClick={() => navigate("/account")} className="hover:text-gray-300">
@@ -109,7 +111,7 @@ function NavBar() {
               <a href="#" className="hover:text-gray-300">
                 Ride
               </a>
-              <a href="#" onClick={() => navigate("/driver/login")} className="hover:text-gray-300">
+              <a href="#" onClick={() => window.open('http://localhost/driver/login', '_blank')} className="hover:text-gray-300">
                 Drive
               </a>
               <a href="#" className="hover:text-gray-300">
