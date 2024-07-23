@@ -38,9 +38,9 @@ const DriverInfo = () => {
       mobile: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().min(3, "Type a valid name"),
+      name: Yup.string().min(3, "Type a valid name").matches(/^[^\d]*$/, "Name should not contain numbers"),
       email: Yup.string().email("Please enter a valid email"),
-      mobile: Yup.string().length(10, "Please enter a valid number"),
+      mobile: Yup.string().matches(/^\d{10}$/, "Please enter a valid 10-digit mobile number"),
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -230,6 +230,12 @@ const DriverInfo = () => {
                   className="input input-bordered input-sm py-[1.16rem] w-full max-w-xs"
                 />
               </div>
+              {formik.touched.name && formik.errors.name && (
+                  <p className="form-error-p-tag">{formik.errors.name}</p>
+                  )}
+              {formik.touched.mobile && formik.errors.mobile && (
+                  <p className="form-error-p-tag ml-auto">{formik.errors.mobile}</p>
+              )}
               <div className="w-full flex gap-6 -mb-3">
                 <p className="w-1/2">Email</p>
                 <p className="w-1/2 hidden md:block">Referral Code</p>
@@ -251,6 +257,9 @@ const DriverInfo = () => {
                   onPointerLeaveCapture={undefined}
                 />
               </div>
+              {formik.touched.email && formik.errors.email && (
+                  <p className="form-error-p-tag">{formik.errors.email}</p>
+              )}
               <div className="w-full flex gap-6 -mb-3">
                 <p className="w-1/2">Account Status</p>
                 <p className="w-1/2 hidden md:block">Joining Date</p>
