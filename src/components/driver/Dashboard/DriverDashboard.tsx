@@ -47,8 +47,7 @@ export const DriverDashboard = () => {
   const getData = async () => {
     try {
         const { data } = await axiosDriver().get(`dashboardData?driver_id=${driverId}`)
-        console.log(data,"ithu datey");
-        
+        console.log(data,"ithu datey aahney");
         setchartData(data.chartData)
         setpieChartData(data.pieChartData)
         setdriverData(data.driverData);
