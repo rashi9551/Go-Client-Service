@@ -21,6 +21,7 @@ import {  openPendingModal } from "../../../../service/redux/slices/pendingModal
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { openRejectedModal } from "../../../../service/redux/slices/rejectModalSlice";
 import { sendOtp } from "../../../../Hooks/auth";
+import './DriverLogin.scss'
   
 function DriverLogin() {
     const dispatch=useDispatch()
@@ -220,69 +221,69 @@ useEffect(() => {
       </nav>
 
 
-    <>
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full relative">
-            <div className="border-orange-400 border-2 rounded-md p-5 mb-4">
-              <h2 className="font-bold text-lg">Test Credentials</h2>
-              <p><strong>Email: </strong> <span className="bg-gray-100 p-2 rounded">test@gmail.com</span></p>
-              <p><strong>Password: </strong> <span className="bg-gray-100 p-2 rounded">Test@123</span></p>
-            </div>
-            <h1 className="text-2xl font-semibold tracking-tight mb-2">
-              Login to your account.
-            </h1>
-            <p className="text-sm text-gray-500 mb-2">
-            If the tester wants to see live photo capturing and get location, they have to sign in.
-            </p>
-            <p className="text-sm text-gray-500 mb-2">
-              Enter tester email and password below to login.
-            </p>
-            <p className="text-sm text-red-500 mb-4">
-              This tester modal will close in <strong>{countdown}</strong> seconds.
-            </p>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800"
-            >
-              &times;
-            </button>
-            <form onSubmit={handleTestSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-                  placeholder="test@gmail.com"
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-                  placeholder="Test@123"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              >
-                Login
-              </button>
-            </form>
-          </div>
+      <>
+  {isOpen && (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn">
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full relative animate-scaleIn">
+        <div className="border-orange-400 border-2 rounded-md p-5 mb-4">
+          <h2 className="font-bold text-lg">Test Credentials</h2>
+          <p><strong>Email: </strong> <span className="bg-gray-100 p-2 rounded">test@gmail.com</span></p>
+          <p><strong>Password: </strong> <span className="bg-gray-100 p-2 rounded">Test@123</span></p>
         </div>
-      )}
-    </> 
+        <h1 className="text-2xl font-semibold tracking-tight mb-2">
+          Login to your account.
+        </h1>
+        <p className="text-sm text-gray-500 mb-2">
+          If the user wants to see the OTP via email, they have to sign up manually.
+        </p>
+        <p className="text-sm text-gray-500 mb-2">
+          Enter tester email and password below to login.
+        </p>
+        <p className="text-sm text-red-500 mb-4">
+          This tester modal will close in <strong>{countdown}</strong> seconds.
+        </p>
+        <button
+          onClick={() => setIsOpen(false)}
+            className="absolute top-3 right-3 text-gray-600 hover:text-gray-800"
+        >
+          &times;
+        </button>
+        <form onSubmit={handleTestSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
+              placeholder="test@gmail.com"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
+              placeholder="Test@123"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+  )}
+</>
 
 
 
