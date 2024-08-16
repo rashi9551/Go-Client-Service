@@ -231,56 +231,57 @@ useEffect(() => {
                     </>
                 ) : (
                     <>
-                        <div className="w-[95%] mx-auto md:h-fit h-fit md:grid-cols-3 mt-6  md:gap-8 grid  gap-5 ">
-                            <div className="bg-green-200  rounded-3xl md:grid-cols-1 grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                                <div className=" row-span-2 flex items-center px-3">
-                                    <h1 className="text-2xl font-medium text-white">This month rides</h1>
-                                </div>
-                                <div className=" row-span-3 flex items-center justify-end">
-                                    <h1 className="text-7xl px-2 text-white">{currentMonthRide ? currentMonthRide : 0}</h1>
-                                </div>
-                            </div>
-                            <div className="bg-green-200  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                                <div className=" row-span-2 flex items-center px-3">
-                                    <h1 className="text-2xl font-medium text-white">Total Earnings</h1>
-                                </div>
-                                <div className=" row-span-3 flex items-center justify-end">
-                                    <h1 className="text-7xl px-2 text-white">₹{driverData?.RideDetails?.totalEarnings}</h1>
-                                </div>
-                            </div>
-                            <div className="bg-green-200  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                                <div className=" row-span-2 flex items-center px-3">
-                                    <h1 className="text-2xl font-medium text-white">Total Rides</h1>
-                                </div>
-                                <div className=" row-span-3 flex items-center justify-end">
-                                    <h1 className="text-7xl px-2  text-white">{driverData?.RideDetails?.completedRides}</h1>
-                                </div>
-                            </div>
-                            <div className="bg-green-200  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                                <div className=" row-span-2 flex items-center px-3">
-                                    <h1 className="text-2xl font-medium text-white">Cancelled Rides</h1>
-                                </div>
-                                <div className=" row-span-3 flex items-center justify-end">
-                                    <h1 className="text-7xl px-2  text-white">{driverData?.RideDetails?.cancelledRides}</h1>
-                                </div>
-                            </div>
-                            <div className="bg-green-200  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                                <div className=" row-span-2 flex items-center px-3">
-                                    <h1 className="text-2xl font-medium text-white">Account Status</h1>
-                                </div>
-                                <div className=" row-span-3 flex items-center justify-end">
-                                    <h1 className="text-5xl px-2 uppercase text-white">{driverData?.account_status}</h1>
-                                </div>
-                            </div>
-                            <div className="bg-green-200  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                                <div className=" row-span-2 flex items-center px-3">
-                                    <h1 className="text-2xl font-medium text-white">Total Ratings</h1>
-                                </div>
-                                <div className=" row-span-3 flex items-center justify-end">
-                                    <h1 className="text-7xl px-2  text-white">{driverData?.totalRatings}</h1>
-                                </div>
-                            </div>
+                      <div className="w-[95%] mx-auto md:h-fit h-fit md:grid-cols-3 mt-6 md:gap-8 grid gap-5">
+                        <div className="bg-gradient-to-r from-blue-400 to-blue-600 rounded-3xl md:grid-cols-1 grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                          <div className="row-span-2 flex items-center px-3">
+                            <h1 className="text-2xl font-medium text-white">This Month's Rides</h1>
+                          </div>
+                          <div className="row-span-3 flex items-center justify-end">
+                            <h1 className="text-7xl px-2 text-white">{currentMonthRide ? currentMonthRide : 0}</h1>
+                          </div>
                         </div>
+                        <div className="bg-gradient-to-r from-purple-400 to-purple-600 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                          <div className="row-span-2 flex items-center px-3">
+                            <h1 className="text-2xl font-medium text-white">Total Earnings</h1>
+                          </div>
+                          <div className="row-span-3 flex items-center justify-end">
+                            <h1 className="text-7xl px-2 text-white">₹{driverData?.RideDetails?.totalEarnings}</h1>
+                          </div>
+                        </div>
+                        <div className="bg-gradient-to-r from-teal-400 to-teal-600 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                          <div className="row-span-2 flex items-center px-3">
+                            <h1 className="text-2xl font-medium text-white">Total Rides</h1>
+                          </div>
+                          <div className="row-span-3 flex items-center justify-end">
+                            <h1 className="text-7xl px-2 text-white">{driverData?.RideDetails?.completedRides}</h1>
+                          </div>
+                        </div>
+                        <div className="bg-gradient-to-r from-red-400 to-red-600 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                          <div className="row-span-2 flex items-center px-3">
+                            <h1 className="text-2xl font-medium text-white">Cancelled Rides</h1>
+                          </div>
+                          <div className="row-span-3 flex items-center justify-end">
+                            <h1 className="text-7xl px-2 text-white">{driverData?.RideDetails?.cancelledRides}</h1>
+                          </div>
+                        </div>
+                        <div className="bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                          <div className="row-span-2 flex items-center px-3">
+                            <h1 className="text-2xl font-medium text-white">Account Status</h1>
+                          </div>
+                          <div className="row-span-3 flex items-center justify-end">
+                            <h1 className="text-5xl px-2 uppercase text-white">{driverData?.account_status}</h1>
+                          </div>
+                        </div>
+                        <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                          <div className="row-span-2 flex items-center px-3">
+                            <h1 className="text-2xl font-medium text-white">Total Ratings</h1>
+                          </div>
+                          <div className="row-span-3 flex items-center justify-end">
+                            <h1 className="text-7xl px-2 text-white">{driverData?.totalRatings}</h1>
+                          </div>
+                        </div>
+                      </div>
+
                         <div className=" mt-16 md:grid-cols-2 md:gap-8 grid">
                             <div>
                             <h1 className="pl-8 mb-8 font-bold">EARNINGS PER MONTH</h1>

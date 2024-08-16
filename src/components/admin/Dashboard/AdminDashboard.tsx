@@ -59,62 +59,62 @@ export const AdminDashboard = () => {
           </>
         ) : (
           <>
-            <div className="w-[95%] mx-auto md:h-fit h-fit md:grid-cols-3  md:gap-8 grid  gap-5 ">
-              <div className="bg-green-200  rounded-3xl md:grid-cols-1 grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                <div className=" row-span-2 flex items-center px-3">
-                  <h1 className="text-2xl font-medium text-white">New Drivers</h1>
+            <div className="w-[95%] mx-auto md:h-fit h-fit md:grid-cols-3  md:gap-8 grid gap-5">
+              <div className="bg-indigo-100 rounded-3xl md:grid-cols-1 grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                <div className="row-span-2 flex items-center px-3">
+                  <h1 className="text-2xl font-medium text-indigo-800">New Drivers</h1>
                 </div>
-                <div className=" row-span-3 flex items-center justify-end">
-                  <h1 className="text-7xl px-2 text-white">{dashboardData?.newDrivers}</h1>
-                </div>
-              </div>
-
-              <div className="bg-green-200  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                <div className=" row-span-2 flex items-center px-3">
-                  <h1 className="text-2xl font-medium text-white">Total Drivers</h1>
-                </div>
-                <div className=" row-span-3 flex items-center justify-end">
-                  <h1 className="text-7xl px-2  text-white">{dashboardData?.totalDrivers}</h1>
+                <div className="row-span-3 flex items-center justify-end">
+                  <h1 className="text-7xl px-2 text-indigo-800">{dashboardData?.newDrivers}</h1>
                 </div>
               </div>
 
-              <div className="bg-green-200  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                <div className=" row-span-2 flex items-center px-3">
-                  <h1 className="text-2xl font-medium text-white">Blocked Drivers</h1>
+              <div className="bg-blue-100 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                <div className="row-span-2 flex items-center px-3">
+                  <h1 className="text-2xl font-medium text-blue-800">Total Drivers</h1>
                 </div>
-                <div className=" row-span-3 flex items-center justify-end">
-                  <h1 className="text-7xl px-2  text-white">{dashboardData?.blockedDrivers}</h1>
+                <div className="row-span-3 flex items-center justify-end">
+                  <h1 className="text-7xl px-2 text-blue-800">{dashboardData?.totalDrivers}</h1>
                 </div>
               </div>
 
+              <div className="bg-pink-100 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                <div className="row-span-2 flex items-center px-3">
+                  <h1 className="text-2xl font-medium text-pink-800">Blocked Drivers</h1>
+                </div>
+                <div className="row-span-3 flex items-center justify-end">
+                  <h1 className="text-7xl px-2 text-pink-800">{dashboardData?.blockedDrivers}</h1>
+                </div>
+              </div>
 
-              <div className="bg-indigo-100  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                <div className=" row-span-2 flex items-center px-3">
-                  <h1 className="text-2xl font-medium text-white">Total Rides</h1>
+              <div className="bg-green-100 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                <div className="row-span-2 flex items-center px-3">
+                  <h1 className="text-2xl font-medium text-green-800">Total Rides</h1>
                 </div>
-                <div className=" row-span-3 flex items-center justify-end">
-                  <h1 className="text-7xl px-2 text-white">{dashboardData?.totalRides}</h1>
-                </div>
-              </div>
-              
-              <div className="bg-indigo-100  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                <div className=" row-span-2 flex items-center px-3">
-                  <h1 className="text-2xl font-medium text-white">Total Users</h1>
-                </div>
-                <div className=" row-span-3 flex items-center justify-end">
-                  <h1 className="text-7xl px-2  text-white">{dashboardData?.totalUsers}</h1>
+                <div className="row-span-3 flex items-center justify-end">
+                  <h1 className="text-7xl px-2 text-green-800">{dashboardData?.totalRides}</h1>
                 </div>
               </div>
-              
-              <div className="bg-indigo-100  rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
-                <div className=" row-span-2 flex items-center px-3">
-                  <h1 className="text-2xl font-medium text-white">Blocked Users</h1>
+
+              <div className="bg-yellow-100 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                <div className="row-span-2 flex items-center px-3">
+                  <h1 className="text-2xl font-medium text-yellow-800">Total Users</h1>
                 </div>
-                <div className=" row-span-3 flex items-center justify-end">
-                  <h1 className="text-7xl px-2  text-white">{dashboardData?.blockedUsers}</h1>
+                <div className="row-span-3 flex items-center justify-end">
+                  <h1 className="text-7xl px-2 text-yellow-800">{dashboardData?.totalUsers}</h1>
+                </div>
+              </div>
+
+              <div className="bg-red-100 rounded-3xl grid grid-rows-5 gap-1 drop-shadow-xl px-1 pb-1">
+                <div className="row-span-2 flex items-center px-3">
+                  <h1 className="text-2xl font-medium text-red-800">Blocked Users</h1>
+                </div>
+                <div className="row-span-3 flex items-center justify-end">
+                  <h1 className="text-7xl px-2 text-red-800">{dashboardData?.blockedUsers}</h1>
                 </div>
               </div>
             </div>
+
             <div className="mt-16 md:grid-cols-2 md:gap-8 grid">
               <div>
               <h1 className="pl-8 mb-8 font-bold">USERS AND DRIVERS REGISTRATIONS</h1>
