@@ -275,12 +275,14 @@ function UserCurrentRide() {
     }),
     onSubmit: async (values: any) => {
       try {
-        console.log(values, "values=-=-=-=-=-=");
+        console.log( values.amount,userData?.wallet?.balance,"ithu values -=-=-=");
+        
         if (
           values.paymentMode === "Wallet" &&
           userData &&
           values.amount > userData?.wallet?.balance
         ) {
+          toast.info("Your Wallet Is Empty")
           return 0;
         }
 

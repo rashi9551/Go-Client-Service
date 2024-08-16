@@ -71,6 +71,7 @@ useEffect(() => {
   const audioRef = useRef<HTMLAudioElement|null>(null);
   audioRef.current = new Audio('/uber_tune.mp3');
   const ENDPOINT = import.meta.env.VITE_SERVER_URL;
+  console.log(ENDPOINT);
   
   useEffect(() => {
     const driverToken=localStorage.getItem('driverToken')
@@ -78,8 +79,10 @@ useEffect(() => {
     const socketInstance = socketIOClient(ENDPOINT, {
       query: {token: driverToken,refreshToken:refreshTokn}
     });
+
     console.log("socket connected to driver side ",socket);
     setSocket(socketInstance);
+
     socketInstance.on("connect", () => {
       console.log("Connected to server with ID:", socketInstance.id);
     });
@@ -95,6 +98,7 @@ useEffect(() => {
         refreshToken: refreshToken
       };
     });
+
     socketInstance.on("getNearByDrivers", () => {
       console.log("location edukkunnu");
       console.log(navigator.geolocation);
@@ -132,6 +136,7 @@ useEffect(() => {
       console.log(driverIdArray,driverId,"------");
       
     })
+
     socketInstance.on("driverConfirmation",(rideId,driver_id)=>{
       if(driverId===driver_id){
         localStorage.setItem("currentRide-driver",rideId)
