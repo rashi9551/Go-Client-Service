@@ -75,7 +75,7 @@ function Ride() {
       query: { token:userToken,refreshToken }
     })
     setSocket(socketInstance);
-    console.log("Socket connected to client");
+    console.log("Socket connected to client its ride page");
     socketInstance.on('tokens-updated', (data) => {
       const token=data.token
       const refreshToken=data.refreshToken
