@@ -301,22 +301,25 @@ useEffect(() => {
                             </h1>
                         </div>
 
-                        <div className="hidden   md:flex md:items-center" style={{ marginTop: "-45px" }}>
+                        <div className="hidden   md:flex md:items-center">
                         {otpInput?(
+                         <div className="mt-6">
                         <Player
                         autoplay
                         loop
                         src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
                         style={{ height: '80%', width: '80%',background:"transparent" }}
                         />
+                        </div>
                         ):(
+                        <div className="mt-6">
                         <Player
                         autoplay
                         loop
                         src="https://lottie.host/bc78ee20-18be-4bb9-8d20-db1e2fa99ee5/xJktXr4YdV.json"
                         style={{ height: '80%', width: '80%',background:"transparent" }}
-                        
                         />
+                        </div>
                         )}
                         </div>
                     </div>

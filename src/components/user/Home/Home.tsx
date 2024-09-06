@@ -4,73 +4,9 @@ import NavBar from "./NavBar";
 import WhySafely from "./WhySafety";
 import Ride from "./Ride";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
+import TypingText from "../../../Hooks/TypeText";
 
-
-
-interface TypingTextProps {
-  text: string;
-  speed: number;
-  eraseSpeed: number;
-  pauseDuration: number;
-}
-
-const TypingText: React.FC<TypingTextProps> = ({ text, speed, eraseSpeed, pauseDuration }) => {
-  const [displayText, setDisplayText] = useState<string>('');
-  const [isTyping, setIsTyping] = useState<boolean>(true);
-  const [index, setIndex] = useState<number>(0);
-  const [pause, setPause] = useState<boolean>(false);
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
-    if (isTyping) {
-      intervalId = setInterval(() => {
-        setDisplayText((prev) => prev + text[index]);
-        setIndex((prev) => prev + 1);
-        if (index >= text.length - 1) {
-          clearInterval(intervalId);
-          setIsTyping(false);
-          setPause(true);
-        }
-      }, speed);
-    } else if (pause) {
-      // Pause for a specified duration
-      const pauseId = setTimeout(() => {
-        setPause(false);
-      }, pauseDuration);
-
-      return () => clearTimeout(pauseId);
-    } else {
-      intervalId = setInterval(() => {
-        setDisplayText((prev) => prev.slice(0, -1));
-        if (displayText.length === 0) {
-          clearInterval(intervalId);
-          setIndex(0);
-          setIsTyping(true);
-        }
-      }, eraseSpeed);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isTyping, pause, index, displayText, text, speed, eraseSpeed, pauseDuration]);
-
-  return (
-    <h4 className="text-2xl font-bold mb-4">
-      <span className="text-white">R</span>
-      {displayText.slice(1).includes("Go & Go") ? (
-        <>
-          {displayText.slice(1).split("Go & Go")[0]}
-          <span className="text-yellow-700">Go & Go</span>
-          {displayText.slice(1).split("Go & Go")[1]}
-        </>
-      ) : (
-        displayText.slice(1)
-      )}
-    </h4>
-  );
-};
 
 
 function Home() {
@@ -104,13 +40,15 @@ function Home() {
         </div>
       </div>
       <div className="w-full md:w-1/2 bg-black text-white p-6">
-        <div className="relative w-full md:w-[53%] h-auto mx-auto mt-10 md:mt-20 overflow-hidden">
-          <img
-            src="/images/IMG_2663.JPG"
-            alt="Right Side Image"
-            className="w-full h-auto animate-fade-zoom"
-          />
-        </div>
+      <div className="relative rounded-lg w-full md:w-[53%] h-auto mx-auto mt-10 md:mt-20 overflow-hidden">
+        <img
+          src="/images/IMG_2663.JPG"
+          alt="Right Side Image"
+          className="w-full h-auto animate-fade-zoom"
+        />
+        <div className="absolute inset-0 rounded-lg pointer-events-none bg-gradient-to-r from-black via-transparent to-black opacity-50"></div>
+      </div>
+
       </div>
 
     </div>

@@ -74,9 +74,6 @@ function Login() {
       }
     },
   });
-  console.log(import.meta.env.VITE_API_GATEWAY_URL,"=-=-=-=-=-=-=-=-=");
-  
-
   const [otpInput, setotpInput] = useState(false);
   const [otp, setOtp] = useState<number>(0);
 
@@ -291,6 +288,7 @@ useEffect(() => {
               style={{ marginTop: "-25px" }}
             >
               {otpInput?(
+                <div className="mt-6">
                 <Player
                 autoplay
                 loop
@@ -298,7 +296,9 @@ useEffect(() => {
                 style={{ height: '80%', width: '80%',background:"transparent" }}
                 
               />
+              </div>
               ):(
+                <div className="mt-6">
                 <Player
                 autoplay
                 loop
@@ -306,6 +306,7 @@ useEffect(() => {
                 style={{ height: '80%', width: '80%',background:"transparent" }}
                 
               />
+              </div>
               )}
               
             </div>

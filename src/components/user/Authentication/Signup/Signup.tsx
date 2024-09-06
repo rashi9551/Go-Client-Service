@@ -33,10 +33,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 function Signup() {
   const [counter, setCounter] = useState(30);
   const [otpPage, setOtpPage] = useState(false);
-  const [userImageUrl,setuserImageUrl] = useState(null)
-  console.log(userImageUrl);
-  
-
+  const [,setuserImageUrl] = useState(null)
   const navigate = useNavigate();
 
   useEffect(() => {

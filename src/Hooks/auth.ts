@@ -40,7 +40,7 @@ export const sendOtp = async (setotpInput:any,auth:any,mobile:string,setConfirma
         throw new Error("RecaptchaVerifier is not defined.");
       }
     } catch (error) {
-      console.log("error")
+      console.log("error",error)
       toast.error((error as Error).message);
     }
   };

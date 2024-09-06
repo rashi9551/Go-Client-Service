@@ -23,6 +23,7 @@ import { fromLocation } from "../../../Hooks/Map";
 import { handleModelSelection } from '../../../Hooks/formik'
 import { useNavigate } from "react-router-dom";
 import isDistanceUnder100Km from "../../../utils/kmCheck";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 
 function Ride() {
@@ -275,11 +276,13 @@ function Ride() {
                             <div className="flex h-20 w-full items-center justify-center">
                                 {/* <span className="loading loading-ring loading-lg"></span> */}
 
-                                <div className="loader2 h-15 w-15">
-                                    <span className="hour"></span>
-                                    <span className="min"></span>
-                                    <span className="circel"></span>
-                                </div>
+                                <Player
+                                    autoplay
+                                    loop
+                                    src="https://lottie.host/6d218af1-a90d-49b2-b56e-7ba126e3ac68/mNvXamDXCm.json"
+                                    style={{ height: '80%', width: '80%',background:"transparent" }}
+                                    
+                                  />
                             </div>
 
                             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">

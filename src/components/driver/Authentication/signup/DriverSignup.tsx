@@ -16,6 +16,7 @@ import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import axiosDriver from "../../../../service/axios/axiosDriver";
 import Loader from "../../../shimmer/Loader";
 import { sendOtp } from "../../../../Hooks/auth";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 function DriverSignup() {
 
@@ -180,12 +181,13 @@ function DriverSignup() {
                                             Please enter the One-Time-Password sent to your registered mobile number
                                         </h1>
                                     </div>
-                                    <div className="hidden md:block" style={{ marginTop: "-30px" }}>
-                                        <img
-                                            style={{ height: "360px", width: "auto" }}
-                                            src="/images/otp.jpg"
-                                            alt=""
-                                        />
+                                    <div className="mt-6">
+                                    <Player
+                                    autoplay
+                                    loop
+                                    src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+                                    style={{ height: '60%', width: '60%',background:"transparent" }}
+                                    />
                                     </div>
                                 </div>
                             ) : (
@@ -196,11 +198,16 @@ function DriverSignup() {
                                         </h1>
                                     </div>
                                     <div className="hidden  md:flex md:items-center" style={{ marginTop: "-40px" }}>
-                                        {load ? <Loader/> :<img
-                                            style={{ height: "330px", width: "auto" }}
-                                            src="/images/login.jpg"
-                                            alt=""
-                                        />}
+                                        {load ? <Loader/> :
+                                        <div className="mt-6">
+                                        <Player
+                                            autoplay
+                                            loop
+                                            src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+                                            style={{ height: '80%', width: '80%',background:"transparent" }}
+                                            />
+                                        </div>
+                                        }
                                         
                                     </div>
                                 </div>
