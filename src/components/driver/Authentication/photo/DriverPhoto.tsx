@@ -6,6 +6,7 @@ import axiosDriver from "../../../../service/axios/axiosDriver"
 import DriverVehiclePage from "../../../../pages/driver/Authentication/DriverVehiclePage"
 import * as yup from 'yup'
 import Loader from "../../../shimmer/Loader"
+import { Player } from "@lottiefiles/react-lottie-player";
 const videoConstraints={
     width:400,
     height:400,
@@ -87,10 +88,13 @@ function DriverPhoto() {
                                     </div>
                                     <div className="hidden  md:flex md:items-center justify-center">
                                         {load ? <Loader/>:(
-                                            <img
-                                            style={{ height: "250px", width: "auto" ,marginTop:'50px'}}
-                                            src="/images/image.jpg"
-                                        />
+                                             <Player
+                                             autoplay
+                                             loop
+                                             src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+                                             style={{ height: '80%', width: '80%',background:"transparent" }}
+                                             
+                                           />
                                         )}
                                         
                                     </div>
@@ -103,11 +107,13 @@ function DriverPhoto() {
                                             </div> */}
 
                                             <div className="flex justify-center items-center">
-                                                <img
-                                                    className="max-h-44 w-auto rounded-3xl"
-                                                    src={formik.values.driverImage}
-                                                    alt=""
-                                                />
+                                            <Player
+                                                autoplay
+                                                loop
+                                                src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+                                                style={{ height: '80%', width: '80%',background:"transparent" }}
+                                                
+                                            />
                                             </div>
 
                                             <div className="mb-4 mt-4">

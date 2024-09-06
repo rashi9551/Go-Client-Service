@@ -22,6 +22,7 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { openRejectedModal } from "../../../../service/redux/slices/rejectModalSlice";
 import { sendOtp } from "../../../../Hooks/auth";
 import './DriverLogin.scss'
+import { Player } from "@lottiefiles/react-lottie-player";
   
 function DriverLogin() {
     const dispatch=useDispatch()
@@ -302,18 +303,20 @@ useEffect(() => {
 
                         <div className="hidden   md:flex md:items-center" style={{ marginTop: "-45px" }}>
                         {otpInput?(
-                        <img
-                            className="mt-2"
-                                style={{ height: "330px", width: "auto" }}
-                                src="/images/otp.jpg"
-                                alt=""
-                            />):(
-                        <img
-                            className="mt-2"
-                                style={{ height: "330px", width: "auto" }}
-                                src="/images/login.jpg"
-                                alt=""
-                            />
+                        <Player
+                        autoplay
+                        loop
+                        src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+                        style={{ height: '80%', width: '80%',background:"transparent" }}
+                        />
+                        ):(
+                        <Player
+                        autoplay
+                        loop
+                        src="https://lottie.host/bc78ee20-18be-4bb9-8d20-db1e2fa99ee5/xJktXr4YdV.json"
+                        style={{ height: '80%', width: '80%',background:"transparent" }}
+                        
+                        />
                         )}
                         </div>
                     </div>

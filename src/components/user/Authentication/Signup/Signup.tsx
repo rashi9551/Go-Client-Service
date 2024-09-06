@@ -27,6 +27,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import { signupValidation } from "../../../../utils/validation";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { Player } from "@lottiefiles/react-lottie-player";
 // import { auth } from "../../../../service/firebase";
 
 function Signup() {
@@ -259,17 +260,20 @@ function Signup() {
               </h1>
             </div>
             <div className="hidden md:flex md:items-center justify-center">
-            {otpPage?(<img
-              className="mt-2"
-                style={{ height: "330px", width: "auto" }}
-                src="/images/otp.jpg"
-                alt=""
-              />):(
-                <img
-              className="mt-2"
-                style={{ height: "330px", width: "auto" }}
-                src="/images/login.jpg"
-                alt=""
+            {otpPage?(
+              <Player
+              autoplay
+              loop
+              src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+              style={{ height: '80%', width: '80%',background:"transparent" }}
+              />
+            ):(
+              <Player
+              autoplay
+              loop
+              src="https://lottie.host/bc78ee20-18be-4bb9-8d20-db1e2fa99ee5/xJktXr4YdV.json"
+              style={{ height: '80%', width: '80%',background:"transparent" }}
+              
               />
               )}
             </div>

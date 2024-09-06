@@ -5,6 +5,7 @@ import axiosDriver from "../../../../service/axios/axiosDriver";
 import {toast} from 'sonner' ;
 import DriverPhotoPage from "../photo/DriverPhoto";
 import Loader from "../../../shimmer/Loader";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 function DriverIdentification() {
     const [photoPage,setphotoPage]=useState(false);
@@ -62,11 +63,15 @@ function DriverIdentification() {
                                 </h1>
                             </div>
                             <div className="hidden  md:flex md:items-center justify-center" style={{ marginTop: "-30px" }}>
-                                {load ? <Loader/>: (<img
-                                    style={{ height: "250px", width: "auto" ,marginTop:'50px'}}
-                                    src="/images/image.jpg"
-                                    alt=""
-                                />)}
+                                {load ? <Loader/>: (
+                                    <Player
+                                    autoplay
+                                    loop
+                                    src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+                                    style={{ height: '80%', width: '80%',background:"transparent" }}
+                                    
+                                  />
+                                )}
                                 
                             </div>
                         </div>
