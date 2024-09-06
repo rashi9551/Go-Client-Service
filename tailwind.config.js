@@ -15,8 +15,22 @@ export default withMT({
         wts: '#ECE5DD',
         glass: 'rgba(255, 255, 255, 0.5)',
       },
+      animation: {
+        'fade-zoom': 'fadeZoom 1.5s ease-out forwards',
+      },
+      keyframes: {
+        fadeZoom: {
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.9)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'scale(1)',
+          },
+        },
+      },
     },
   },
   plugins: [],
-
 });

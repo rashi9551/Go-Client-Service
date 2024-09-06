@@ -1,11 +1,76 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Footer from "./Footer";
 import NavBar from "./NavBar";
-import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import WhySafely from "./WhySafety";
 import Ride from "./Ride";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 
+
+interface TypingTextProps {
+  text: string;
+  speed: number;
+  eraseSpeed: number;
+  pauseDuration: number;
+}
+
+const TypingText: React.FC<TypingTextProps> = ({ text, speed, eraseSpeed, pauseDuration }) => {
+  const [displayText, setDisplayText] = useState<string>('');
+  const [isTyping, setIsTyping] = useState<boolean>(true);
+  const [index, setIndex] = useState<number>(0);
+  const [pause, setPause] = useState<boolean>(false);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    if (isTyping) {
+      intervalId = setInterval(() => {
+        setDisplayText((prev) => prev + text[index]);
+        setIndex((prev) => prev + 1);
+        if (index >= text.length - 1) {
+          clearInterval(intervalId);
+          setIsTyping(false);
+          setPause(true);
+        }
+      }, speed);
+    } else if (pause) {
+      // Pause for a specified duration
+      const pauseId = setTimeout(() => {
+        setPause(false);
+      }, pauseDuration);
+
+      return () => clearTimeout(pauseId);
+    } else {
+      intervalId = setInterval(() => {
+        setDisplayText((prev) => prev.slice(0, -1));
+        if (displayText.length === 0) {
+          clearInterval(intervalId);
+          setIndex(0);
+          setIsTyping(true);
+        }
+      }, eraseSpeed);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isTyping, pause, index, displayText, text, speed, eraseSpeed, pauseDuration]);
+
+  return (
+    <h4 className="text-2xl font-bold mb-4">
+      <span className="text-white">R</span>
+      {displayText.slice(1).includes("Go & Go") ? (
+        <>
+          {displayText.slice(1).split("Go & Go")[0]}
+          <span className="text-yellow-700">Go & Go</span>
+          {displayText.slice(1).split("Go & Go")[1]}
+        </>
+      ) : (
+        displayText.slice(1)
+      )}
+    </h4>
+  );
+};
 
 
 function Home() {
@@ -21,44 +86,34 @@ function Home() {
 
       {/* Banner */}
 
-        <div className="flex flex-col md:flex-row min-h-screen">
-          <div className="w-full md:w-1/2 bg-black text-white p-6">
-            <div className="mt-20 md:mt-40 md:ml-56 text-center md:text-left">
-              <h4 className="text-2xl font-bold mb-4">
-                Ready To Assist Anywhere With Go & Go
-              </h4>
-              <p>Tap, Book, Ride, Go, Enjoy!</p>
-            </div>
-            <div className="relative items-center w-full md:w-1/2 md:ml-52 mt-10 mx-auto md:mx-0">
-              <input
-                type="text"
-                placeholder="Pickup Location"
-                className="border-2 border-gray-300 rounded-full px-4 py-2 w-full"
-              />
-              <div className="icon-line">
-                <GpsFixedIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black" />
-              </div>
-            </div>
-            <div className="relative items-center w-full md:w-1/2 md:ml-52 mt-10 mx-auto md:mx-0">
-              <input
-                type="text"
-                placeholder="Dropoff Location"
-                className="border-2 border-gray-300 rounded-full px-4 py-2 w-full"
-              />
-              <GpsFixedIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black" />
-            </div>
-            <button className="bg-yellow-400 h-9 w-full md:w-[19%] mx-auto md:ml-[54%] mt-9 rounded text-black">
-              See Prices
-            </button>
-          </div>
-          <div className="w-full md:w-1/2 bg-black text-white p-6">
-            <img
-              src="/images/IMG_2663.JPG"
-              alt="Right Side Image"
-              className="w-full md:w-[53%] h-auto mx-auto mt-10 md:mt-20"
-            />
+      <div className="flex flex-col md:flex-row min-h-screen">
+      <div className="w-full md:w-1/2 bg-black text-white p-6">
+        <div className="mt-20 md:mt-40 md:ml-56 text-center md:text-left">
+          <TypingText text="Ready To Assist Anywhere With Go & Go" speed={100} eraseSpeed={100}  pauseDuration={2000} />
+          <p className="text-yellow-600">Tap, Book, Ride, Go, Enjoy!</p>
+          <div className="mt-[50px]">
+          <Player
+        autoplay
+        loop
+        src="https://lottie.host/b0b9429a-aede-416f-b11a-09376106e9d0/zHCbnzyQ67.json"
+        style={{ height: '80%', width: '80%',background:"transparent" }}
+        
+      />
+
           </div>
         </div>
+      </div>
+      <div className="w-full md:w-1/2 bg-black text-white p-6">
+        <div className="relative w-full md:w-[53%] h-auto mx-auto mt-10 md:mt-20 overflow-hidden">
+          <img
+            src="/images/IMG_2663.JPG"
+            alt="Right Side Image"
+            className="w-full h-auto animate-fade-zoom"
+          />
+        </div>
+      </div>
+
+    </div>
 
       {/* Ride Component */}
       <div className="py-12 px-6">
@@ -69,11 +124,13 @@ function Home() {
 
         <div className="flex flex-col md:flex-row min-h-screen">
           <div className="w-full md:w-1/2 bg-white flex justify-center items-center p-6">
-            <img
-              src="/images/IMG_2666.jpg"
-              alt="Right Side Image"
-              className="w-full md:w-[53%] h-auto"
-            />
+          <Player
+        autoplay
+        loop
+        src="https://lottie.host/0a822ba8-9941-4266-965d-4165e4eeb255/RSWO2aAKgC.json"
+        style={{ height: '80%', width: '80%',background:"transparent" }}
+        
+      />
           </div>
           <div className="w-full md:w-1/2 bg-yellow-400 text-white p-6 mb-9 flex justify-center items-center">
             <div className="text-center md:text-left mb-10 md:mb-[19%]">
