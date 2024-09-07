@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HStack, PinInput, PinInputField } from "@chakra-ui/react";
-import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import MailIcon from '@mui/icons-material/Mail';
 // import { auth } from "../../../../service/firebase";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
@@ -111,17 +111,26 @@ function DriverLogin() {
         //     toast.error("Enter a valid otp");
         // }
 
-
-        const {data}=await axiosDriver().post('/verifyOtp',{email,otp})
-        if(data.message==='Success'){
-            toast.success("Login success");
-            localStorage.setItem("driverToken",driverData.driverToken)
-            localStorage.setItem("DriverRefreshToken",driverData.refreshToken)
-            dispatch(driverLogin(driverData));
-            navigate("/driver/dashboard");
-            localStorage.removeItem("driverId");
-        }else{
-            toast.error("Enter a valid otp");
+        try {
+            if(counter<1){
+                toast.error("Otp Time Expired")
+                return
+              }
+            const {data}=await axiosDriver().post('/verifyOtp',{email,otp})
+            if(data.message==='Success'){
+                toast.success("Login success");
+                localStorage.setItem("driverToken",driverData.driverToken)
+                localStorage.setItem("DriverRefreshToken",driverData.refreshToken)
+                dispatch(driverLogin(driverData));
+                navigate("/driver/dashboard");
+                localStorage.removeItem("driverId");
+            }else{
+                toast.error("Enter a valid otp");
+            }
+            
+        } catch (error) {
+            console.log(error);
+            
         }
     };
 
@@ -349,7 +358,7 @@ useEffect(() => {
                                 </div>
 
                                 <div className="flex items-center  py-2 px-3 rounded-2xl mb-2">
-                                    <SmartphoneIcon className={iconsColor} />
+                                    <MailIcon className={iconsColor} />
 
                                     <input
                                         className="pl-2 outline-none border-b w-full"
@@ -359,7 +368,7 @@ useEffect(() => {
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         id="emailId"
-                                        placeholder="email number"
+                                        placeholder="Enter Your Email"
                                     />
                                 </div>
                                 {formik.touched.email && formik.errors.email && (

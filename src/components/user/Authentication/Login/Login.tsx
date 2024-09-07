@@ -5,23 +5,24 @@ declare global {
     recaptchaVerifier?: RecaptchaVerifier;
   }
 }
-import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import MailIcon from '@mui/icons-material/Mail';
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axiosUser from "../../../../service/axios/axiosUser";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import {ConfirmationResult,RecaptchaVerifier,} from "firebase/auth";
+// import {ConfirmationResult,RecaptchaVerifier,} from "firebase/auth";
 import { jwtDecode } from "jwt-decode";
-import { auth } from "../../../../service/firebase";
+// import { auth } from "../../../../service/firebase";
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../../../service/redux/slices/userAuthSlice";
 import {  CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import {  sendOtp } from "../../../../Hooks/auth";
+// import {  sendOtp } from "../../../../Hooks/auth";
 import { Player } from "@lottiefiles/react-lottie-player";
 import './Login.scss'
+import { RecaptchaVerifier } from 'firebase/auth';
 interface UserData {
   user: string;
   user_id: string;
@@ -31,7 +32,7 @@ interface UserData {
 }
 
 function Login() {
-  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  // const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const navigate = useNavigate();
   const [userData, setuserData] = useState<UserData>({
     user: "",
@@ -43,37 +44,46 @@ function Login() {
   const dispatch=useDispatch()
   const formik = useFormik({
     initialValues: {
-      mobile: "",
+      email:"",
     },
     validationSchema: yup.object({
-      mobile: yup
-        .string()
-        .length(10, "Enter a valid mobile number")
-        .required("please enter the mobile number"),
+      email: yup.string().email("Please enter a valid email").required("Please enter an email"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       try {
-        const { data } = await axiosUser().post("/checkLoginUser", values);        
-        if (data.message === "Success") {
-          sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
-          console.log(data,"-========")
-          setuserData({
-            user: data.name,
-            user_id: data._id,
-            userToken:data.token,
-            refreshToken:data.refreshToken,
-            loggedIn:true
-          });          
-        } else if (data.message === "Blocked") {
-          toast.info("your account is blocked");
-        } else {
-          toast.error("Not registered! please register to continue.");
-        }
+        await formikHandleSubmit()
+        
       } catch (error) {
-        toast.error((error as Error).message);
+        console.log(error);
       }
     },
   });
+
+  const formikHandleSubmit=async()=>{
+    try {
+      const { data } = await axiosUser().post("/checkLoginUser", formik.values);        
+      if (data.message === "Success") {
+        // sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+        toast.success("Otp sent successfully");
+        setotpInput(true);
+        console.log(data,"-========")
+        setuserData({
+          user: data.name,
+          user_id: data._id,
+          userToken:data.token,
+          refreshToken:data.refreshToken,
+          loggedIn:true
+        });          
+      } else if (data.message === "Blocked") {
+        toast.info("your account is blocked");
+      } else {
+        toast.error("Not registered! please register to continue.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error((error as Error).message);
+    }
+  }
   const [otpInput, setotpInput] = useState(false);
   const [otp, setOtp] = useState<number>(0);
 
@@ -86,32 +96,55 @@ function Login() {
   const [counter, setCounter] = useState(40);
   useEffect(() => {
     if (otpInput) {
-      counter > 0 && setTimeout(() => setCounter(counter - 1), 120000);
+      counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
     }
   }, [counter, otpInput]);
 
   
-  const otpVerify = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  const otpVerify = async(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    email:string
   ) => {
     event.preventDefault();
-    if (otp && confirmationResult) {
-      const otpValue: string = otp.toString();
-      confirmationResult
-        .confirm(otpValue)
-        .then(async () => {
-          console.log(userData,"-------")
-          localStorage.setItem("userToken",userData.userToken)
-          localStorage.setItem("refreshToken",userData.refreshToken)
-          dispatch(userLogin(userData))
-          toast.success("login success");
-          navigate("/");
-        })
-        .catch(() => {
+    // if (otp && confirmationResult) {
+    //   const otpValue: string = otp.toString();
+    //   confirmationResult
+    //     .confirm(otpValue)
+    //     .then(async () => {
+    //       console.log(userData,"-------")
+    //       localStorage.setItem("userToken",userData.userToken)
+    //       localStorage.setItem("refreshToken",userData.refreshToken)
+    //       dispatch(userLogin(userData))
+    //       toast.success("login success");
+    //       navigate("/");
+    //     })
+    //     .catch(() => {
+    //       toast.error("Enter a valid otp");
+    //     });
+    // } else {
+    //   toast.error("Enter a valid otp");
+    // }
+
+    try {
+      if(counter<1){
+        toast.error("Otp Time Expired")
+        return
+      }
+      const {data}=await axiosUser().post('/verifyOtp',{email,otp})
+      if(data.message==='Success'){
+        console.log(userData,"-------")
+        localStorage.setItem("userToken",userData.userToken)
+        localStorage.setItem("refreshToken",userData.refreshToken)
+        dispatch(userLogin(userData))
+        toast.success("login success");
+        navigate("/");
+      }else{
           toast.error("Enter a valid otp");
-        });
-    } else {
-      toast.error("Enter a valid otp");
+      }
+      
+    } catch (error) {
+        console.log(error,"error in verifying otp");
+        
     }
   };
   const googleLogin = async (datas: CredentialResponse) => {
@@ -293,7 +326,7 @@ useEffect(() => {
                 autoplay
                 loop
                 src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
-                style={{ height: '80%', width: '80%',background:"transparent" }}
+                style={{ height: '60%', width: '60%',background:"transparent" }}
                 
               />
               </div>
@@ -321,20 +354,20 @@ useEffect(() => {
                 </div>
 
                 <div className="flex items-center py-2 px-3 rounded-2xl mb-2">
-                  <SmartphoneIcon className={iconsColor} />
+                  <MailIcon className={iconsColor} />
                   <input
                     className="pl-2 outline-none border-b w-full"
-                    type="number"
-                    value={formik.values.mobile}
+                    type="email"
+                    value={formik.values.email}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    name="mobile"
-                    placeholder="Mobile number"
+                    name="email"
+                    placeholder="Enter Your Email"
                   />
                 </div>
 
-                {formik.touched.mobile && formik.errors.mobile && (
-                  <p className="form-error-p-tag">{formik.errors.mobile}</p>
+                {formik.touched.email && formik.errors.email && (
+                  <p className="form-error-p-tag">{formik.errors.email}</p>
                 )}
 
                 <div className="my-4 px-2">
@@ -357,7 +390,7 @@ useEffect(() => {
                 {otpInput ? (
                   <>
                     <button
-                      onClick={otpVerify}
+                      onClick={(e)=>otpVerify(e,formik.values.email)}
                       className="block w-full text-white bg-blue-800 py-1.5 rounded-2xl font-semibold mb-2"
                     >
                       Verify OTP
@@ -369,11 +402,11 @@ useEffect(() => {
                       ) : (
                         <p
                           className="text-sm text-blue-800 cursor-pointer"
-                          onClick={() => {
+                          onClick={async() => {
                             setCounter(40);
                             setOtp(0)
-                            sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
-                            toast.success('OTP resent successfully')
+                            await formikHandleSubmit()
+                            // sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
                           }}
                         >
                           Resend OTP
