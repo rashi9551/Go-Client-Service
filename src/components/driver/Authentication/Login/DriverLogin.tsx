@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HStack, PinInput, PinInputField } from "@chakra-ui/react";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
-import { auth } from "../../../../service/firebase";
+// import { auth } from "../../../../service/firebase";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import {toast} from 'sonner' ;
@@ -12,15 +12,15 @@ import { driverLogin } from "../../../../service/redux/slices/driverAuthSlice";
 
 import { jwtDecode } from "jwt-decode";
 
-import {
-    ConfirmationResult,
-  } from "firebase/auth";
+// import {
+//     ConfirmationResult,
+//   } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {  openPendingModal } from "../../../../service/redux/slices/pendingModalSlice";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { openRejectedModal } from "../../../../service/redux/slices/rejectModalSlice";
-import { sendOtp } from "../../../../Hooks/auth";
+// import { sendOtp } from "../../../../Hooks/auth";
 import './DriverLogin.scss'
 import { Player } from "@lottiefiles/react-lottie-player";
   
@@ -35,7 +35,7 @@ function DriverLogin() {
         driver_id:"",
         refreshToken:""
     })
-    const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+    // const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
     const [counter,setCounter]=useState<number>(40)
     useEffect(() => {
@@ -46,62 +46,81 @@ function DriverLogin() {
 
     const formik=useFormik({
         initialValues:{
-            mobile:""
+            email:""
         },
         validationSchema:yup.object({
-            mobile:yup.string().length(10,"Enter a valid mobile number").required("Please enter the mobile number")
+            email: yup.string().email("Please enter a valid email").required("Please enter an email"),
         }),
-        onSubmit:async (values)=>{
+        onSubmit:async ()=>{
             try {
-                const {data}=await axiosDriver().post("/checkLoginDriver",values)
-                console.log(data);
-                
-                if(data.message==="Success"){
-                    sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
-                    setdriverData({name:data.name,refreshToken:data.refreshToken,driverToken: data.token, driver_id: data._id })
-                }else if (data.message === "Incomplete registration") {
-                    toast.info("Please complete the verification!");
-                    localStorage.setItem("driverId", data.driverId);
-                    navigate('/driver/signup')
-                } else if (data.message === "Blocked") {
-                    toast.info("Your account is blocked!");
-                } else if (data.message === "Not verified") {
-                    dispatch(openPendingModal());
-                } else if (data.message === "Rejected") {
-                    localStorage.setItem("driverId", data.driverId);
-                    dispatch(openRejectedModal());
-                } else {
-                    toast.error("Not registered! Please register to  continue.");
-                }
-                
+                await formikSubmit()
             } catch (error) {
                 toast.error((error as Error).message);
             }
         }
     })
     
+
+    const formikSubmit=async()=>{
+        const {data}=await axiosDriver().post("/checkLoginDriver",formik.values)
+        console.log(data);
+        
+        if(data.message==="Success"){
+            toast.success("Otp sent successfully");
+            setotpInput(true)
+            // sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+            setdriverData({name:data.name,refreshToken:data.refreshToken,driverToken: data.token, driver_id: data._id })
+        }else if (data.message === "Incomplete registration") {
+            toast.info("Please complete the verification!");
+            localStorage.setItem("driverId", data.driverId);
+            navigate('/driver/signup')
+        } else if (data.message === "Blocked") {
+            toast.info("Your account is blocked!");
+        } else if (data.message === "Not verified") {
+            dispatch(openPendingModal());
+        } else if (data.message === "Rejected") {
+            localStorage.setItem("driverId", data.driverId);
+            dispatch(openRejectedModal());
+        } else {
+            toast.error("Not registered! Please register to  continue.");
+        }
+        
+    }
    
 
-    const otpVerify = (
+    const otpVerify = async(
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-      ) => {
+      ,email:string) => {
         event.preventDefault();
-        if (otp && confirmationResult) {
-          const otpValue: string = otp.toString();
-          confirmationResult
-            .confirm(otpValue)
-                .then(async () => {
-                    toast.success("Login success");
-                    localStorage.setItem("driverToken",driverData.driverToken)
-                    localStorage.setItem("DriverRefreshToken",driverData.refreshToken)
-                    dispatch(driverLogin(driverData));
-                    navigate("/driver/dashboard");
-                    localStorage.removeItem("driverId");
-                })
-                .catch(() => {
-                    toast.error("Enter a valid otp");
-                });
-        } else {
+        // if (otp && confirmationResult) {
+        //   const otpValue: string = otp.toString();
+        //   confirmationResult
+        //     .confirm(otpValue)
+        //         .then(async () => {
+        //             toast.success("Login success");
+        //             localStorage.setItem("driverToken",driverData.driverToken)
+        //             localStorage.setItem("DriverRefreshToken",driverData.refreshToken)
+        //             dispatch(driverLogin(driverData));
+        //             navigate("/driver/dashboard");
+        //             localStorage.removeItem("driverId");
+        //         })
+        //         .catch(() => {
+        //             toast.error("Enter a valid otp");
+        //         });
+        // } else {
+        //     toast.error("Enter a valid otp");
+        // }
+
+
+        const {data}=await axiosDriver().post('/verifyOtp',{email,otp})
+        if(data.message==='Success'){
+            toast.success("Login success");
+            localStorage.setItem("driverToken",driverData.driverToken)
+            localStorage.setItem("DriverRefreshToken",driverData.refreshToken)
+            dispatch(driverLogin(driverData));
+            navigate("/driver/dashboard");
+            localStorage.removeItem("driverId");
+        }else{
             toast.error("Enter a valid otp");
         }
     };
@@ -303,23 +322,22 @@ useEffect(() => {
 
                         <div className="hidden   md:flex md:items-center">
                         {otpInput?(
-                         <div className="mt-6">
+                         <div className="">
                         <Player
                         autoplay
                         loop
                         src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
-                        style={{ height: '80%', width: '80%',background:"transparent" }}
+                        style={{ height: '60%', width: '60%',background:"transparent" }}
                         />
                         </div>
                         ):(
-                        <div className="mt-6">
+
                         <Player
                         autoplay
                         loop
                         src="https://lottie.host/bc78ee20-18be-4bb9-8d20-db1e2fa99ee5/xJktXr4YdV.json"
                         style={{ height: '80%', width: '80%',background:"transparent" }}
                         />
-                        </div>
                         )}
                         </div>
                     </div>
@@ -335,17 +353,17 @@ useEffect(() => {
 
                                     <input
                                         className="pl-2 outline-none border-b w-full"
-                                        type="number"
-                                        name="mobile"
-                                        value={formik.values.mobile}
+                                        type="email"
+                                        name="email"
+                                        value={formik.values.email}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        id="mobile"
-                                        placeholder="Mobile number"
+                                        id="email"
+                                        placeholder="email number"
                                     />
                                 </div>
-                                {formik.touched.mobile && formik.errors.mobile && (
-                                    <p className="form-error-p-tag">{formik.errors.mobile}</p>
+                                {formik.touched.email && formik.errors.email && (
+                                    <p className="form-error-p-tag">{formik.errors.email}</p>
                                 )}
 
                                 <div className="my-4 px-2">
@@ -366,7 +384,7 @@ useEffect(() => {
                                 {otpInput ? (
                                     <>
                                         <button
-                                            onClick={otpVerify}
+                                            onClick={(e)=>otpVerify(e,formik.values.email)}
                                             className="block w-full bg-blue-800 py-1.5 rounded-2xl text-golden font-semibold mb-2"
                                         >
                                             Verify OTP
@@ -377,10 +395,11 @@ useEffect(() => {
                                             ) : (
                                                 <p
                                                     className="text-sm text-blue-800 cursor-pointer"
-                                                    onClick={(e) => {e.preventDefault()
+                                                    onClick={async(e) => {e.preventDefault()
                                                         setCounter(40);
                                                         setOtp(0)
-                                                        sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+                                                        await formikSubmit()
+                                                        // sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
                                                     }}
                                                 >
                                                     Resend OTP

@@ -1,19 +1,28 @@
-// Import the functions you need from the SDKs you need
+// Import the functions you need from the SDKs
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth"; // If you still need auth
+import { getAnalytics } from "firebase/analytics";
 
-// Your web app's Firebase configuration
+// Your new Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD-2CQJakQM6gzmbgCWpn-PdMEqm2c2f44",
-  authDomain: "go-cab-e7004.firebaseapp.com",
-  projectId: "go-cab-e7004",
-  storageBucket: "go-cab-e7004.appspot.com",
-  messagingSenderId: "1023075533698",
-  appId: "1:1023075533698:web:1a664d0dab97f21d58c59b"
+  apiKey: "AIzaSyDKnuhYPwvQ7LWUNCbBNgSFTlXBtHCFoqA",
+  authDomain: "go-cab-be26d.firebaseapp.com",
+  projectId: "go-cab-be26d",
+  storageBucket: "go-cab-be26d.appspot.com",
+  messagingSenderId: "638225609432",
+  appId: "1:638225609432:web:c893e084d9536c8b5eddad",
+  measurementId: "G-VPJ6LQZTML"
 };
 
-// Initialize Firebase
-const Firebase = initializeApp(firebaseConfig);
-export const auth=getAuth(Firebase)
 
-export default {Firebase,auth}
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+
+export const auth = getAuth(app);
+
+
+export { app, analytics };
+
+export default { app, analytics, auth }; 

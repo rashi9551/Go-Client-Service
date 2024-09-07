@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import PersonIcon from "@mui/icons-material/Person";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
@@ -6,16 +7,16 @@ import GroupIcon from "@mui/icons-material/Group";
 import "./DriverSignup.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ConfirmationResult } from "firebase/auth";
+// import { ConfirmationResult } from "firebase/auth";
 import DriverIdentificationPage from "../../../../pages/driver/Authentication/DriverIdentificationPage";
-import { auth } from "../../../../service/firebase";
+// import { auth } from "../../../../service/firebase";
 import {toast} from 'sonner';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import axiosDriver from "../../../../service/axios/axiosDriver";
 import Loader from "../../../shimmer/Loader";
-import { sendOtp } from "../../../../Hooks/auth";
+// import { sendOtp } from "../../../../Hooks/auth";
 import { Player } from "@lottiefiles/react-lottie-player";
 
 function DriverSignup() {
@@ -32,8 +33,8 @@ function DriverSignup() {
         }
     }, [counter, otpPage]);
 
-    const [otp, setotpInput] = useState<number>(0);
-    const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+    const [otp, setotpInput] = useState<any>(0);
+    // const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
     useEffect(() => {
         setOtpPage(false);
@@ -96,6 +97,7 @@ function DriverSignup() {
         try {
             
             const { data } = await axiosDriver().post(`/checkDriver`, formData);
+            console.log(data);
             if (data.message === "Driver login") {
                 toast.error("Driver Already registered! Please Login to continue");
                 navigate("/driver/login");
@@ -104,10 +106,12 @@ function DriverSignup() {
                 console.log(data);
                 localStorage.setItem("driverId", data.driverId);
                 setIdentificationPage(true);
-            } else {
-                sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+            } else if(data.message==='Otp sended successfully'){
+                // sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+                toast.success("Otp sent successfully");
                 setLoad(false)
                 setOtpPage(true);
+                setotpInput(true)
             }
         } catch (error) {
             toast.error((error as Error).message);
@@ -115,34 +119,43 @@ function DriverSignup() {
     };
 
     // OTP and Captcha-verification
-    const otpVerify = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setLoad(true)
-        event.preventDefault();
-        if (otp && confirmationResult) {
-            const otpValue: string = otp.toString();
-            confirmationResult
-                .confirm(otpValue)
-                .then(async () => {
-                    registerSubmit();
-                })
-                .catch(() => {
-                    toast.error("Enter a valid otp");
-                });
-        } else {
-            toast.error("Enter a valid otp");
-        }
-    };
+    // const otpVerify = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        // setLoad(true)
+    //     event.preventDefault();
+    //     if (otp && confirmationResult) {
+    //         const otpValue: string = otp.toString();
+    //         confirmationResult
+    //             .confirm(otpValue)
+    //             .then(async () => {
+    //                 registerSubmit();
+    //             })
+    //             .catch(() => {
+    //                 toast.error("Enter a valid otp");
+    //             });
+    //     } else {
+    //         toast.error("Enter a valid otp");
+    //     }
+    // };
 
     // signup-form submition API
 
-    const registerSubmit = async () => {
+    const registerSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         try {
-            const response = await axiosDriver().post(`/registerDriver`, formik.values);
-            if (response.data.message === "Success") {
+            event.preventDefault();
+            if(counter<1){
+                toast.error("otp time expired tap to resend")
+                return
+            }
+            setLoad(true)
+            const {data} = await axiosDriver().post(`/registerDriver`, {...formik.values,otp});
+            console.log(data,"ithu response");
+            if (data.message === "Success") {
                 toast.success("OTP verified successfully");
-                localStorage.setItem("driverId", response.data.driverId);
+                localStorage.setItem("driverId", data.driverId);
                 setLoad(false)
                 setIdentificationPage(true);
+            }else if(data.message==='Incorrect Otp'){
+                toast.error("invalid otp")
             }
         } catch (error) {
             toast.error((error as Error).message);
@@ -236,8 +249,7 @@ function DriverSignup() {
                                             </HStack>
 
                                             <button
-                                                onClick={otpVerify}
-                                                type="submit"
+                                                onClick={registerSubmit}
                                                 className="block w-full bg-blue-800 py-2 my-4 rounded-2xl text-golden font-semibold mb-2"
                                             >
                                                 Verify
@@ -251,7 +263,8 @@ function DriverSignup() {
                                                         onClick={(e) => {
                                                             e.preventDefault()
                                                             setCounter(40);
-                                                            sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
+                                                            signupHandle(formik.values)
+                                                            // sendOtp(setotpInput,auth,formik.values.mobile,setConfirmationResult);
                                                             setLoad(false)
                                                             setOtpPage(true);
                                                         }}

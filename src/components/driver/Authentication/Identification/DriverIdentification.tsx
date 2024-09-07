@@ -67,10 +67,10 @@ function DriverIdentification() {
                                     <Player
                                     autoplay
                                     loop
-                                    src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
+                                    src="https://lottie.host/4d9f98cb-2a44-4a20-b422-649992c60069/MTxuwxSyrs.json"
                                     style={{ height: '80%', width: '80%',background:"transparent" }}
                                     
-                                  />
+                                />
                                 )}
                                 
                             </div>

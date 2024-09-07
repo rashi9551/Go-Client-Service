@@ -15,6 +15,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { useDispatch } from "react-redux";
 import { openPendingModal } from "../../../../service/redux/slices/pendingModalSlice";
 import Loader from "../../../shimmer/Loader";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 function DriverLocation() {
 
@@ -90,10 +91,13 @@ function DriverLocation() {
                         </h1>
                         <div className="hidden  md:flex md:items-center justify-center">
                             {load ? <Loader/> : (
-                                <img
-                                    style={{ height: "300px", width: "auto" }}
-                                    src="/images/location.jpg"
-                                />
+                                <Player
+                                autoplay
+                                loop
+                                src="https://lottie.host/4d9f98cb-2a44-4a20-b422-649992c60069/MTxuwxSyrs.json"
+                                style={{ height: '80%', width: '80%',background:"transparent" }}
+                                
+                            />
 
                             )}
                         </div>

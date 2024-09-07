@@ -88,13 +88,13 @@ function DriverPhoto() {
                                     </div>
                                     <div className="hidden  md:flex md:items-center justify-center">
                                         {load ? <Loader/>:(
-                                             <Player
-                                             autoplay
-                                             loop
-                                             src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
-                                             style={{ height: '80%', width: '80%',background:"transparent" }}
-                                             
-                                           />
+                                            <Player
+                                            autoplay
+                                            loop
+                                            src="https://lottie.host/4d9f98cb-2a44-4a20-b422-649992c60069/MTxuwxSyrs.json"
+                                            style={{ height: '80%', width: '80%',background:"transparent" }}
+                                            
+                                        />
                                         )}
                                         
                                     </div>
@@ -107,13 +107,11 @@ function DriverPhoto() {
                                             </div> */}
 
                                             <div className="flex justify-center items-center">
-                                            <Player
-                                                autoplay
-                                                loop
-                                                src="https://lottie.host/363e0788-7405-4a23-8e9b-f319bf535d6b/NtF1LZyBk6.json"
-                                                style={{ height: '80%', width: '80%',background:"transparent" }}
-                                                
-                                            />
+                                                <img
+                                                    className="max-h-44 w-auto rounded-3xl"
+                                                    src={formik.values.driverImage}
+                                                    alt=""
+                                                />
                                             </div>
 
                                             <div className="mb-4 mt-4">
