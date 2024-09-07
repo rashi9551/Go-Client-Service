@@ -358,7 +358,7 @@ useEffect(() => {
                                         value={formik.values.email}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        id="email"
+                                        id="emailId"
                                         placeholder="email number"
                                     />
                                 </div>
