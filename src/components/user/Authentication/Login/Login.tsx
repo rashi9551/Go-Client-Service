@@ -33,6 +33,7 @@ interface UserData {
 
 function Login() {
   // const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  console.log(import.meta.env.VITE_API_GATEWAY_URL);
   const navigate = useNavigate();
   const [userData, setuserData] = useState<UserData>({
     user: "",
